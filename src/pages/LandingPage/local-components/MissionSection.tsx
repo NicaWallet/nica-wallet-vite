@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Grid, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import FinanceOverviewImage from "/src/assets/images/finance-overview-image.png";
 
 const MissionSection: React.FC = () => {
   const { t } = useTranslation();
@@ -24,7 +25,7 @@ const MissionSection: React.FC = () => {
         >
           <Box
             component="img"
-            src="src/assets/images/finance-overview-image.png" // Reemplaza con la ruta de tu imagen
+            src={FinanceOverviewImage}
             alt={t("MISSION_SECTION_IMAGE_ALT")}
             sx={{
               width: "100%",
