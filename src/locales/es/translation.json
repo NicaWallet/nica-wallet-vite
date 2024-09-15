@@ -90,5 +90,6 @@
   "PASSWORD_WEAK": "La contraseña es débil",
   "PASSWORD_MODERATE": "La contraseña es moderada",
   "PASSWORD_STRONG": "La contraseña es segura",
-  "CHANGE_LANGUAGE": "Cambiar idioma"
+  "CHANGE_LANGUAGE": "Cambiar idioma",
+  "BIRTH_DATE": "Fecha de nacimiento"
 }
