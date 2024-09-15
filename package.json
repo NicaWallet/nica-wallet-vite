@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "serve -s dist"
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",
@@ -15,12 +16,18 @@
     "@fontsource/roboto": "^5.0.14",
     "@mui/icons-material": "^6.0.1",
     "@mui/material": "^6.0.1",
+    "@mui/styles": "^6.0.1",
+    "axios": "^1.7.6",
+    "framer-motion": "^11.4.0",
     "i18next": "^23.14.0",
     "i18next-browser-languagedetector": "^8.0.0",
+    "nica-wallet-vite": "file:",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-i18next": "^15.0.1",
-    "react-router-dom": "^6.26.1"
+    "react-router-dom": "^6.26.1",
+    "serve": "^14.2.3",
+    "vite": "^5.4.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
@@ -33,7 +40,6 @@
     "eslint-plugin-react-refresh": "^0.4.9",
     "globals": "^15.9.0",
     "typescript": "^5.5.3",
-    "typescript-eslint": "^8.0.1",
-    "vite": "^5.4.1"
+    "typescript-eslint": "^8.0.1"
   }
 }
