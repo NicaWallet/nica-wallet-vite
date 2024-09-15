@@ -1,6 +1,9 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import LandingPage from "../pages/LandingPage";
 import NotFoundPage from "../pages/NotFoundPage";
+import LoginPage from "../pages/Login";
+import RegisterPage from "../pages/Register";
+
 
 const AppRoutes = () => {
   return (
@@ -12,11 +15,12 @@ const AppRoutes = () => {
         {/* Landing Page */}
         <Route path="/" element={<LandingPage />} />
 
-        {/* AUTH MODULE */}
-        {/* <Route path="/auth/login" element={<></>} /> */}
-        {/* <Route path="/auth/register" element={<Register />} /> */}
-        {/* <Route path="/auth/forgot-password" element={<ForgotPassword />} /> */}
-        {/* <Route path="/auth/reset-password" element={<ResetPassword />} /> */}
+        {/* Auth module */}
+        {/* Login page  */}
+        <Route path="/auth/login" element={<LoginPage />} />
+
+        {/* Register page */}
+        <Route path="/auth/register" element={<RegisterPage />} /> 
       </Routes>
     </Router>
   );
