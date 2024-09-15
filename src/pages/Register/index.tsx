@@ -1,10 +1,33 @@
-import { Avatar, Button, CssBaseline, TextField, Link, Grid, Box, Typography, Container, LinearProgress, IconButton, Menu, MenuItem, Tooltip } from '@mui/material';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import LanguageIcon from '@mui/icons-material/Language';
-import { useTheme } from '@mui/material/styles';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from '@mui/material/styles';
+import {
+  Container,
+  Box,
+  Avatar,
+  Typography,
+  Grid,
+  FormControl,
+  InputLabel,
+  OutlinedInput,
+  InputAdornment,
+  IconButton,
+  Button,
+  Link,
+  Tooltip,
+  Menu,
+  MenuItem,
+  LinearProgress,
+  TextField
+} from '@mui/material';
+import PersonIcon from '@mui/icons-material/Person';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import CakeIcon from '@mui/icons-material/Cake';
+import EmailIcon from '@mui/icons-material/Email';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import LanguageIcon from '@mui/icons-material/Language';
 
 const RegisterPage = () => {
   const { t, i18n } = useTranslation();
@@ -15,6 +38,7 @@ const RegisterPage = () => {
   const [passwordStrength, setPasswordStrength] = useState(0);
   const [showPasswordStrength, setShowPasswordStrength] = useState(false);
   const [passwordTimeout, setPasswordTimeout] = useState<number | null>(null);
+  const [showPassword, setShowPassword] = useState(false); // Para mostrar/ocultar contraseña
   const [errors, setErrors] = useState({
     firstName: '',
     lastName: '',
@@ -25,63 +49,71 @@ const RegisterPage = () => {
     birthDate: '',
   });
 
+  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+  };
+
+  const handleClickShowPassword = () => {
+    setShowPassword((prev) => !prev);
+  };
+
   const validateForm = (data: FormData) => {
     const newErrors = {
-      firstName: '',
-      lastName: '',
-      email: '',
-      confirmEmail: '',
-      password: '',
-      confirmPassword: '',
-      birthDate: '',
+      firstName: "",
+      lastName: "",
+      email: "",
+      confirmEmail: "",
+      password: "",
+      confirmPassword: "",
+      birthDate: "",
     };
     let isValid = true;
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (!data.get('firstName')) {
-      newErrors.firstName = t('FIRST_NAME_REQUIRED');
+    if (!data.get("firstName")) {
+      newErrors.firstName = t("FIRST_NAME_REQUIRED");
       isValid = false;
     }
-    if (!data.get('lastName')) {
-      newErrors.lastName = t('LAST_NAME_REQUIRED');
-      isValid = false;
-    }
-
-    if (!data.get('birthDate')) {
-      newErrors.birthDate = t('BIRTH_DATE_REQUIRED');
+    if (!data.get("lastName")) {
+      newErrors.lastName = t("LAST_NAME_REQUIRED");
       isValid = false;
     }
 
-    const email = data.get('email') as string;
-    const confirmEmail = data.get('confirmEmail') as string;
+    if (!data.get("birthDate")) {
+      newErrors.birthDate = t("BIRTH_DATE_REQUIRED");
+      isValid = false;
+    }
+
+    const email = data.get("email") as string;
+    const confirmEmail = data.get("confirmEmail") as string;
 
     if (!email) {
-      newErrors.email = t('EMAIL_REQUIRED');
+      newErrors.email = t("EMAIL_REQUIRED");
       isValid = false;
     } else if (!emailRegex.test(email)) {
-      newErrors.email = t('EMAIL_INVALID');
+      newErrors.email = t("EMAIL_INVALID");
       isValid = false;
     }
 
     if (confirmEmail !== email) {
-      newErrors.confirmEmail = t('EMAILS_DO_NOT_MATCH');
+      newErrors.confirmEmail = t("EMAILS_DO_NOT_MATCH");
       isValid = false;
     }
 
-    const password = data.get('password') as string;
-    const confirmPassword = data.get('confirmPassword') as string;
+    const password = data.get("password") as string;
+    const confirmPassword = data.get("confirmPassword") as string;
 
     if (!password) {
-      newErrors.password = t('PASSWORD_REQUIRED');
+      newErrors.password = t("PASSWORD_REQUIRED");
       isValid = false;
     } else if (password.length < 8) {
-      newErrors.password = t('PASSWORD_TOO_SHORT');
+      newErrors.password = t("PASSWORD_TOO_SHORT");
       isValid = false;
     }
 
     if (confirmPassword !== password) {
-      newErrors.confirmPassword = t('PASSWORDS_DO_NOT_MATCH');
+      newErrors.confirmPassword = t("PASSWORDS_DO_NOT_MATCH");
       isValid = false;
     }
 
@@ -121,35 +153,35 @@ const RegisterPage = () => {
 
     if (validateForm(data)) {
       console.log({
-        firstName: data.get('firstName'),
-        lastName: data.get('lastName'),
-        email: data.get('email'),
-        confirmEmail: data.get('confirmEmail'),
-        password: data.get('password'),
-        confirmPassword: data.get('confirmPassword'),
-        birthDate: data.get('birthDate'),
+        firstName: data.get("firstName"),
+        lastName: data.get("lastName"),
+        email: data.get("email"),
+        confirmEmail: data.get("confirmEmail"),
+        password: data.get("password"),
+        confirmPassword: data.get("confirmPassword"),
+        birthDate: data.get("birthDate"),
       });
     }
   };
 
   const onLoginClick = () => {
-    navigate('/auth/login');
+    navigate("/auth/login");
   };
 
   const getPasswordStrengthColor = () => {
-    if (passwordStrength === 100) return theme.palette.success.main;  // Verde
-    if (passwordStrength >= 75) return theme.palette.warning.main;    // Amarillo
-    return theme.palette.error.main;                                   // Rojo
+    if (passwordStrength === 100) return theme.palette.success.main; // Verde
+    if (passwordStrength >= 75) return theme.palette.warning.main; // Amarillo
+    return theme.palette.error.main; // Rojo
   };
 
   const availableLanguages = [
-    { code: 'en', label: 'English' },
-    { code: 'es', label: 'Español' },
+    { code: "en", label: "English" },
+    { code: "es", label: "Español" },
   ];
 
-  const languagesToShow = availableLanguages.filter(
-    (lang) => lang.code !== i18n.language
-  );
+  // const languagesToShow = availableLanguages.filter(
+  //   (lang) => lang.code !== i18n.language
+  // );
 
   const handleLanguageMenuClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -166,15 +198,7 @@ const RegisterPage = () => {
 
   return (
     <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <Box
-        sx={{
-          marginTop: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
+      <Box sx={{ marginTop: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <Avatar sx={{ m: 1, bgcolor: theme.palette.secondary.main }}>
           <LockOutlinedIcon />
         </Avatar>
@@ -184,29 +208,38 @@ const RegisterPage = () => {
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete="given-name"
-                name="firstName"
-                required
-                fullWidth
-                id="firstName"
-                label={t('FIRST_NAME')}
-                autoFocus
-                error={!!errors.firstName}
-                helperText={errors.firstName}
-              />
+              <FormControl fullWidth>
+                <InputLabel htmlFor="firstName">{t('FIRST_NAME')}</InputLabel>
+                <OutlinedInput
+                  id="firstName"
+                  name="firstName"
+                  autoComplete="given-name"
+                  endAdornment={
+                    <InputAdornment position="start">
+                      <PersonIcon />
+                    </InputAdornment>
+                  }
+                  label={t('FIRST_NAME')}
+                  error={!!errors.firstName}
+                />
+              </FormControl>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField
-                required
-                fullWidth
-                id="lastName"
-                label={t('LAST_NAME')}
-                name="lastName"
-                autoComplete="family-name"
-                error={!!errors.lastName}
-                helperText={errors.lastName}
-              />
+              <FormControl fullWidth>
+                <InputLabel htmlFor="lastName">{t('LAST_NAME')}</InputLabel>
+                <OutlinedInput
+                  id="lastName"
+                  name="lastName"
+                  autoComplete="family-name"
+                  endAdornment={
+                    <InputAdornment position="start">
+                      <PersonIcon />
+                    </InputAdornment>
+                  }
+                  label={t('LAST_NAME')}
+                  error={!!errors.lastName}
+                />
+              </FormControl>
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -224,42 +257,63 @@ const RegisterPage = () => {
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                id="email"
-                label={t('EMAIL_ADDRESS_PLACEHOLDER')}
-                name="email"
-                autoComplete="email"
-                error={!!errors.email}
-                helperText={errors.email}
-              />
+              <FormControl fullWidth>
+                <InputLabel htmlFor="email">{t('EMAIL_ADDRESS_PLACEHOLDER')}</InputLabel>
+                <OutlinedInput
+                  id="email"
+                  name="email"
+                  autoComplete="email"
+                  endAdornment={
+                    <InputAdornment position="start">
+                      <EmailIcon />
+                    </InputAdornment>
+                  }
+                  label={t('EMAIL_ADDRESS_PLACEHOLDER')}
+                  error={!!errors.email}
+                />
+              </FormControl>
             </Grid>
             <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                id="confirmEmail"
-                label={t('CONFIRM_EMAIL_ADDRESS')}
-                name="confirmEmail"
-                autoComplete="email"
-                error={!!errors.confirmEmail}
-                helperText={errors.confirmEmail}
-              />
+              <FormControl fullWidth>
+                <InputLabel htmlFor="confirmEmail">{t('CONFIRM_EMAIL_ADDRESS')}</InputLabel>
+                <OutlinedInput
+                  id="confirmEmail"
+                  name="confirmEmail"
+                  autoComplete="email"
+                  endAdornment={
+                    <InputAdornment position="start">
+                      <EmailIcon />
+                    </InputAdornment>
+                  }
+                  label={t('CONFIRM_EMAIL_ADDRESS')}
+                  error={!!errors.confirmEmail}
+                />
+              </FormControl>
             </Grid>
             <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                name="password"
-                label={t('PASSWORD_PLACEHOLDER')}
-                type="password"
-                id="password"
-                autoComplete="new-password"
-                error={!!errors.password}
-                helperText={errors.password}
-                onChange={handlePasswordChange}
-              />
+              <FormControl fullWidth>
+                <InputLabel htmlFor="password">{t('PASSWORD_PLACEHOLDER')}</InputLabel>
+                <OutlinedInput
+                  id="password"
+                  name="password"
+                  type={showPassword ? 'text' : 'password'}
+                  onChange={handlePasswordChange}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                  label={t('PASSWORD_PLACEHOLDER')}
+                  error={!!errors.password}
+                />
+              </FormControl>
               {showPasswordStrength && (
                 <Box sx={{ mt: 2 }}>
                   <Typography variant="body2">
@@ -275,9 +329,9 @@ const RegisterPage = () => {
                     sx={{
                       height: 10,
                       borderRadius: 5,
-                      backgroundColor: theme.palette.background.default, // Fondo del tema
+                      backgroundColor: theme.palette.background.default,
                       '& .MuiLinearProgress-bar': {
-                        backgroundColor: getPasswordStrengthColor(), // Color dinámico
+                        backgroundColor: getPasswordStrengthColor(),
                       },
                     }}
                   />
@@ -285,25 +339,31 @@ const RegisterPage = () => {
               )}
             </Grid>
             <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                name="confirmPassword"
-                label={t('CONFIRM_PASSWORD_PLACEHOLDER')}
-                type="password"
-                id="confirmPassword"
-                autoComplete="new-password"
-                error={!!errors.confirmPassword}
-                helperText={errors.confirmPassword}
-              />
+              <FormControl fullWidth>
+                <InputLabel htmlFor="confirmPassword">{t('CONFIRM_PASSWORD_PLACEHOLDER')}</InputLabel>
+                <OutlinedInput
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type={showPassword ? 'text' : 'password'}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                  label={t('CONFIRM_PASSWORD_PLACEHOLDER')}
+                  error={!!errors.confirmPassword}
+                />
+              </FormControl>
             </Grid>
           </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-          >
+          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
             {t('REGISTER')}
           </Button>
           <Grid container justifyContent="flex-end">
@@ -315,29 +375,13 @@ const RegisterPage = () => {
           </Grid>
         </Box>
       </Box>
-
-      {/* Botón de selección de idioma */}
       <Tooltip title={t('CHANGE_LANGUAGE')} aria-label="change-language">
-        <IconButton
-          color="inherit"
-          aria-label="change-language"
-          onClick={handleLanguageMenuClick}
-          sx={{
-            position: 'fixed',
-            top: 16,
-            right: 16,
-          }}
-        >
+        <IconButton color="inherit" onClick={handleLanguageMenuClick} sx={{ position: 'fixed', top: 16, right: 16 }}>
           <LanguageIcon />
         </IconButton>
       </Tooltip>
-
-      <Menu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleMenuClose}
-      >
-        {languagesToShow.map((lang) => (
+      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
+        {availableLanguages.map((lang) => (
           <MenuItem key={lang.code} onClick={() => handleLanguageChange(lang.code)}>
             {lang.label}
           </MenuItem>
