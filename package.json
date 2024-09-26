@@ -1,14 +1,16 @@
 {
   "name": "nica-wallet-vite",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "start": "serve -s dist"
+    "start": "http-server ./dist",
+    "all": "npm install && npm run build && npm run dev",
+    "preinstall": "npx npm-force-resolutions"
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",
@@ -18,7 +20,9 @@
     "@mui/material": "^6.0.1",
     "@mui/styles": "^6.0.1",
     "axios": "^1.7.6",
+    "date-fns": "^4.1.0",
     "framer-motion": "^11.4.0",
+    "http-server": "^14.1.1",
     "i18next": "^23.14.0",
     "i18next-browser-languagedetector": "^8.0.0",
     "nica-wallet-vite": "file:",
@@ -26,8 +30,7 @@
     "react-dom": "^18.3.1",
     "react-i18next": "^15.0.1",
     "react-router-dom": "^6.26.1",
-    "serve": "^14.2.3",
-    "vite": "^5.4.1"
+    "vite": "^5.4.7"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
@@ -39,7 +42,11 @@
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.9",
     "globals": "^15.9.0",
+    "npm-force-resolutions": "^0.0.10",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.0.1"
+  },
+  "resolutions": {
+    "path-to-regexp": "6.2.2"
   }
 }
