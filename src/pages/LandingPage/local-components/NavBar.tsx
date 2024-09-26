@@ -3,43 +3,25 @@ import {
   AppBar,
   Box,
   Toolbar,
-  IconButton,
   Typography,
   Button,
   Drawer,
   List,
   ListItem,
   ListItemText,
-  Menu,
-  MenuItem,
+  IconButton,
 } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import LanguageIcon from "@mui/icons-material/Language";
-import { useTranslation } from "react-i18next";
+import MenuIcon from "@mui/icons-material/Language";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import LanguageSwitcher from "../../../components/LanguageSwitcher";
 
 const NavBar: React.FC = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const { i18n } = useTranslation();
-  const isMenuOpen = Boolean(anchorEl);
   const { t } = useTranslation();
 
   const toggleDrawer = (open: boolean) => () => {
     setDrawerOpen(open);
-  };
-
-  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleLanguageChange = (lang: string) => {
-    i18n.changeLanguage(lang);
-    handleMenuClose();
   };
 
   const sections = [
@@ -50,12 +32,6 @@ const NavBar: React.FC = () => {
     { name: t("OUR_PLANS"), href: "#planes" },
     { name: t("CONTACT"), href: "#contacto" },
   ];
-
-  const availableLanguages = ["es", "en"];
-  const currentLanguage = i18n.language;
-  const languagesToDisplay = availableLanguages.filter(
-    (lang) => lang !== currentLanguage
-  );
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -107,30 +83,7 @@ const NavBar: React.FC = () => {
             >
               {t("LOGIN")}
             </Button>
-
-            <IconButton
-              color="inherit"
-              aria-label="change language"
-              onClick={handleMenuOpen}
-              sx={{ marginLeft: "1rem" }}
-            >
-              <LanguageIcon />
-            </IconButton>
-
-            <Menu
-              anchorEl={anchorEl}
-              open={isMenuOpen}
-              onClose={handleMenuClose}
-              MenuListProps={{
-                "aria-labelledby": "basic-button",
-              }}
-            >
-              {languagesToDisplay.map((lang) => (
-                <MenuItem key={lang} onClick={() => handleLanguageChange(lang)}>
-                  {lang === "es" ? "Español" : "English"}
-                </MenuItem>
-              ))}
-            </Menu>
+            <LanguageSwitcher sx={{ marginLeft: "1rem" }} />
           </Box>
 
           <IconButton
@@ -169,30 +122,7 @@ const NavBar: React.FC = () => {
             </ListItem>
 
             <ListItem>
-              <IconButton
-                color="inherit"
-                aria-label="change language"
-                onClick={handleMenuOpen}
-              >
-                <LanguageIcon />
-              </IconButton>
-              <Menu
-                anchorEl={anchorEl}
-                open={isMenuOpen}
-                onClose={handleMenuClose}
-                MenuListProps={{
-                  "aria-labelledby": "basic-button",
-                }}
-              >
-                {languagesToDisplay.map((lang) => (
-                  <MenuItem
-                    key={lang}
-                    onClick={() => handleLanguageChange(lang)}
-                  >
-                    {lang === "es" ? "Español" : "English"}
-                  </MenuItem>
-                ))}
-              </Menu>
+              <LanguageSwitcher />
             </ListItem>
           </List>
         </Box>

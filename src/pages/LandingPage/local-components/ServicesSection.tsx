@@ -97,7 +97,7 @@ const ServicesSection: React.FC = () => {
                 boxShadow: 3,
                 borderRadius: "12px",
                 padding: { xs: "15px", md: "20px" },
-                height: "100%",
+                height: "80%",
                 display: "flex",
                 flexDirection: "column",
                 margin: "0 auto",

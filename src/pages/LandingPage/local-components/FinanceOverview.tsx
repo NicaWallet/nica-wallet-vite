@@ -3,6 +3,8 @@ import { Box, Typography, Button, Grid } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import FinanceOverviewImage from '/src/assets/images/finance-overview-image.png';
+
 
 const FinanceOverview: React.FC = () => {
   // #region hooks
@@ -86,7 +88,7 @@ const FinanceOverview: React.FC = () => {
         <Grid item xs={12} md={6}>
           <Box
             component="img"
-            src="src/assets/images/finance-overview-image.png"
+            src={FinanceOverviewImage}
             alt={t("FINANCE_OVERVIEW_IMAGE_ALT")}
             sx={{
               display: { xs: "none", md: "block" },
