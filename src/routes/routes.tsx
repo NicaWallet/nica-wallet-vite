@@ -4,6 +4,7 @@ import NotFoundPage from "../pages/NotFoundPage";
 import LoginPage from "../pages/Login";
 import RegisterPage from "../pages/Register";
 import DashboardLayout from "../pages/DashboardLayout";
+import WelcomePage from "../pages/WelcomePage";
 
 const AppRoutes = () => {
   return (
@@ -25,9 +26,7 @@ const AppRoutes = () => {
         {/* Dashboard module (rutas privadas) */}
         <Route element={<DashboardLayout />}>
           {/* Welcome page */}
-          <Route path="/welcome" element={<>
-          <h1>
-            Hola esta es la pagina de bienvenida</h1></>} />
+          <Route path="/welcome" element={<WelcomePage />} />
 
           {/* Dashboard page */}
           {/* <Route path="/dashboard" element={<DashboardPage />} /> */}

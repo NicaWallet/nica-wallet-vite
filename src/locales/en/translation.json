@@ -112,5 +112,14 @@
   "ACCESS_HISTORY": "Access History",
   "NOTIFICATIONS": "Notifications",
   "SETTINGS": "Settings",
-  "SEARCH": "Search..."
+  "SEARCH": "Search...",
+  "WELCOME_TITLE": "Welcome, {{name}}!",
+  "INTRODUCTION_MESSAGE": "We are very happy to have you with us. On {{date}} at {{time}}, you began your journey with NicaWallet, a tool designed to help you manage your finances simply and effectively. We're excited to accompany you on this path towards better financial control!",
+  "EXPLORE_DASHBOARD": "Explore Dashboard",
+  "CONTROL_EXPENSES_TITLE": "Control your expenses",
+  "CONTROL_EXPENSES_DESCRIPTION": "Keep detailed track of your expenses to improve your financial health.",
+  "CREATE_BUDGET_TITLE": "Create budgets",
+  "CREATE_BUDGET_DESCRIPTION": "Set and follow your monthly budgets to save more.",
+  "DETAILED_REPORTS_TITLE": "Detailed reports",
+  "DETAILED_REPORTS_DESCRIPTION": "Analyze your finances with personalized reports and make informed decisions."
 }
