@@ -3,20 +3,17 @@ import { Box, Toolbar, useMediaQuery, Typography, Button } from "@mui/material";
 import SideNav from "./local-components/SideNav";
 import DashboardNavBar from "./local-components/DashboardNavBar";
 import { Outlet, useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next"; // Agrega el hook useTranslation
-
-const drawerWidth = 240;
+import { useTranslation } from "react-i18next";
 
 const DashboardLayout: React.FC = () => {
   const isSmallScreen = useMediaQuery("(max-width:800px)");
   const navigate = useNavigate();
-  const { t } = useTranslation(); // Usa el hook useTranslation
+  const { t } = useTranslation();
 
   const handleLogout = async () => {
     try {
-      // Simulación de petición de cierre de sesión (lógica real pendiente de implementar)
+      // Simulación de petición de cierre de sesión
       console.log("Cerrando sesión...");
-      // Redirigir a la página de inicio
       navigate("/");
     } catch (error) {
       console.error("Error al cerrar sesión", error);
@@ -24,7 +21,14 @@ const DashboardLayout: React.FC = () => {
   };
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box
+      sx={{
+        display: "flex",
+        height: "100vh",
+        width: "100vw",
+        overflow: "hidden",
+      }}
+    >
       {isSmallScreen ? (
         <Box
           sx={{
@@ -39,10 +43,10 @@ const DashboardLayout: React.FC = () => {
           }}
         >
           <Typography variant="h6" sx={{ marginBottom: "16px" }}>
-            {t("MOBILE_DEVICE_WARNING")} {/* Traducción correcta */}
+            {t("MOBILE_DEVICE_WARNING")}
           </Typography>
           <Button variant="contained" color="secondary" onClick={handleLogout}>
-            {t("LOGOUT")} {/* Traducción correcta */}
+            {t("LOGOUT")}
           </Button>
         </Box>
       ) : (
@@ -54,13 +58,22 @@ const DashboardLayout: React.FC = () => {
             sx={{
               flexGrow: 1,
               backgroundColor: "#f5f5f5",
-              minHeight: "100vh",
-              padding: "16px",
-              marginLeft: `${drawerWidth}px`,
+              height: "100%",
+              display: "flex",
+              flexDirection: "column",
+              overflow: "hidden", // Asegura que el scroll sea interno
             }}
           >
             <Toolbar />
-            <Outlet />
+            <Box
+              sx={{
+                flexGrow: 1,
+                padding: "16px",
+                overflowY: "auto", // Scroll interno
+              }}
+            >
+              <Outlet />
+            </Box>
           </Box>
         </>
       )}
