@@ -1,4 +1,4 @@
-import { Avatar, Button, CssBaseline, TextField, Link, Grid, Box, Typography, Container, LinearProgress, IconButton, Menu, MenuItem, Tooltip } from '@mui/material';
+import { Avatar, Button, TextField, Link, Grid, Box, Typography, Container, LinearProgress, IconButton, Menu, MenuItem, Tooltip } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import LanguageIcon from '@mui/icons-material/Language';
 import { useTheme } from '@mui/material/styles';
@@ -166,7 +166,6 @@ const RegisterPage = () => {
 
   return (
     <Container component="main" maxWidth="xs">
-      <CssBaseline />
       <Box
         sx={{
           marginTop: 8,
