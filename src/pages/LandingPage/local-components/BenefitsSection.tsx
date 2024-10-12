@@ -14,6 +14,10 @@ import SavingsIcon from "@mui/icons-material/Savings";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { useTranslation } from "react-i18next";
 
+/**
+ * BenefitsSection component displays a section with various benefits.
+ * Each benefit is represented by a card with an icon, title, description, and a button.
+ */
 const BenefitsSection: React.FC = () => {
   const { t } = useTranslation();
 

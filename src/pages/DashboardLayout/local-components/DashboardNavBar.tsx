@@ -61,8 +61,12 @@ const exampleNotifications = [
   },
 ];
 
+/**
+ * DashboardNavBar component renders the navigation bar for the dashboard.
+ * It includes language switcher, notifications, settings, profile menu, and a search bar.
+ */
 const DashboardNavBar = () => {
-  const { t } = useTranslation(); // Usa el hook useTranslation
+  const { t } = useTranslation();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [settingsAnchorEl, setSettingsAnchorEl] = useState<null | HTMLElement>(
     null
@@ -107,16 +111,12 @@ const DashboardNavBar = () => {
       sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
     >
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-        {/* Logo o nombre de la empresa */}
         <Typography variant="h6" noWrap component="div">
           NicaWallet Dashboard
         </Typography>
 
-        {/* Iconos a la derecha */}
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          {/* Botón para seleccionar idioma */}
-          <LanguageSwitcher /> {/* Usamos el LanguageSwitcher directamente */}
-          {/* Botón de notificaciones */}
+          <LanguageSwitcher />
           <IconButton color="inherit" onClick={handleNotificationMenuOpen}>
             <Badge badgeContent={unreadNotificationsCount} color="secondary">
               <NotificationsIcon />
@@ -180,7 +180,6 @@ const DashboardNavBar = () => {
               )}
             </List>
 
-            {/* Botón para mostrar más notificaciones */}
             {sortedNotifications.length > 3 && !showAllNotifications && (
               <MenuItem
                 onClick={handleShowMore}
@@ -192,7 +191,6 @@ const DashboardNavBar = () => {
               </MenuItem>
             )}
           </Menu>
-          {/* Botón de ajustes con menú */}
           <IconButton color="inherit" onClick={handleSettingsMenuOpen}>
             <SettingsIcon />
           </IconButton>
@@ -204,7 +202,6 @@ const DashboardNavBar = () => {
             <MenuItem onClick={handleMenuClose}>Configuración general</MenuItem>
             <MenuItem onClick={handleMenuClose}>Preferencias</MenuItem>
           </Menu>
-          {/* Menú desplegable de perfil */}
           <IconButton
             edge="end"
             color="inherit"
@@ -220,7 +217,6 @@ const DashboardNavBar = () => {
             <MenuItem onClick={handleMenuClose}>Mi Perfil</MenuItem>
             <MenuItem onClick={handleMenuClose}>Cerrar Sesión</MenuItem>
           </Menu>
-          {/* Campo de búsqueda con borde */}
           <Paper
             component="form"
             sx={{
@@ -230,7 +226,7 @@ const DashboardNavBar = () => {
               width: 250,
               marginLeft: "20px",
               borderRadius: "4px",
-              border: "1px solid rgba(0, 0, 0, 0.23)", // Agregar el borde
+              border: "1px solid rgba(0, 0, 0, 0.23)",
             }}
           >
             <SearchIcon sx={{ color: "rgba(0, 0, 0, 0.54)" }} />

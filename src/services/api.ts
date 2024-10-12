@@ -3,13 +3,14 @@ import { BASE_URL } from '../config/config';
 
 const api = axios.create({
     baseURL: BASE_URL,
-    timeout: 5000, // 5 seconds timeout
+    timeout: 5000,
 });
 
-
+/**
+ * Interceptor to add authorization token to request headers if available.
+ */
 api.interceptors.request.use(
     config => {
-        // Add auth token to headers if available
         const token = localStorage.getItem('token');
         if (token) {
             config.headers['Authorization'] = `Bearer ${token}`;
@@ -21,17 +22,24 @@ api.interceptors.request.use(
     }
 );
 
+/**
+ * Interceptor to handle responses and errors.
+ */
 api.interceptors.response.use(
     response => response,
     error => {
-        // Handle global errors here (like 401, 403, etc.)
-        if (error.response.status === 401) {
-            // Handle unauthorized access
-            console.error("Unauthorized access - perhaps redirect to login?");
+        if (error.response) {
+            if (error.response.status === 401) {
+                console.error("Unauthorized access - perhaps redirect to login?");
+            }
+        } else if (error.request) {
+            console.error("No response received from server.");
+        } else {
+            console.error("Error during request setup:", error.message);
         }
+
         return Promise.reject(error);
     }
 );
-
 
 export default api;

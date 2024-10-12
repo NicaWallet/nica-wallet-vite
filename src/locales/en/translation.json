@@ -121,5 +121,8 @@
   "CREATE_BUDGET_TITLE": "Create budgets",
   "CREATE_BUDGET_DESCRIPTION": "Set and follow your monthly budgets to save more.",
   "DETAILED_REPORTS_TITLE": "Detailed reports",
-  "DETAILED_REPORTS_DESCRIPTION": "Analyze your finances with personalized reports and make informed decisions."
+  "BIRTH_DATE_INVALID": "Invalid date of birth",
+  "BIRTH_DATE_IN_FUTURE": "Date of birth cannot be in the future",
+  "CONFIRM_EMAIL_REQUIRED": "Email confirmation is required",
+  "CONFIRM_PASSWORD_REQUIRED": "Password confirmation is required"
 }

@@ -36,6 +36,10 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
 const drawerWidth = 240;
 
+/**
+ * SideNav component renders a navigation drawer with various menu items.
+ * It supports nested submenus and collapsible sections.
+ */
 const SideNav = () => {
   const [open, setOpen] = useState(true);
   const [openAnalytics, setOpenAnalytics] = useState(false);
@@ -47,11 +51,18 @@ const SideNav = () => {
   );
   const navigate = useNavigate();
 
+  /**
+   * Toggles the drawer open and close state.
+   */
   const handleDrawerToggle = () => {
     setOpen(!open);
     setAnchorEl(null);
   };
 
+  /**
+   * Toggles the Analytics submenu.
+   * @param event - The mouse event triggering the toggle.
+   */
   const toggleAnalytics = (event: React.MouseEvent<HTMLElement>) => {
     if (!open) {
       setAnchorEl(anchorEl ? null : event.currentTarget);
@@ -76,6 +87,10 @@ const SideNav = () => {
     }
   };
 
+  /**
+   * Toggles the Profile submenu.
+   * @param event - The mouse event triggering the toggle.
+   */
   const toggleProfile = (event: React.MouseEvent<HTMLElement>) => {
     if (!open) {
       setAnchorEl(anchorEl ? null : event.currentTarget);
@@ -100,6 +115,10 @@ const SideNav = () => {
     }
   };
 
+  /**
+   * Toggles the Security submenu.
+   * @param event - The mouse event triggering the toggle.
+   */
   const toggleSecurity = (event: React.MouseEvent<HTMLElement>) => {
     if (!open) {
       setAnchorEl(anchorEl ? null : event.currentTarget);
@@ -124,6 +143,10 @@ const SideNav = () => {
     }
   };
 
+  /**
+   * Navigates to the specified path.
+   * @param path - The path to navigate to.
+   */
   const handleNavigate = (path: string) => {
     navigate(path);
     setAnchorEl(null);
@@ -168,12 +191,7 @@ const SideNav = () => {
         )}
       </IconButton>
 
-      <List
-        sx={{
-          height: "calc(100vh - 64px)",
-          overflowY: "auto",
-        }}
-      >
+      <List sx={{ height: "calc(100vh - 64px)", overflowY: "auto" }}>
         <ListItem
           onClick={() => handleNavigate("/")}
           sx={{

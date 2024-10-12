@@ -7,10 +7,24 @@ import ServicesSection from "./local-components/ServicesSection";
 import { motion, Variants } from "framer-motion";
 import { useMediaQuery, useTheme } from "@mui/material";
 
+/**
+ * LandingPage component that renders the main landing page of the application.
+ * It includes various sections such as NavBar, FinanceOverview, BenefitsSection,
+ * MissionSection, ServicesSection, and Footer. It also applies animations to
+ * these sections based on the screen size.
+ */
 const LandingPage = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
+  /**
+   * Returns an animated section if the screen size is not mobile.
+   * Otherwise, it returns a regular div containing the children.
+   *
+   * @param children - The content to be wrapped in the animated section.
+   * @param variants - The animation variants to be applied.
+   * @returns A motion.div or div containing the children.
+   */
   const getAnimatedSection = (
     children: React.ReactNode,
     variants: Variants

@@ -3,7 +3,7 @@ import { Box, Typography, Button } from "@mui/material";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { DateTimeUtils, formatTime } from "../../utils/dateTimeUtils";
-import { useTranslation } from "react-i18next"; // Importar hook para traducciones
+import { useTranslation } from "react-i18next";
 
 interface User {
   first_name: string;
@@ -12,8 +12,13 @@ interface User {
   created_at: string;
 }
 
+/**
+ * WelcomePage component displays a welcome message to the user.
+ * It fetches user data from localStorage and displays a personalized greeting.
+ * It also provides navigation to the dashboard and displays some feature highlights.
+ */
 const WelcomePage: React.FC = () => {
-  const { t } = useTranslation(); // Usar hook de traducciones
+  const { t } = useTranslation();
   const [user, setUser] = useState<User | null>(null);
   const navigate = useNavigate();
 

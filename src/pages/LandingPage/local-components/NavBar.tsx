@@ -16,10 +16,18 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "../../../components/LanguageSwitcher";
 
+/**
+ * NavBar component that renders the navigation bar for the application.
+ * It includes links to different sections of the page and a language switcher.
+ */
 const NavBar: React.FC = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const { t } = useTranslation();
 
+  /**
+   * Toggles the state of the drawer (open/close).
+   * @param open - Boolean indicating whether the drawer should be open or closed.
+   */
   const toggleDrawer = (open: boolean) => () => {
     setDrawerOpen(open);
   };

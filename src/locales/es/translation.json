@@ -121,5 +121,11 @@
   "CREATE_BUDGET_TITLE": "Crea presupuestos",
   "CREATE_BUDGET_DESCRIPTION": "Establece y sigue tus presupuestos mensuales para ahorrar más.",
   "DETAILED_REPORTS_TITLE": "Reportes detallados",
-  "DETAILED_REPORTS_DESCRIPTION": "Analiza tus finanzas con reportes personalizados y toma decisiones informadas."
+  "DETAILED_REPORTS_DESCRIPTION": "Analiza tus finanzas con reportes personalizados y toma decisiones informadas.",
+  "LOGIN_FAILED_ERROR": "Error al iniciar sesión. Por favor, verifica tus credenciales. Si continúas experimentando problemas, por favor contacta al soporte.",
+  "REGISTER_ERROR": "Ocurrió un error al intentar registrar tu cuenta. Por favor, inténtalo de nuevo más tarde.",
+  "BIRTH_DATE_INVALID": "La fecha de nacimiento no es válida",
+  "BIRTH_DATE_IN_FUTURE": "La fecha de nacimiento no puede estar en el futuro",
+  "CONFIRM_EMAIL_REQUIRED": "La confirmación del correo electrónico es obligatoria",
+  "CONFIRM_PASSWORD_REQUIRED": "La confirmación de la contraseña es obligatoria"
 }

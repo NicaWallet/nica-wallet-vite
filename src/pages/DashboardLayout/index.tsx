@@ -5,14 +5,20 @@ import DashboardNavBar from "./local-components/DashboardNavBar";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
+/**
+ * DashboardLayout component that provides the layout for the dashboard.
+ * It adjusts the layout based on the screen size.
+ */
 const DashboardLayout: React.FC = () => {
   const isSmallScreen = useMediaQuery("(max-width:800px)");
   const navigate = useNavigate();
   const { t } = useTranslation();
 
+  /**
+   * Handles the logout action by navigating to the home page.
+   */
   const handleLogout = async () => {
     try {
-      // Simulación de petición de cierre de sesión
       console.log("Cerrando sesión...");
       navigate("/");
     } catch (error) {
@@ -61,7 +67,7 @@ const DashboardLayout: React.FC = () => {
               height: "100%",
               display: "flex",
               flexDirection: "column",
-              overflow: "hidden", // Asegura que el scroll sea interno
+              overflow: "hidden",
             }}
           >
             <Toolbar />
@@ -69,7 +75,7 @@ const DashboardLayout: React.FC = () => {
               sx={{
                 flexGrow: 1,
                 padding: "16px",
-                overflowY: "auto", // Scroll interno
+                overflowY: "auto",
               }}
             >
               <Outlet />

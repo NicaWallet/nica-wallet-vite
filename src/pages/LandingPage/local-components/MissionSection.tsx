@@ -3,6 +3,12 @@ import { Box, Grid, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import FinanceOverviewImage from "/src/assets/images/finance-overview-image.png";
 
+/**
+ * MissionSection component displays the mission statement of the application.
+ * It includes an image and several text sections that describe the mission,
+ * what drives the organization, and key focus areas such as financial empowerment,
+ * inclusivity, and education.
+ */
 const MissionSection: React.FC = () => {
   const { t } = useTranslation();
 
@@ -20,7 +26,7 @@ const MissionSection: React.FC = () => {
           xs={12}
           md={6}
           sx={{
-            display: { xs: "none", md: "block" }, // Oculta la imagen en pantallas pequeñas
+            display: { xs: "none", md: "block" },
           }}
         >
           <Box

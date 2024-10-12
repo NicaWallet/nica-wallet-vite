@@ -1,6 +1,9 @@
-// src/styles/theme.ts
 import { createTheme } from '@mui/material/styles';
 
+/**
+ * Creates a custom theme using Material-UI's createTheme function.
+ * This theme customizes typography and component default properties.
+ */
 const theme = createTheme({
   typography: {
     fontFamily: 'Roboto, sans-serif',
