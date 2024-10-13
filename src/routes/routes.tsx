@@ -5,6 +5,7 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import DashboardLayout from "../pages/DashboardLayout";
 import WelcomePage from "../pages/WelcomePage";
+import { AdminPanel } from "../pages/AdminPanel";
 
 /**
  * AppRoutes component defines the main routing structure for the application.
@@ -49,6 +50,27 @@ const AppRoutes = () => {
           {/* <Route path="/accounts" element={<AccountsPage />} /> */}
           {/* <Route path="/reports" element={<ReportsPage />} /> */}
           {/* <Route path="/settings" element={<SettingsPage />} /> */}
+
+          {/* Admin Panel */}
+          <Route path="/admin-panel" element={<AdminPanel />}></Route>
+
+          {/* Admin Panel - users */}
+          {/* <Route path="/admin-panel/users" element={<UsersPage />} /> */}
+
+          {/* Admin Panel - roles */}
+          {/* <Route path="/admin-panel/roles" element={<RolesPage />} /> */}
+
+          {/* Admin Panel - settings */}
+          {/* <Route path="/admin-panel/settings" element={<SettingsPage />} /> */}
+
+          {/* Admin Panel - reports */}
+          {/* <Route path="/admin-panel/reports" element={<ReportsPage />} /> */}
+
+          {/* Admin Panel - analytics */}
+          {/* <Route path="/admin-panel/analytics" element={<AnalyticsPage />} /> */}
+
+          {/* Admin Panel - notifications */}
+          {/* <Route path="/admin-panel/notifications" element={<NotificationsPage />} /> */}
         </Route>
       </Routes>
     </Router>

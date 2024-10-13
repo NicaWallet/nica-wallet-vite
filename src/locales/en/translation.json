@@ -124,5 +124,18 @@
   "BIRTH_DATE_INVALID": "Invalid date of birth",
   "BIRTH_DATE_IN_FUTURE": "Date of birth cannot be in the future",
   "CONFIRM_EMAIL_REQUIRED": "Email confirmation is required",
-  "CONFIRM_PASSWORD_REQUIRED": "Password confirmation is required"
+  "CONFIRM_PASSWORD_REQUIRED": "Password confirmation is required",
+  "LOGIN_FAILED_ERROR": "Failed to log in. Please check your credentials. If you continue to experience issues, please contact support.",
+  "ADMIN_PANEL": "Admin Panel",
+  "ADMIN_PANEL_DESCRIPTION": "Here you can manage various administrative tasks.",
+  "USER_MANAGEMENT": "User Management",
+  "MANAGE_USERS_PERMISSIONS_ROLES": "Manage users, permissions, and roles.",
+  "ROLE_MANAGEMENT": "Role Management",
+  "ASSIGN_UPDATE_USER_ROLES": "Assign and update user roles.",
+  "SYSTEM_SETTINGS": "System Settings",
+  "MANAGE_SYSTEM_SETTINGS": "Manage system-wide settings and configurations.",
+  "VIEW_SYSTEM_REPORTS": "View system reports and logs.",
+  "ACCESS_SYSTEM_ANALYTICS": "Access system analytics and performance metrics.",
+  "MANAGE_SYSTEM_NOTIFICATIONS": "Manage system notifications and alerts.",
+  "GO_TO": "Go to"
 }

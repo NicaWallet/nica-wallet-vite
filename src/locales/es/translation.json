@@ -127,5 +127,17 @@
   "BIRTH_DATE_INVALID": "La fecha de nacimiento no es válida",
   "BIRTH_DATE_IN_FUTURE": "La fecha de nacimiento no puede estar en el futuro",
   "CONFIRM_EMAIL_REQUIRED": "La confirmación del correo electrónico es obligatoria",
-  "CONFIRM_PASSWORD_REQUIRED": "La confirmación de la contraseña es obligatoria"
+  "CONFIRM_PASSWORD_REQUIRED": "La confirmación de la contraseña es obligatoria",
+  "ADMIN_PANEL": "Panel de administración",
+  "ADMIN_PANEL_DESCRIPTION": "Aquí puedes gestionar varias tareas administrativas.",
+  "USER_MANAGEMENT": "Gestión de Usuarios",
+  "MANAGE_USERS_PERMISSIONS_ROLES": "Gestiona usuarios, permisos y roles.",
+  "ROLE_MANAGEMENT": "Gestión de Roles",
+  "ASSIGN_UPDATE_USER_ROLES": "Asignar y actualizar roles de usuarios.",
+  "SYSTEM_SETTINGS": "Configuración del Sistema",
+  "MANAGE_SYSTEM_SETTINGS": "Gestiona la configuración y ajustes del sistema.",
+  "VIEW_SYSTEM_REPORTS": "Ver reportes y registros del sistema.",
+  "ACCESS_SYSTEM_ANALYTICS": "Acceder a analíticas del sistema y métricas de rendimiento.",
+  "MANAGE_SYSTEM_NOTIFICATIONS": "Gestionar notificaciones y alertas del sistema.",
+  "GO_TO": "Ir a"
 }

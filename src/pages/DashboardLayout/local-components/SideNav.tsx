@@ -33,6 +33,7 @@ import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import { AdminPanelSettings } from "@mui/icons-material";
 
 const drawerWidth = 240;
 
@@ -465,6 +466,7 @@ const SideNav = () => {
       <Box sx={{ flexGrow: 1 }} />
 
       <List>
+      </List>
         <ListItem
           onClick={() => handleNavigate("/settings")}
           sx={{
@@ -478,7 +480,19 @@ const SideNav = () => {
           </ListItemIcon>
           {open && <ListItemText primary={t("SETTINGS")} />}
         </ListItem>
-      </List>
+        <ListItem
+          onClick={() => handleNavigate("/admin-panel")}
+          sx={{
+            cursor: "pointer",
+            "&:hover": { backgroundColor: "#f0f0f0" },
+            transition: "background-color 0.3s ease",
+          }}
+        >
+          <ListItemIcon>
+            <AdminPanelSettings />
+          </ListItemIcon>
+          {open && <ListItemText primary={t("ADMIN_PANEL")} />}
+        </ListItem>
 
       <Popper
         open={Boolean(anchorEl)}
