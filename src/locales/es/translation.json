@@ -139,5 +139,9 @@
   "VIEW_SYSTEM_REPORTS": "Ver reportes y registros del sistema.",
   "ACCESS_SYSTEM_ANALYTICS": "Acceder a analíticas del sistema y métricas de rendimiento.",
   "MANAGE_SYSTEM_NOTIFICATIONS": "Gestionar notificaciones y alertas del sistema.",
-  "GO_TO": "Ir a"
+  "GO_TO": "Ir a",
+  "SUBMIT": "Enviar",
+  "RECOVERY_EMAIL_SENT": "¡Correo de recuperación enviado!",
+  "PASSWORD_RECOVERY_SUBTITLE": "¿Olvidaste tu contraseña? No te preocupes, te enviaremos un correo electrónico con instrucciones para restablecer tu contraseña.",
+  "PASSWORD_RECOVERY": "Recuperación de Contraseña"
 }

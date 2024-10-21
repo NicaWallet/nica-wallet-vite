@@ -6,6 +6,7 @@ import Register from "../pages/Register";
 import DashboardLayout from "../pages/DashboardLayout";
 import WelcomePage from "../pages/WelcomePage";
 import { AdminPanel } from "../pages/AdminPanel";
+import PasswordRecovery from "../pages/PasswordRecovery";
 
 /**
  * AppRoutes component defines the main routing structure for the application.
@@ -38,6 +39,9 @@ const AppRoutes = () => {
 
         {/* Register page */}
         <Route path="/auth/register" element={<Register />} />
+
+        {/* PasswordRecovery page */}
+        <Route path="/auth/password-recovery" element={<PasswordRecovery />} />
 
         {/* Dashboard module (rutas privadas) */}
         <Route element={<DashboardLayout />}>

@@ -95,12 +95,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, loading }) => {
 
       <Grid container>
         <Grid item xs>
-          <Link href="#" variant="body2">
+          <Link href="/auth/password-recovery" variant="body2">
             {t("FORGOT_PASSWORD")}
           </Link>
         </Grid>
         <Grid item>
-          <Link href="#" variant="body2">
+          <Link href="/auth/register" variant="body2">
             {t("REGISTER_NOW")}
           </Link>
         </Grid>

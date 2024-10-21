@@ -137,5 +137,9 @@
   "VIEW_SYSTEM_REPORTS": "View system reports and logs.",
   "ACCESS_SYSTEM_ANALYTICS": "Access system analytics and performance metrics.",
   "MANAGE_SYSTEM_NOTIFICATIONS": "Manage system notifications and alerts.",
-  "GO_TO": "Go to"
+  "GO_TO": "Go to",
+  "SUBMIT": "Submit",
+  "RECOVERY_EMAIL_SENT": "Recovery email sent!",
+  "PASSWORD_RECOVERY_SUBTITLE": "Forgot your password? Don't worry, we will send you an email with instructions to reset your password.",
+  "PASSWORD_RECOVERY": "Password Recovery"
 }
