@@ -1,6 +1,5 @@
-// CheckboxComponent.stories.tsx
 import { Meta, StoryFn } from "@storybook/react";
-import CenteredTemplate from "../../stories/CenteredTemplate"; // Asegúrate de tener este componente
+import CenteredTemplate from "../../stories/CenteredTemplate";
 import { action } from "@storybook/addon-actions";
 import CheckboxComponent, { CheckboxComponentProps } from ".";
 
@@ -10,7 +9,6 @@ export default {
   argTypes: {
     label: {
       control: "text",
-      description: "Etiqueta que se mostrará junto al checkbox",
       table: {
         type: { summary: "string" },
         defaultValue: { summary: "Label" },
@@ -18,7 +16,6 @@ export default {
     },
     checked: {
       control: "boolean",
-      description: "Estado del checkbox (marcado o desmarcado)",
       table: {
         type: { summary: "boolean" },
         defaultValue: { summary: "false" },
@@ -26,7 +23,6 @@ export default {
     },
     onChange: {
       action: "checkbox-changed",
-      description: "Función que se ejecuta al cambiar el estado del checkbox",
     },
   },
   parameters: {
@@ -47,7 +43,6 @@ const Template: StoryFn<CheckboxComponentProps> = (args) => (
 
 // Historias
 
-// 1. Default: Checkbox desmarcado
 export const Default = Template.bind({});
 Default.args = {
   label: "Default Checkbox",
@@ -61,7 +56,6 @@ Default.parameters = {
   },
 };
 
-// 2. Checked: Checkbox marcado
 export const Checked = Template.bind({});
 Checked.args = {
   label: "Checked Checkbox",
@@ -75,7 +69,6 @@ Checked.parameters = {
   },
 };
 
-// 3. Disabled: Checkbox deshabilitado
 export const Disabled = Template.bind({});
 Disabled.args = {
   label: "Disabled Checkbox",
@@ -96,7 +89,6 @@ Disabled.parameters = {
   },
 };
 
-// 4. With Long Label: Checkbox con etiqueta larga
 export const WithLongLabel = Template.bind({});
 WithLongLabel.args = {
   label:
@@ -112,7 +104,6 @@ WithLongLabel.parameters = {
   },
 };
 
-// 5. Interactive: Permite al usuario manipular las propiedades
 export const Interactive = Template.bind({});
 Interactive.args = {
   label: "Interactive Checkbox",

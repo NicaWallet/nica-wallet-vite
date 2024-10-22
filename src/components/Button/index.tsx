@@ -1,5 +1,5 @@
 import React from "react";
-import { Button as MuiButton, CircularProgress } from "@mui/material";
+import { Button as MuiButton, CircularProgress, SxProps } from "@mui/material";
 
 export interface ButtonProps {
   label: string;
@@ -10,6 +10,7 @@ export interface ButtonProps {
   isLoading?: boolean;
   startIcon?: React.ReactNode;
   endIcon?: React.ReactNode;
+  SxProps?: SxProps;
 }
 
 /**
@@ -26,7 +27,7 @@ export interface ButtonProps {
  *
  * @returns {JSX.Element} The rendered button component.
  */
-const Button: React.FC<ButtonProps> = ({
+const ButtonComponent: React.FC<ButtonProps> = ({
   label,
   onClick,
   color = "primary",
@@ -35,6 +36,7 @@ const Button: React.FC<ButtonProps> = ({
   isLoading = false,
   startIcon,
   endIcon,
+  SxProps,
 }) => {
   return (
     <MuiButton
@@ -45,10 +47,11 @@ const Button: React.FC<ButtonProps> = ({
       startIcon={isLoading ? <CircularProgress size={20} /> : startIcon}
       endIcon={!isLoading ? endIcon : null}
       disabled={isLoading}
+      sx={SxProps}
     >
       {!isLoading ? label : ""}
     </MuiButton>
   );
 };
 
-export default Button;
+export default ButtonComponent;

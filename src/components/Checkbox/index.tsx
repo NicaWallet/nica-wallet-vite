@@ -7,6 +7,11 @@ export interface CheckboxComponentProps {
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
+/**
+ * A functional component that renders a checkbox with a label.
+ * @param {CheckboxComponentProps} props - The props for the component.
+ * @returns {JSX.Element} The rendered checkbox component.
+ */
 const CheckboxComponent: React.FC<CheckboxComponentProps> = ({
   label,
   checked,

@@ -7,6 +7,7 @@ import {
   Typography,
   CardMedia,
   Box,
+  Skeleton,
 } from "@mui/material";
 
 export interface CardComponentProps {
@@ -16,21 +17,34 @@ export interface CardComponentProps {
   icon?: React.ReactNode;
   buttonText?: string;
   onClick?: () => void;
+  isLoading?: boolean;
+  width?: string;
+  borderColor?: string;
+  bgColor?: string;
+  customHeight?: string;
+  maxDescriptionHeight?: string;
+  imageBorderRadius?: string;
+  imageBoxShadow?: string;
+  imageObjectFit?:
+    | "cover"
+    | "contain"
+    | "fill"
+    | "none"
+    | "scale-down"
+    | "unset"
+    | "initial"
+    | "revert"
+    | "inherit"
+    | "revert";
+  imageHeight?: string;
 }
 
 /**
- * CardComponent is a React functional component that displays a card with an optional icon or image,
- * title, description, and a button.
+ * CardComponent is a reusable card component that displays a title, description, image or icon, and an optional button.
+ * It supports loading state and various customization options.
  *
- * @component
- * @param {CardComponentProps} props - The properties that define the CardComponent.
- * @param {string} props.title - The title of the card.
- * @param {string} props.description - The description text of the card.
- * @param {string} [props.imageUrl] - The URL of the image to be displayed in the card.
- * @param {React.ReactNode} [props.icon] - An optional icon to be displayed at the top of the card.
- * @param {string} [props.buttonText] - The text to be displayed on the button.
- * @param {() => void} [props.onClick] - The function to be called when the button is clicked.
- * @returns {JSX.Element} The rendered card component.
+ * @param {CardComponentProps} props - The properties for the CardComponent.
+ * @returns {JSX.Element} The rendered CardComponent.
  */
 const CardComponent: React.FC<CardComponentProps> = ({
   title,
@@ -39,10 +53,35 @@ const CardComponent: React.FC<CardComponentProps> = ({
   icon,
   buttonText,
   onClick,
+  isLoading = false,
+  width = "345px",
+  borderColor = "transparent",
+  bgColor = "white",
+  customHeight = "auto",
+  maxDescriptionHeight = "100px",
+  imageBorderRadius = "0px",
+  imageBoxShadow = "none",
+  imageObjectFit = "cover",
+  imageHeight = "140px",
 }) => {
   return (
-    <Card sx={{ maxWidth: 345 }}>
-      {icon ? (
+    <Card
+      sx={{
+        maxWidth: width,
+        width: "100%",
+        borderColor: borderColor,
+        backgroundColor: bgColor,
+        border: `1px solid ${borderColor}`,
+        height: customHeight,
+      }}
+    >
+      {isLoading ? (
+        <Skeleton
+          variant="rectangular"
+          width="100%"
+          height={icon ? 80 : imageHeight}
+        />
+      ) : icon ? (
         <Box
           sx={{
             display: "flex",
@@ -58,25 +97,53 @@ const CardComponent: React.FC<CardComponentProps> = ({
         imageUrl && (
           <CardMedia
             component="img"
-            height="140"
             image={imageUrl}
             alt={title}
+            height={imageHeight}
+            sx={{
+              borderRadius: imageBorderRadius,
+              boxShadow: imageBoxShadow,
+              objectFit: imageObjectFit,
+            }}
           />
         )
       )}
+
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          {title}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          {description}
-        </Typography>
+        {isLoading ? (
+          <>
+            <Skeleton width="60%" height={30} />
+            <Skeleton width="100%" height={20} />
+            <Skeleton width="80%" height={20} />
+          </>
+        ) : (
+          <>
+            <Typography gutterBottom variant="h5" component="div">
+              {title}
+            </Typography>
+            <Box
+              sx={{
+                maxHeight: maxDescriptionHeight,
+                overflowY: "auto",
+              }}
+            >
+              <Typography variant="body2" color="text.secondary">
+                {description}
+              </Typography>
+            </Box>
+          </>
+        )}
       </CardContent>
+
       {buttonText && (
         <CardActions>
-          <Button size="small" onClick={onClick}>
-            {buttonText}
-          </Button>
+          {isLoading ? (
+            <Skeleton width="80px" height="36px" />
+          ) : (
+            <Button size="small" onClick={onClick}>
+              {buttonText}
+            </Button>
+          )}
         </CardActions>
       )}
     </Card>

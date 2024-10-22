@@ -2,6 +2,8 @@ import React from "react";
 import { TextField, Button, Box, Grid, Link } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import ButtonComponent from "../../components/Button";
+import WarningIcon from '@mui/icons-material/Warning';
 
 type LoginFormInputs = {
   email: string;
@@ -92,6 +94,18 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, loading }) => {
       >
         {t("SIGN_IN")}
       </Button>
+
+      <ButtonComponent
+        onClick={() => console.log("Button clicked")}
+        label="boton de prueba"
+        color="warning"
+        endIcon={<WarningIcon />}
+        // isLoading={true}
+        size="large"
+        startIcon={<WarningIcon />}
+        variant="outlined"
+        SxProps={{ width: "100%" }}
+      />
 
       <Grid container>
         <Grid item xs>
