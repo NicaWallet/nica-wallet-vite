@@ -1,13 +1,8 @@
-// CardComponent.stories.tsx
+import React from "react";
 import { Meta, StoryFn } from "@storybook/react";
-import CenteredTemplate from "../../stories/CenteredTemplate";
-import { action } from "@storybook/addon-actions";
-import InfoIcon from "@mui/icons-material/Info"; // Importa un ícono de MUI
 import CardComponent, { CardComponentProps } from ".";
-
-// URL de imagen de placeholder
-const placeholderImage =
-  "https://via.placeholder.com/300x140.png?text=Card+Image";
+import CenteredTemplate from "../../stories/CenteredTemplate";
+import AddIcon from "@mui/icons-material/Add";
 
 export default {
   title: "Components/CardComponent",
@@ -15,55 +10,83 @@ export default {
   argTypes: {
     title: {
       control: "text",
-      description: "Título de la tarjeta",
-      table: {
-        type: { summary: "string" },
-        defaultValue: { summary: "Título" },
-      },
+      description: "Título de la tarjeta.",
+      defaultValue: "Título del Card",
     },
     description: {
       control: "text",
-      description: "Descripción de la tarjeta",
-      table: {
-        type: { summary: "string" },
-        defaultValue: { summary: "Descripción" },
-      },
+      description: "Descripción dentro del card.",
+      defaultValue: "Esta es la descripción del card.",
     },
     imageUrl: {
       control: "text",
-      description: "URL de la imagen de la tarjeta",
-      table: {
-        type: { summary: "string" },
-        defaultValue: { summary: "undefined" },
-      },
+      description: "URL de la imagen a mostrar en la tarjeta.",
     },
     icon: {
-      control: false, // React.ReactNode no puede ser controlado directamente
-      description: "Ícono que se muestra en la tarjeta",
-      table: {
-        type: { summary: "React.ReactNode" },
-        defaultValue: { summary: "undefined" },
-      },
+      control: false,
+      description: "Ícono opcional para mostrar en lugar de la imagen.",
     },
     buttonText: {
       control: "text",
-      description: "Texto del botón en la tarjeta",
-      table: {
-        type: { summary: "string" },
-        defaultValue: { summary: "undefined" },
-      },
+      description: "Texto a mostrar en el botón.",
+      defaultValue: "Click Me",
     },
     onClick: {
-      action: "button-click",
-      description: "Función que se ejecuta al hacer clic en el botón",
+      action: "clicked",
+      description: "Función que se ejecuta al hacer clic en el botón.",
     },
-  },
-  parameters: {
-    docs: {
-      description: {
-        component:
-          "Componente de tarjeta reutilizable construido con Material-UI que muestra una imagen o un ícono, título, descripción y un botón opcional.",
-      },
+    isLoading: {
+      control: "boolean",
+      description:
+        "Muestra skeletons en lugar del contenido real mientras se carga.",
+      defaultValue: false,
+    },
+    width: {
+      control: "text",
+      description: "Ancho de la tarjeta (porcentaje o px).",
+      defaultValue: "345px",
+    },
+    borderColor: {
+      control: "color",
+      description: "Color del borde de la tarjeta.",
+      defaultValue: "transparent",
+    },
+    bgColor: {
+      control: "color",
+      description: "Color de fondo de la tarjeta.",
+      defaultValue: "white",
+    },
+    customHeight: {
+      control: "text",
+      description: "Altura de la tarjeta (porcentaje o px).",
+      defaultValue: "auto",
+    },
+    maxDescriptionHeight: {
+      control: "text",
+      description:
+        "Altura máxima de la descripción antes de que aparezca el scroll.",
+      defaultValue: "100px",
+    },
+    imageBorderRadius: {
+      control: "text",
+      description: "Radio del borde de la imagen.",
+      defaultValue: "0px",
+    },
+    imageBoxShadow: {
+      control: "text",
+      description: "Sombra aplicada a la imagen.",
+      defaultValue: "none",
+    },
+    imageObjectFit: {
+      control: { type: "select" },
+      options: ["cover", "contain", "fill", "none"],
+      description: "Ajuste de la imagen en su contenedor.",
+      defaultValue: "cover",
+    },
+    imageHeight: {
+      control: "text",
+      description: "Altura personalizada de la imagen.",
+      defaultValue: "140px",
     },
   },
 } as Meta<CardComponentProps>;
@@ -74,130 +97,47 @@ const Template: StoryFn<CardComponentProps> = (args) => (
   </CenteredTemplate>
 );
 
-// Historias
+export const DefaultCard = Template.bind({});
+DefaultCard.args = {
+  title: "Título del Card",
+  description: "Esta es la descripción del card.",
+  imageUrl: "https://via.placeholder.com/150",
+  buttonText: "Click Me",
+  width: "345px",
+  isLoading: false,
+};
+DefaultCard.storyName = "Default Card";
 
-// 1. Default: Solo título y descripción
-export const Default = Template.bind({});
-Default.args = {
-  title: "Tarjeta Predeterminada",
-  description: "Esta es una descripción predeterminada para la tarjeta.",
+export const CardWithIcon = Template.bind({});
+CardWithIcon.args = {
+  title: "Título del Card",
+  description: "Esta es la descripción del card.",
+  icon: <AddIcon fontSize="large" />,
+  buttonText: "Click Me",
+  width: "345px",
+  isLoading: false,
 };
-Default.storyName = "Default";
-Default.parameters = {
-  docs: {
-    storyDescription: "Tarjeta con solo título y descripción.",
-  },
-};
+CardWithIcon.storyName = "Card With Icon";
 
-// 2. With Image: Título, descripción e imagen
-export const WithImage = Template.bind({});
-WithImage.args = {
-  title: "Tarjeta con Imagen",
-  description: "Esta tarjeta incluye una imagen.",
-  imageUrl: placeholderImage,
+export const LoadingCard = Template.bind({});
+LoadingCard.args = {
+  title: "Cargando...",
+  description: "Esta descripción está cargando...",
+  imageUrl: "https://via.placeholder.com/150",
+  buttonText: "Cargando...",
+  isLoading: true,
 };
-WithImage.storyName = "With Image";
-WithImage.parameters = {
-  docs: {
-    storyDescription:
-      "Tarjeta que muestra una imagen junto con el título y la descripción.",
-  },
-};
+LoadingCard.storyName = "Loading Card";
 
-// 3. With Icon: Título, descripción e ícono
-export const WithIcon = Template.bind({});
-WithIcon.args = {
-  title: "Tarjeta con Ícono",
-  description: "Esta tarjeta incluye un ícono en lugar de una imagen.",
-  icon: <InfoIcon fontSize="large" color="primary" />, // Usa un ícono de MUI
+export const CustomImageCard = Template.bind({});
+CustomImageCard.args = {
+  title: "Título del Card",
+  description: "Esta es una descripción con una imagen personalizada.",
+  imageUrl: "https://picsum.photos/1920/1080.jpg",
+  buttonText: "Click Me",
+  imageBorderRadius: "10px",
+  imageBoxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+  imageObjectFit: "contain",
+  imageHeight: "200px",
 };
-WithIcon.storyName = "With Icon";
-WithIcon.parameters = {
-  docs: {
-    storyDescription:
-      "Tarjeta que muestra un ícono en lugar de una imagen junto con el título y la descripción.",
-  },
-};
-
-// 4. With Button: Título, descripción y botón
-export const WithButton = Template.bind({});
-WithButton.args = {
-  title: "Tarjeta con Botón",
-  description: "Esta tarjeta incluye un botón.",
-  buttonText: "Acción",
-  onClick: action("Botón clicado"),
-};
-WithButton.storyName = "With Button";
-WithButton.parameters = {
-  docs: {
-    storyDescription: "Tarjeta que incluye un botón con texto personalizable.",
-  },
-};
-
-// 5. With Image and Button: Todas las propiedades
-export const WithImageAndButton = Template.bind({});
-WithImageAndButton.args = {
-  title: "Tarjeta Completa",
-  description: "Esta tarjeta incluye una imagen y un botón.",
-  imageUrl: placeholderImage,
-  buttonText: "Realizar Acción",
-  onClick: action("Botón clicado"),
-};
-WithImageAndButton.storyName = "With Image and Button";
-WithImageAndButton.parameters = {
-  docs: {
-    storyDescription:
-      "Tarjeta que incluye una imagen y un botón con texto personalizado.",
-  },
-};
-
-// 6. With Icon and Button: Título, descripción, ícono y botón
-export const WithIconAndButton = Template.bind({});
-WithIconAndButton.args = {
-  title: "Tarjeta con Ícono y Botón",
-  description: "Esta tarjeta incluye un ícono y un botón.",
-  icon: <InfoIcon fontSize="large" color="secondary" />,
-  buttonText: "Detalles",
-  onClick: action("Botón 'Detalles' clicado"),
-};
-WithIconAndButton.storyName = "With Icon and Button";
-WithIconAndButton.parameters = {
-  docs: {
-    storyDescription:
-      "Tarjeta que incluye un ícono y un botón con texto personalizado.",
-  },
-};
-
-// 7. Button Variations: Diferentes textos en el botón
-export const ButtonVariations = Template.bind({});
-ButtonVariations.args = {
-  title: "Tarjeta con Variaciones de Botón",
-  description: "Esta tarjeta muestra diferentes textos en el botón.",
-  buttonText: "Ver Más",
-  onClick: action("Botón 'Ver Más' clicado"),
-};
-ButtonVariations.storyName = "Button Variations";
-ButtonVariations.parameters = {
-  docs: {
-    storyDescription:
-      "Tarjeta con un botón que muestra texto diferente según la necesidad.",
-  },
-};
-
-// 8. Interactive Controls: Permite al usuario manipular las propiedades
-export const Interactive = Template.bind({});
-Interactive.args = {
-  title: "Tarjeta Interactiva",
-  description: "Usa los controles para personalizar esta tarjeta.",
-  imageUrl: placeholderImage,
-  icon: <InfoIcon fontSize="large" color="inherit" />, // Puedes dejar esto opcional
-  buttonText: "Click Aquí",
-  onClick: action("Botón clicado"),
-};
-Interactive.storyName = "Interactive Controls";
-Interactive.parameters = {
-  docs: {
-    storyDescription:
-      "Tarjeta que permite interactuar con todas sus propiedades mediante controles de Storybook.",
-  },
-};
+CustomImageCard.storyName = "Card with Custom Image";

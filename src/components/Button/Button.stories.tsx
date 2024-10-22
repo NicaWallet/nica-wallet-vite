@@ -3,11 +3,11 @@ import SaveIcon from "@mui/icons-material/Save";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import CenteredTemplate from "../../stories/CenteredTemplate";
-import Button, { ButtonProps } from ".";
+import ButtonComponent, { ButtonProps } from ".";
 
 export default {
   title: "Components/Button",
-  component: Button,
+  component: ButtonComponent,
   argTypes: {
     label: {
       control: "text",
@@ -53,7 +53,7 @@ export default {
       description: "Muestra un indicador de carga y deshabilita el botón",
       table: {
         type: { summary: "boolean" },
-        defaultValue: { summary: "false" }, // Cambiado a cadena de texto
+        defaultValue: { summary: "false" },
       },
     },
     startIcon: {
@@ -83,11 +83,13 @@ export default {
 
 const Template: StoryFn<ButtonProps> = (args) => (
   <CenteredTemplate>
-    <Button {...args} />
+    <ButtonComponent {...args} />
   </CenteredTemplate>
 );
 
-// Variantes Básicas
+/**
+ * Primary: Basic primary button with contained variant.
+ */
 export const Primary = Template.bind({});
 Primary.args = {
   label: "Primary Button",
@@ -104,6 +106,9 @@ Primary.parameters = {
   },
 };
 
+/**
+ * Secondary: Basic secondary button with outlined variant.
+ */
 export const Secondary = Template.bind({});
 Secondary.args = {
   label: "Secondary Button",
@@ -120,6 +125,9 @@ Secondary.parameters = {
   },
 };
 
+/**
+ * Error: Basic error button with contained variant.
+ */
 export const Error = Template.bind({});
 Error.args = {
   label: "Error Button",
@@ -136,6 +144,9 @@ Error.parameters = {
   },
 };
 
+/**
+ * Warning: Basic warning button with text variant.
+ */
 export const Warning = Template.bind({});
 Warning.args = {
   label: "Warning Button",
@@ -152,7 +163,9 @@ Warning.parameters = {
   },
 };
 
-// Tamaños
+/**
+ * Small: Button of small size.
+ */
 export const Small = Template.bind({});
 Small.args = {
   label: "Small Button",
@@ -165,6 +178,9 @@ Small.parameters = {
   },
 };
 
+/**
+ * Large: Button of large size.
+ */
 export const Large = Template.bind({});
 Large.args = {
   label: "Large Button",
@@ -177,7 +193,9 @@ Large.parameters = {
   },
 };
 
-// Estado de Carga
+/**
+ * Loading: Button in loading state showing an indicator and disabled.
+ */
 export const Loading = Template.bind({});
 Loading.args = {
   label: "Loading Button",
@@ -191,7 +209,9 @@ Loading.parameters = {
   },
 };
 
-// Íconos
+/**
+ * WithStartIcon: Button with a start icon.
+ */
 export const WithStartIcon = Template.bind({});
 WithStartIcon.args = {
   label: "Save",
@@ -204,6 +224,9 @@ WithStartIcon.parameters = {
   },
 };
 
+/**
+ * WithEndIcon: Button with an end icon.
+ */
 export const WithEndIcon = Template.bind({});
 WithEndIcon.args = {
   label: "Delete",
@@ -216,6 +239,9 @@ WithEndIcon.parameters = {
   },
 };
 
+/**
+ * WithBothIcons: Button with both start and end icons.
+ */
 export const WithBothIcons = Template.bind({});
 WithBothIcons.args = {
   label: "Add & Save",
@@ -230,7 +256,9 @@ WithBothIcons.parameters = {
   },
 };
 
-// Variantes Combinadas
+/**
+ * ContainedPrimaryLarge: Combined variant of contained primary button with large size.
+ */
 export const ContainedPrimaryLarge = Template.bind({});
 ContainedPrimaryLarge.args = {
   label: "Contained Primary Large",
@@ -245,6 +273,9 @@ ContainedPrimaryLarge.parameters = {
   },
 };
 
+/**
+ * OutlinedSecondarySmall: Combined variant of outlined secondary button with small size.
+ */
 export const OutlinedSecondarySmall = Template.bind({});
 OutlinedSecondarySmall.args = {
   label: "Outlined Secondary Small",
@@ -259,6 +290,9 @@ OutlinedSecondarySmall.parameters = {
   },
 };
 
+/**
+ * TextWarningLoading: Combined variant of text warning button in loading state.
+ */
 export const TextWarningLoading = Template.bind({});
 TextWarningLoading.args = {
   label: "Text Warning Loading",

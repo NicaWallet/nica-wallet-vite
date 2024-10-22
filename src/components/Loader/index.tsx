@@ -1,44 +1,62 @@
 import React from "react";
-import { CircularProgress, Box, styled } from "@mui/material";
+import {
+  CircularProgress,
+  Box,
+  CircularProgressProps,
+  SxProps,
+  Theme,
+} from "@mui/material";
 
-// Styled component for the overlay
-const Overlay = styled(Box)(() => ({
-  position: "fixed",
-  top: 0,
-  left: 0,
-  width: "100%",
-  height: "100%",
-  backgroundColor: "rgba(255, 255, 255, 0.8)",
-  zIndex: 9999,
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-}));
+// Variantes de estilo predefinido
+const overlayVariantStyles: { [key: string]: SxProps<Theme> } = {
+  default: {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    backgroundColor: "rgba(255, 255, 255, 0.8)",
+    zIndex: 9999,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  transparent: {
+    backgroundColor: "transparent",
+  },
+  blur: {
+    backdropFilter: "blur(5px)",
+  },
+  dark: {
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
+  },
+  light: {
+    backgroundColor: "rgba(255, 255, 255, 0.7)",
+  },
+};
 
-/**
- * Loader component
- *
- * @param {Object} props - Component props
- * @param {"inherit" | "primary" | "secondary" | "error" | "info" | "success" | "warning"} [props.color="primary"] - Color of the loader
- * @param {number} [props.size=40] - Size of the loader
- *
- * @returns {JSX.Element} The Loader component
- */
-const Loader: React.FC<{
-  color?:
-    | "inherit"
-    | "primary"
-    | "secondary"
-    | "error"
-    | "info"
-    | "success"
-    | "warning";
-  size?: number;
-}> = ({ color = "primary", size = 40 }) => {
+export interface LoaderProps extends CircularProgressProps {
+  overlayVariant?: "default" | "transparent" | "blur" | "dark" | "light";
+  overlaySx?: SxProps<Theme>; // Estilos adicionales opcionales para el overlay
+}
+
+const Loader: React.FC<LoaderProps> = ({
+  color = "primary",
+  size = 40,
+  overlayVariant = "default",
+  overlaySx = {},
+  ...props // Permitir que se pasen props adicionales a CircularProgress
+}) => {
+  // Combina los estilos predefinidos con los personalizados
+  const combinedOverlaySx = {
+    ...overlayVariantStyles[overlayVariant],
+    ...overlaySx,
+  };
+
   return (
-    <Overlay>
-      <CircularProgress color={color} size={size} />
-    </Overlay>
+    <Box sx={combinedOverlaySx}>
+      <CircularProgress color={color} size={size} {...props} />
+    </Box>
   );
 };
 

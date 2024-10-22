@@ -3,7 +3,7 @@ import { Box, Typography, LinearProgress } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { useTranslation } from "react-i18next";
 
-interface PasswordStrengthMeterProps {
+export interface PasswordStrengthMeterProps {
   strength: number;
 }
 

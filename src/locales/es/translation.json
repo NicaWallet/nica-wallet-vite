@@ -143,5 +143,21 @@
   "SUBMIT": "Enviar",
   "RECOVERY_EMAIL_SENT": "¡Correo de recuperación enviado!",
   "PASSWORD_RECOVERY_SUBTITLE": "¿Olvidaste tu contraseña? No te preocupes, te enviaremos un correo electrónico con instrucciones para restablecer tu contraseña.",
-  "PASSWORD_RECOVERY": "Recuperación de Contraseña"
+  "PASSWORD_RECOVERY": "Recuperación de Contraseña",
+  "CONFIRM": "Confirmar",
+  "CANCEL": "Cancelar",
+  "CLOSE_WARNING_TITLE": "¿Estás seguro?",
+  "CLOSE_WARNING_MESSAGE": "Los cambios no guardados se perderán. ¿Deseas continuar?",
+  "CLOSE_WARNING_CONFIRM": "Sí, continuar",
+  "CLOSE_WARNING_CANCEL": "No",
+  "SUCCESS_TITLE": "Éxito",
+  "SUCCESS_MESSAGE": "Operación exitosa.",
+  "WARNING_TITLE": "Advertencia",
+  "WARNING_MESSAGE": "Por favor, presta atención antes de proceder.",
+  "ERROR_TITLE": "Error",
+  "ERROR_MESSAGE": "Ocurrió un error.",
+  "INFO_TITLE": "Información",
+  "INFO_MESSAGE": "Este es un mensaje informativo.",
+  "OPEN_MODAL": "Abrir Modal",
+  "CONFIRMATION_ALERT": "¡Acción confirmada!"
 }

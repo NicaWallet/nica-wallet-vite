@@ -141,5 +141,21 @@
   "SUBMIT": "Submit",
   "RECOVERY_EMAIL_SENT": "Recovery email sent!",
   "PASSWORD_RECOVERY_SUBTITLE": "Forgot your password? Don't worry, we will send you an email with instructions to reset your password.",
-  "PASSWORD_RECOVERY": "Password Recovery"
+  "PASSWORD_RECOVERY": "Password Recovery",
+  "CONFIRM": "Confirm",
+  "CANCEL": "Cancel",
+  "CLOSE_WARNING_TITLE": "Are you sure?",
+  "CLOSE_WARNING_MESSAGE": "Unsaved changes will be lost. Do you want to proceed?",
+  "CLOSE_WARNING_CONFIRM": "Yes, continue",
+  "CLOSE_WARNING_CANCEL": "No",
+  "SUCCESS_TITLE": "Success",
+  "SUCCESS_MESSAGE": "Operation successful.",
+  "WARNING_TITLE": "Warning",
+  "WARNING_MESSAGE": "Please pay attention before proceeding.",
+  "ERROR_TITLE": "Error",
+  "ERROR_MESSAGE": "An error occurred.",
+  "INFO_TITLE": "Information",
+  "INFO_MESSAGE": "This is an informational message.",
+  "OPEN_MODAL": "Open Modal",
+  "CONFIRMATION_ALERT": "Action confirmed!"
 }
