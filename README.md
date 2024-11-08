@@ -1,50 +1,88 @@
-# React + TypeScript + Vite
+# NicaWallet - Personal Finance Management App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Descripción
 
-Currently, two official plugins are available:
+NicaWallet es una aplicación web para la gestión financiera personal que permite a los usuarios visualizar transferencias, gastos, ingresos, ajustar presupuestos y obtener proyecciones de movimientos financieros futuros.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features principales:
 
-## Expanding the ESLint configuration
+- Gestión de transacciones y presupuestos.
+- Creación de cuentas personalizadas.
+- Recomendaciones financieras.
+- Roles de usuario con diferentes permisos.
+- Interfaz multi-idioma.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Tecnologías principales:
 
-- Configure the top-level `parserOptions` property like this:
+- **Frontend**: React, TypeScript, MUI, Vite.
+- **Backend**: NestJS, Prisma ORM, PostgreSQL.
+- **Estado**: React Hook Form, yup para validación de formularios.
+- **Traducciones**: i18n para el soporte multi-idioma.
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Estructura del Proyecto
+
+```
+src/
+├── api/                # Configuración de API (axios, etc.)
+├── components/         # Componentes generales y reutilizables
+├── config/             # Configuración general (API keys, rutas)
+├── forms/              # Formularios complejos como Login y Register
+├── hooks/              # Hooks personalizados como usePasswordStrength
+├── locales/            # Archivos de traducción
+├── pages/              # Páginas principales de la aplicación
+├── schemas/            # Schemas de validación con Yup
+├── types/              # Tipos de TypeScript usados en toda la app
+└── utils/              # Utilidades como helpers, parsers, etc.
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## Componentes principales
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+1. **Register Form**:
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+   - **Descripción**: Formulario para registro de usuarios, con validación mediante React Hook Form y Yup, incluyendo cálculo de fuerza de contraseñas.
+   - **Archivo**: `src/pages/Register/index.tsx`
+   - **Hooks**: `usePasswordStrength` para el manejo de la fortaleza de la contraseña.
+   - **Traducciones**: Manejado por `i18n` en `locales/es` y `locales/en`.
+
+2. **Loader**:
+
+   - **Descripción**: Indicador de carga reutilizable que aparece mientras se realiza alguna acción.
+   - **Archivo**: `src/components/Loader/index.tsx`
+
+3. **ErrorSnackbar**:
+
+   - **Descripción**: Componente de alerta para manejar errores en pantalla.
+   - **Archivo**: `src/components/ErrorSnackbar/index.tsx`
+
+4. **PasswordStrengthMeter**:
+
+   - **Descripción**: Visualiza la fuerza de la contraseña en un registro o cambio de contraseña.
+   - **Archivo**: `src/components/PasswordStrengthMeter/index.tsx`
+
+5. **LanguageSwitcher**:
+   - **Descripción**: Componente para cambiar entre idiomas.
+   - **Archivo**: `src/components/LanguageSwitcher/index.tsx`
+
+## Hooks personalizados
+
+- **usePasswordStrength**: Calcula la fortaleza de la contraseña y controla la visibilidad del indicador.
+  - **Archivo**: `src/hooks/usePasswordStrength.ts`
+
+## Cómo empezar
+
+1. **Instalación**:
+   Clona el repositorio y ejecuta los siguientes comandos:
+
+   ```bash
+   npm install
+   npm run dev
+   ```
+
+2. **Variables de entorno**:
+   Asegúrate de configurar las variables de entorno necesarias en `.env`.
+
+3. **Testeo**:
+   Los tests unitarios se ejecutan con:
+   ```bash
+   npm run test
+   ```

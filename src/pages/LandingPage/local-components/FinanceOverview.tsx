@@ -3,25 +3,28 @@ import { Box, Typography, Button, Grid } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import FinanceOverviewImage from '/src/assets/images/finance-overview-image.png';
+import FinanceOverviewImage from "/src/assets/images/finance-overview-image.png";
 
-
+/**
+ * FinanceOverview component provides an overview of financial information
+ * with a title, description, and action buttons.
+ */
 const FinanceOverview: React.FC = () => {
-  // #region hooks
   const { t } = useTranslation();
 
-  // #endregion
-
-  // #region handlers
+  /**
+   * Handles the click event for the start button.
+   */
   const handleStartButtonClick = () => {
     console.info("Start button clicked");
   };
 
+  /**
+   * Handles the click event for the learn more button.
+   */
   const handleLearnMoreButtonClick = () => {
     console.info("Learn more button clicked");
   };
-
-  // #endregion
 
   return (
     <Box
@@ -33,7 +36,6 @@ const FinanceOverview: React.FC = () => {
         borderLeft: "4px solid #82ca9d",
       }}
     >
-      {/* TODO: Investigar como utilizar grid2 ya que grid esta en desuso */}
       <Grid container spacing={4} alignItems="center">
         <Grid item xs={12} md={6}>
           <Typography

@@ -5,8 +5,8 @@ import enTranslation from "./locales/en/translation.json";
 import esTranslation from "./locales/es/translation.json";
 
 i18n
-  .use(languageDetector) // Detecta el idioma del usuario
-  .use(initReactI18next) // Conecta i18next con react-i18next
+  .use(languageDetector)
+  .use(initReactI18next)
   .init({
     resources: {
       en: {
@@ -16,16 +16,21 @@ i18n
         translation: esTranslation,
       },
     },
-    lng: "en", // Idioma por defecto
-    fallbackLng: "en", // Idioma de respaldo en caso de que falten traducciones
+    lng: "en",
+    fallbackLng: "en",
     interpolation: {
-      escapeValue: false, // React ya se encarga de esto por defecto
+      escapeValue: false,
     },
     detection: {
-      // Opciones adicionales de detección si es necesario
       order: ['querystring', 'cookie', 'localStorage', 'navigator', 'htmlTag', 'path', 'subdomain'],
       caches: ['localStorage', 'cookie'],
     },
   });
 
+/**
+ * The default export of the i18n module.
+ * 
+ * This module is responsible for internationalization (i18n) in the application.
+ * It provides the necessary functionality to handle multiple languages and translations.
+ */
 export default i18n;

@@ -10,6 +10,10 @@ import {
 import { Facebook, Twitter, LinkedIn, Instagram } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 
+/**
+ * Footer component for the landing page.
+ * Displays social media icons, site links, support links, and a newsletter subscription form.
+ */
 const Footer: React.FC = () => {
   const { t } = useTranslation();
 

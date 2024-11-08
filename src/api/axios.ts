@@ -1,15 +1,19 @@
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 
 const api = axios.create({
     baseURL: import.meta.env.VITE_BASE_URL,
-    timeout: 10000, // 10 seconds timeout
+    timeout: 10000,
     headers: {
         'Content-Type': 'application/json',
     },
     withCredentials: true,
 });
 
-// Request interceptor for adding authorization token and logging requests
+/**
+ * Interceptor for requests to add authorization token and log requests.
+ * @param {AxiosRequestConfig} config - The Axios request configuration.
+ * @returns {AxiosRequestConfig} - The modified Axios request configuration.
+ */
 api.interceptors.request.use(
     (config) => {
         const token = localStorage.getItem('token');
@@ -24,7 +28,11 @@ api.interceptors.request.use(
     }
 );
 
-// Response interceptor for logging responses and handling errors
+/**
+ * Interceptor for responses to log responses and handle errors.
+ * @param {any} response - The Axios response.
+ * @returns {any} - The Axios response.
+ */
 api.interceptors.response.use(
     (response) => {
         console.log('Response:', response);
@@ -32,22 +40,60 @@ api.interceptors.response.use(
     },
     (error) => {
         if (error.response) {
-            // Server responded with a status other than 2xx
             console.error('Response error:', error.response.data);
             if (error.response.status === 401) {
-                // Handle unauthorized error
                 alert('Unauthorized! Please log in again.');
-                // Optionally redirect to login page
             }
         } else if (error.request) {
-            // No response was received
             console.error('Request error:', error.request);
         } else {
-            // Something happened in setting up the request
             console.error('Error:', error.message);
         }
         return Promise.reject(error);
     }
 );
+
+/**
+ * Adds authorization token to the Axios request configuration.
+ * @param {AxiosRequestConfig} config - The Axios request configuration.
+ * @returns {Promise<AxiosRequestConfig>} - The modified Axios request configuration.
+ */
+export const tokenInterceptor = async (config: AxiosRequestConfig) => {
+    const newConfig = { ...config };
+    const token = localStorage.getItem('token');
+
+    if (token) {
+        const parsedToken = JSON.parse(token);
+        const loginToken = parsedToken.state.loginToken.token;
+
+        newConfig.headers = {
+            ...newConfig.headers,
+            Authorization: `Bearer ${loginToken}`,
+        };
+    }
+
+    return newConfig;
+};
+
+/**
+ * Makes an Axios request with the authorization token added to the configuration.
+ * @param {string} url - The URL for the Axios request.
+ * @param {AxiosRequestConfig} [config={}] - The Axios request configuration.
+ * @returns {Promise<any>} - The response data from the Axios request.
+ */
+export const axiosTokenInterceptor = async (
+    url: string,
+    config: AxiosRequestConfig = {}
+) => {
+    const newConfig = await tokenInterceptor(config);
+
+    try {
+        const response = await axios(url, newConfig);
+        return response.data;
+    } catch (error) {
+        console.error('Axios error:', error);
+        throw error;
+    }
+};
 
 export default api;

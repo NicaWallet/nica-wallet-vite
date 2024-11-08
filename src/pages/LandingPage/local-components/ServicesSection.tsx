@@ -8,6 +8,10 @@ import GroupIcon from "@mui/icons-material/Group";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import PrivacyTipIcon from "@mui/icons-material/PrivacyTip";
 
+/**
+ * ServicesSection component displays a section with various services offered.
+ * Each service includes an icon, title, and description.
+ */
 const ServicesSection: React.FC = () => {
   const { t } = useTranslation();
 
@@ -97,7 +101,7 @@ const ServicesSection: React.FC = () => {
                 boxShadow: 3,
                 borderRadius: "12px",
                 padding: { xs: "15px", md: "20px" },
-                height: "100%",
+                height: "80%",
                 display: "flex",
                 flexDirection: "column",
                 margin: "0 auto",
