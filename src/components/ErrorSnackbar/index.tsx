@@ -3,7 +3,8 @@ import { Snackbar, Alert, AlertColor, SnackbarOrigin } from "@mui/material";
 
 export interface ErrorSnackbarProps {
   message: string;
-  onClose: () => void;
+  onClose?: () => void;
+  open: boolean;
   severity?: AlertColor;
   autoHideDuration?: number;
   anchorOrigin?: SnackbarOrigin;
@@ -19,22 +20,25 @@ export interface ErrorSnackbarProps {
 const ErrorSnackbar: React.FC<ErrorSnackbarProps> = ({
   message,
   onClose,
+  open,
   severity = "error",
   autoHideDuration = 6000,
   anchorOrigin = { vertical: "bottom", horizontal: "center" },
   dismissOnClickAway = true,
 }) => {
+  const handleClose = onClose || (() => {});
+
   return (
     <Snackbar
-      open
+      open={open}
       autoHideDuration={autoHideDuration}
-      onClose={onClose}
+      onClose={handleClose}
       anchorOrigin={anchorOrigin}
       ClickAwayListenerProps={{
-        onClickAway: dismissOnClickAway ? onClose : undefined,
+        onClickAway: dismissOnClickAway ? handleClose : undefined,
       }}
     >
-      <Alert onClose={onClose} severity={severity} sx={{ width: "100%" }}>
+      <Alert onClose={handleClose} severity={severity} sx={{ width: "100%" }}>
         {message}
       </Alert>
     </Snackbar>

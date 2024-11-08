@@ -9,23 +9,13 @@ import {
   Box,
   Toolbar,
   Collapse,
-  Popper,
-  Paper,
-  ClickAwayListener,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { t } from "i18next";
 import HomeIcon from "@mui/icons-material/Home";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
-import BarChartIcon from "@mui/icons-material/BarChart";
-import PieChartIcon from "@mui/icons-material/PieChart";
-import FlagIcon from "@mui/icons-material/Flag";
-import TrendingUpIcon from "@mui/icons-material/TrendingUp";
-import ReceiptIcon from "@mui/icons-material/Receipt";
-import NotificationsIcon from "@mui/icons-material/Notifications";
 import InsertChartIcon from "@mui/icons-material/InsertChart";
-import PersonIcon from "@mui/icons-material/Person";
 import LockIcon from "@mui/icons-material/Lock";
 import HelpIcon from "@mui/icons-material/Help";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -37,120 +27,18 @@ import { AdminPanelSettings } from "@mui/icons-material";
 
 const drawerWidth = 240;
 
-/**
- * SideNav component renders a navigation drawer with various menu items.
- * It supports nested submenus and collapsible sections.
- */
 const SideNav = () => {
   const [open, setOpen] = useState(true);
+  const [openFinances, setOpenFinances] = useState(false);
   const [openAnalytics, setOpenAnalytics] = useState(false);
-  const [openProfile, setOpenProfile] = useState(false);
-  const [openSecurity, setOpenSecurity] = useState(false);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [submenuContent, setSubmenuContent] = useState<JSX.Element | null>(
-    null
-  );
   const navigate = useNavigate();
 
-  /**
-   * Toggles the drawer open and close state.
-   */
   const handleDrawerToggle = () => {
     setOpen(!open);
-    setAnchorEl(null);
   };
 
-  /**
-   * Toggles the Analytics submenu.
-   * @param event - The mouse event triggering the toggle.
-   */
-  const toggleAnalytics = (event: React.MouseEvent<HTMLElement>) => {
-    if (!open) {
-      setAnchorEl(anchorEl ? null : event.currentTarget);
-      setSubmenuContent(
-        <List component="div" disablePadding>
-          <ListItem
-            sx={{ pl: 2 }}
-            onClick={() => handleNavigate("/analytics/statistics")}
-          >
-            <ListItemText primary={t("STATISTICS")} />
-          </ListItem>
-          <ListItem
-            sx={{ pl: 2 }}
-            onClick={() => handleNavigate("/analytics/trends")}
-          >
-            <ListItemText primary={t("TRENDS")} />
-          </ListItem>
-        </List>
-      );
-    } else {
-      setOpenAnalytics(!openAnalytics);
-    }
-  };
-
-  /**
-   * Toggles the Profile submenu.
-   * @param event - The mouse event triggering the toggle.
-   */
-  const toggleProfile = (event: React.MouseEvent<HTMLElement>) => {
-    if (!open) {
-      setAnchorEl(anchorEl ? null : event.currentTarget);
-      setSubmenuContent(
-        <List component="div" disablePadding>
-          <ListItem
-            sx={{ pl: 2 }}
-            onClick={() => handleNavigate("/profile/details")}
-          >
-            <ListItemText primary={t("PERSONAL_INFO")} />
-          </ListItem>
-          <ListItem
-            sx={{ pl: 2 }}
-            onClick={() => handleNavigate("/profile/preferences")}
-          >
-            <ListItemText primary={t("PREFERENCES")} />
-          </ListItem>
-        </List>
-      );
-    } else {
-      setOpenProfile(!openProfile);
-    }
-  };
-
-  /**
-   * Toggles the Security submenu.
-   * @param event - The mouse event triggering the toggle.
-   */
-  const toggleSecurity = (event: React.MouseEvent<HTMLElement>) => {
-    if (!open) {
-      setAnchorEl(anchorEl ? null : event.currentTarget);
-      setSubmenuContent(
-        <List component="div" disablePadding>
-          <ListItem
-            sx={{ pl: 2 }}
-            onClick={() => handleNavigate("/security/2fa")}
-          >
-            <ListItemText primary={t("TWO_FA")} />
-          </ListItem>
-          <ListItem
-            sx={{ pl: 2 }}
-            onClick={() => handleNavigate("/security/access-history")}
-          >
-            <ListItemText primary={t("ACCESS_HISTORY")} />
-          </ListItem>
-        </List>
-      );
-    } else {
-      setOpenSecurity(!openSecurity);
-    }
-  };
-
-  /**
-   * Navigates to the specified path.
-   * @param path - The path to navigate to.
-   */
   const handleNavigate = (path: string) => {
     navigate(path);
-    setAnchorEl(null);
   };
 
   return (
@@ -193,13 +81,10 @@ const SideNav = () => {
       </IconButton>
 
       <List sx={{ height: "calc(100vh - 64px)", overflowY: "auto" }}>
+        {/* Primary Navigation */}
         <ListItem
-          onClick={() => handleNavigate("/")}
-          sx={{
-            cursor: "pointer",
-            "&:hover": { backgroundColor: "#f0f0f0" },
-            transition: "background-color 0.3s ease",
-          }}
+          onClick={() => handleNavigate("/welcome")}
+          sx={{ cursor: "pointer", "&:hover": { backgroundColor: "#f0f0f0" } }}
         >
           <ListItemIcon>
             <HomeIcon />
@@ -209,11 +94,7 @@ const SideNav = () => {
 
         <ListItem
           onClick={() => handleNavigate("/dashboard")}
-          sx={{
-            cursor: "pointer",
-            "&:hover": { backgroundColor: "#f0f0f0" },
-            transition: "background-color 0.3s ease",
-          }}
+          sx={{ cursor: "pointer", "&:hover": { backgroundColor: "#f0f0f0" } }}
         >
           <ListItemIcon>
             <DashboardIcon />
@@ -221,97 +102,68 @@ const SideNav = () => {
           {open && <ListItemText primary={t("DASHBOARD")} />}
         </ListItem>
 
+        {/* Finance Section */}
         <ListItem
-          onClick={() => handleNavigate("/accounts")}
-          sx={{
-            cursor: "pointer",
-            "&:hover": { backgroundColor: "#f0f0f0" },
-            transition: "background-color 0.3s ease",
-          }}
+          onClick={() => setOpenFinances(!openFinances)}
+          sx={{ cursor: "pointer", "&:hover": { backgroundColor: "#f0f0f0" } }}
         >
           <ListItemIcon>
             <AccountBalanceIcon />
           </ListItemIcon>
-          {open && <ListItemText primary={t("ACCOUNTS")} />}
+          {open && <ListItemText primary={t("FINANCES")} />}
+          {open && (openFinances ? <ExpandLess /> : <ExpandMore />)}
         </ListItem>
+        {open && (
+          <Collapse in={openFinances} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <ListItem
+                onClick={() => handleNavigate("/finances/budget")}
+                sx={{
+                  pl: 4,
+                  cursor: "pointer",
+                  "&:hover": { backgroundColor: "#f0f0f0" },
+                }}
+              >
+                <ListItemText primary={t("BUDGET")} />
+              </ListItem>
+              <ListItem
+                onClick={() => handleNavigate("/finances/goals")}
+                sx={{
+                  pl: 4,
+                  cursor: "pointer",
+                  "&:hover": { backgroundColor: "#f0f0f0" },
+                }}
+              >
+                <ListItemText primary={t("GOALS")} />
+              </ListItem>
+              <ListItem
+                onClick={() => handleNavigate("/finances/investments")}
+                sx={{
+                  pl: 4,
+                  cursor: "pointer",
+                  "&:hover": { backgroundColor: "#f0f0f0" },
+                }}
+              >
+                <ListItemText primary={t("INVESTMENTS")} />
+              </ListItem>
+              <ListItem
+                onClick={() => handleNavigate("/finances/bills")}
+                sx={{
+                  pl: 4,
+                  cursor: "pointer",
+                  "&:hover": { backgroundColor: "#f0f0f0" },
+                }}
+              >
+                <ListItemText primary={t("BILLS")} />
+              </ListItem>
+            </List>
+          </Collapse>
+        )}
 
+        {/* Analytics Section */}
         <ListItem
-          onClick={() => handleNavigate("/budget")}
-          sx={{
-            cursor: "pointer",
-            "&:hover": { backgroundColor: "#f0f0f0" },
-            transition: "background-color 0.3s ease",
-          }}
-        >
-          <ListItemIcon>
-            <PieChartIcon />
-          </ListItemIcon>
-          {open && <ListItemText primary={t("BUDGET")} />}
-        </ListItem>
-
-        <ListItem
-          onClick={() => handleNavigate("/goals")}
-          sx={{
-            cursor: "pointer",
-            "&:hover": { backgroundColor: "#f0f0f0" },
-            transition: "background-color 0.3s ease",
-          }}
-        >
-          <ListItemIcon>
-            <FlagIcon />
-          </ListItemIcon>
-          {open && <ListItemText primary={t("GOALS")} />}
-        </ListItem>
-
-        <ListItem
-          onClick={() => handleNavigate("/investments")}
-          sx={{
-            cursor: "pointer",
-            "&:hover": { backgroundColor: "#f0f0f0" },
-            transition: "background-color 0.3s ease",
-          }}
-        >
-          <ListItemIcon>
-            <TrendingUpIcon />
-          </ListItemIcon>
-          {open && <ListItemText primary={t("INVESTMENTS")} />}
-        </ListItem>
-
-        <ListItem
-          onClick={() => handleNavigate("/bills")}
-          sx={{
-            cursor: "pointer",
-            "&:hover": { backgroundColor: "#f0f0f0" },
-            transition: "background-color 0.3s ease",
-          }}
-        >
-          <ListItemIcon>
-            <ReceiptIcon />
-          </ListItemIcon>
-          {open && <ListItemText primary={t("BILLS")} />}
-        </ListItem>
-
-        <ListItem
-          onClick={() => handleNavigate("/reports")}
-          sx={{
-            cursor: "pointer",
-            "&:hover": { backgroundColor: "#f0f0f0" },
-            transition: "background-color 0.3s ease",
-          }}
-        >
-          <ListItemIcon>
-            <BarChartIcon />
-          </ListItemIcon>
-          {open && <ListItemText primary={t("REPORTS")} />}
-        </ListItem>
-
-        <ListItem
-          onClick={toggleAnalytics}
-          sx={{
-            cursor: "pointer",
-            "&:hover": { backgroundColor: "#f0f0f0" },
-            transition: "background-color 0.3s ease",
-          }}
+          onClick={() => setOpenAnalytics(!openAnalytics)}
+          sx={{ cursor: "pointer", "&:hover": { backgroundColor: "#f0f0f0" } }}
         >
           <ListItemIcon>
             <InsertChartIcon />
@@ -323,24 +175,22 @@ const SideNav = () => {
           <Collapse in={openAnalytics} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
               <ListItem
+                onClick={() => handleNavigate("/analytics/statistics")}
                 sx={{
                   pl: 4,
                   cursor: "pointer",
                   "&:hover": { backgroundColor: "#f0f0f0" },
-                  transition: "background-color 0.3s ease",
                 }}
-                onClick={() => handleNavigate("/analytics/statistics")}
               >
                 <ListItemText primary={t("STATISTICS")} />
               </ListItem>
               <ListItem
+                onClick={() => handleNavigate("/analytics/trends")}
                 sx={{
                   pl: 4,
                   cursor: "pointer",
                   "&:hover": { backgroundColor: "#f0f0f0" },
-                  transition: "background-color 0.3s ease",
                 }}
-                onClick={() => handleNavigate("/analytics/trends")}
               >
                 <ListItemText primary={t("TRENDS")} />
               </ListItem>
@@ -349,112 +199,8 @@ const SideNav = () => {
         )}
 
         <ListItem
-          onClick={toggleProfile}
-          sx={{
-            cursor: "pointer",
-            "&:hover": { backgroundColor: "#f0f0f0" },
-            transition: "background-color 0.3s ease",
-          }}
-        >
-          <ListItemIcon>
-            <PersonIcon />
-          </ListItemIcon>
-          {open && <ListItemText primary={t("PROFILE")} />}
-          {open && (openProfile ? <ExpandLess /> : <ExpandMore />)}
-        </ListItem>
-        {open && (
-          <Collapse in={openProfile} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              <ListItem
-                sx={{
-                  pl: 4,
-                  cursor: "pointer",
-                  "&:hover": { backgroundColor: "#f0f0f0" },
-                  transition: "background-color 0.3s ease",
-                }}
-                onClick={() => handleNavigate("/profile/details")}
-              >
-                <ListItemText primary={t("PERSONAL_INFO")} />
-              </ListItem>
-              <ListItem
-                sx={{
-                  pl: 4,
-                  cursor: "pointer",
-                  "&:hover": { backgroundColor: "#f0f0f0" },
-                  transition: "background-color 0.3s ease",
-                }}
-                onClick={() => handleNavigate("/profile/preferences")}
-              >
-                <ListItemText primary={t("PREFERENCES")} />
-              </ListItem>
-            </List>
-          </Collapse>
-        )}
-
-        <ListItem
-          onClick={toggleSecurity}
-          sx={{
-            cursor: "pointer",
-            "&:hover": { backgroundColor: "#f0f0f0" },
-            transition: "background-color 0.3s ease",
-          }}
-        >
-          <ListItemIcon>
-            <LockIcon />
-          </ListItemIcon>
-          {open && <ListItemText primary={t("SECURITY")} />}
-          {open && (openSecurity ? <ExpandLess /> : <ExpandMore />)}
-        </ListItem>
-        {open && (
-          <Collapse in={openSecurity} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              <ListItem
-                sx={{
-                  pl: 4,
-                  cursor: "pointer",
-                  "&:hover": { backgroundColor: "#f0f0f0" },
-                  transition: "background-color 0.3s ease",
-                }}
-                onClick={() => handleNavigate("/security/2fa")}
-              >
-                <ListItemText primary={t("TWO_FA")} />
-              </ListItem>
-              <ListItem
-                sx={{
-                  pl: 4,
-                  cursor: "pointer",
-                  "&:hover": { backgroundColor: "#f0f0f0" },
-                  transition: "background-color 0.3s ease",
-                }}
-                onClick={() => handleNavigate("/security/access-history")}
-              >
-                <ListItemText primary={t("ACCESS_HISTORY")} />
-              </ListItem>
-            </List>
-          </Collapse>
-        )}
-
-        <ListItem
-          onClick={() => handleNavigate("/notifications")}
-          sx={{
-            cursor: "pointer",
-            "&:hover": { backgroundColor: "#f0f0f0" },
-            transition: "background-color 0.3s ease",
-          }}
-        >
-          <ListItemIcon>
-            <NotificationsIcon />
-          </ListItemIcon>
-          {open && <ListItemText primary={t("NOTIFICATIONS")} />}
-        </ListItem>
-
-        <ListItem
           onClick={() => handleNavigate("/support")}
-          sx={{
-            cursor: "pointer",
-            "&:hover": { backgroundColor: "#f0f0f0" },
-            transition: "background-color 0.3s ease",
-          }}
+          sx={{ cursor: "pointer", "&:hover": { backgroundColor: "#f0f0f0" } }}
         >
           <ListItemIcon>
             <HelpIcon />
@@ -463,17 +209,12 @@ const SideNav = () => {
         </ListItem>
       </List>
 
+      {/* Bottom Section */}
       <Box sx={{ flexGrow: 1 }} />
-
       <List>
-      </List>
         <ListItem
           onClick={() => handleNavigate("/settings")}
-          sx={{
-            cursor: "pointer",
-            "&:hover": { backgroundColor: "#f0f0f0" },
-            transition: "background-color 0.3s ease",
-          }}
+          sx={{ cursor: "pointer", "&:hover": { backgroundColor: "#f0f0f0" } }}
         >
           <ListItemIcon>
             <SettingsIcon />
@@ -481,28 +222,24 @@ const SideNav = () => {
           {open && <ListItemText primary={t("SETTINGS")} />}
         </ListItem>
         <ListItem
+          onClick={() => handleNavigate("/security")}
+          sx={{ cursor: "pointer", "&:hover": { backgroundColor: "#f0f0f0" } }}
+        >
+          <ListItemIcon>
+            <LockIcon />
+          </ListItemIcon>
+          {open && <ListItemText primary={t("SECURITY")} />}
+        </ListItem>
+        <ListItem
           onClick={() => handleNavigate("/admin-panel")}
-          sx={{
-            cursor: "pointer",
-            "&:hover": { backgroundColor: "#f0f0f0" },
-            transition: "background-color 0.3s ease",
-          }}
+          sx={{ cursor: "pointer", "&:hover": { backgroundColor: "#f0f0f0" } }}
         >
           <ListItemIcon>
             <AdminPanelSettings />
           </ListItemIcon>
           {open && <ListItemText primary={t("ADMIN_PANEL")} />}
         </ListItem>
-
-      <Popper
-        open={Boolean(anchorEl)}
-        anchorEl={anchorEl}
-        placement="right-start"
-      >
-        <ClickAwayListener onClickAway={() => setAnchorEl(null)}>
-          <Paper elevation={3}>{submenuContent}</Paper>
-        </ClickAwayListener>
-      </Popper>
+      </List>
     </Drawer>
   );
 };

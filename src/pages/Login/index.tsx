@@ -1,21 +1,16 @@
 import React, { useState, useEffect } from "react";
-import {
-  Container,
-  Avatar,
-  Box,
-  Typography,
-  Fab,
-  Tooltip,
-  Snackbar,
-  Alert,
-} from "@mui/material";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import HomeIcon from "@mui/icons-material/Home";
+import { Container, Box, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import LanguageSwitcher from "../../components/LanguageSwitcher";
 import LoginForm from "../../forms/LoginForm";
 import Loader from "../../components/Loader";
 import { useLogin } from "../../services/auth/login.service";
+import AvatarComponent from "../../components/Avatar";
+import { HomeFloatingButton } from "./local-components/HomeFloatingButton";
+import ErrorSnackbar from "../../components/ErrorSnackbar";
+import LoginIcon from '@mui/icons-material/Login';
+import { t } from "i18next";
+import { getRandomColor } from "../../utils/getRandomColor";
 
 /**
  * Login component that handles user authentication.
@@ -41,13 +36,6 @@ const Login: React.FC = () => {
    */
   const onLandingPageClick = () => {
     navigate("/");
-  };
-
-  /**
-   * Closes the error Snackbar.
-   */
-  const handleErrorClose = () => {
-    setOpenError(false);
   };
 
   useEffect(() => {
@@ -84,48 +72,20 @@ const Login: React.FC = () => {
           alignItems: "center",
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-          <LockOutlinedIcon />
-        </Avatar>
+        <AvatarComponent icon={<LoginIcon />} backgroundColor={getRandomColor()} />
         <Typography component="h1" variant="h5">
-          Login
+          {t("LOGIN")}
         </Typography>
 
         <LoginForm onSubmit={onSubmit} loading={loading} error={error} />
 
-        <Tooltip title="Back to Landing" aria-label="back-to-landing">
-          <Fab
-            color="primary"
-            aria-label="back-to-landing"
-            onClick={onLandingPageClick}
-            sx={{
-              position: "fixed",
-              bottom: 16,
-              left: 16,
-              transition: "transform 0.3s ease-in-out",
-              "&:hover": {
-                transform: "scale(1.2)",
-                bgcolor: "primary.dark",
-              },
-            }}
-          >
-            <HomeIcon />
-          </Fab>
-        </Tooltip>
+        <HomeFloatingButton onLandingPageClick={onLandingPageClick} />
       </Box>
-      <Snackbar
+
+      <ErrorSnackbar
         open={openError}
-        autoHideDuration={6000}
-        onClose={handleErrorClose}
-      >
-        <Alert
-          onClose={handleErrorClose}
-          severity="error"
-          sx={{ width: "100%" }}
-        >
-          {error}
-        </Alert>
-      </Snackbar>
+        message={error || ""}
+      />
     </Container>
   );
 };

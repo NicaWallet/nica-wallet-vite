@@ -28,17 +28,22 @@ import {
   IconButton,
   Button,
   TablePagination,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { ColumnConfig } from "./columnConfig";
+import { ClearAll, Clear, Visibility, Edit, Delete } from "@mui/icons-material";
+import columnConfig, { IColumnConfig } from "./columnConfig";
 import { useTranslation } from "react-i18next";
-import { ClearAll, Clear } from "@mui/icons-material";
 
 type ColumnFilterValue = string | string[] | number | number[] | null;
 
-export interface TableComponentProps extends TableProps {
-  columns: ColumnConfig[];
-  rows: Array<Record<string, unknown>>;
+export interface TableComponentProps<T extends Record<string, unknown>>
+  extends TableProps {
+  columns?: IColumnConfig[];
+  rows: T[];
   variant?: "default" | "compact" | "striped" | "bordered";
   sx?: SxProps<Theme>;
   columnOrder?: string[];
@@ -47,10 +52,14 @@ export interface TableComponentProps extends TableProps {
   showRowNumber?: boolean;
   maxWidth?: number | string;
   maxHeight?: number | string;
+  minHeight?: number | string;
+  handleView?: (row: T) => void;
+  handleEdit?: (row: T) => void;
+  handleDelete?: (row: T) => void;
 }
 
-const TableComponent: React.FC<TableComponentProps> = ({
-  columns,
+const TableComponent = <T extends Record<string, unknown>>({
+  columns = columnConfig,
   rows,
   variant = "default",
   sx = {},
@@ -60,23 +69,13 @@ const TableComponent: React.FC<TableComponentProps> = ({
   showRowNumber = false,
   maxWidth = "100%",
   maxHeight = 500,
+  minHeight = 500,
+  handleView,
+  handleEdit,
+  handleDelete,
   ...props
-}) => {
+}: TableComponentProps<T>) => {
   const { t } = useTranslation();
-
-  function validateUniqueIds(columns: ColumnConfig[]): void {
-    const idSet = new Set<string>();
-    for (const column of columns) {
-      if (idSet.has(column.id)) {
-        throw new Error(
-          `ID duplicado encontrado en columnConfig: ${column.id}`
-        );
-      }
-      idSet.add(column.id);
-    }
-  }
-
-  validateUniqueIds(columns);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [columnFilters, setColumnFilters] = useState<{
@@ -84,6 +83,27 @@ const TableComponent: React.FC<TableComponentProps> = ({
   }>({});
   const [page, setPage] = useState(0);
   const [currentRowsPerPage, setCurrentRowsPerPage] = useState(rowsPerPage);
+  const [filterDialogOpen, setFilterDialogOpen] = useState(false);
+  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
+
+  const handleOpenFilterDialog = () => setFilterDialogOpen(true);
+  const handleCloseFilterDialog = () => setFilterDialogOpen(false);
+  const toggleFilterSelection = (filterId: string) => {
+    setSelectedFilters((prevSelected) =>
+      prevSelected.includes(filterId)
+        ? prevSelected.filter((id) => id !== filterId)
+        : [...prevSelected, filterId]
+    );
+  };
+  const confirmSelectedFilters = () => setFilterDialogOpen(false);
+  const handleClearSelection = () => setSelectedFilters([]);
+
+  // Función para acceder a propiedades anidadas mediante una cadena (e.g., "user.user_id")
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const getNestedProperty = (obj: Record<string, any>, path: string): any => {
+    return path.split('.').reduce((acc, part) => acc && acc[part] !== undefined ? acc[part] : undefined, obj);
+  };
+
 
   const variantStyles: { [key: string]: SxProps<Theme> } = {
     default: {},
@@ -111,58 +131,41 @@ const TableComponent: React.FC<TableComponentProps> = ({
   const combinedStyles = { ...variantStyles[variant], ...sx };
 
   const dataKeys = new Set<string>();
-  rows.forEach((row) => {
-    Object.keys(row).forEach((key) => {
-      dataKeys.add(key);
+
+  const collectKeys = (obj: Record<string, unknown>, prefix = ""): void => {
+    Object.keys(obj).forEach((key) => {
+      const fullKey = prefix ? `${prefix}.${key}` : key;
+      dataKeys.add(fullKey);
+      if (typeof obj[key] === "object" && obj[key] !== null) {
+        collectKeys(obj[key] as Record<string, unknown>, fullKey);
+      }
     });
-  });
+  };
+
+  rows.forEach((row) => collectKeys(row));
+
 
   const orderedColumns = columnOrder
     ? (columnOrder
-        .map((id) => columns.find((col) => col.id === id))
-        .filter(Boolean) as ColumnConfig[])
+      .map((id) => columns.find((col) => col.id === id))
+      .filter(Boolean) as IColumnConfig[])
     : [...columns].sort((a, b) => a.titleKey.localeCompare(b.titleKey));
 
-  const filteredColumns = orderedColumns.filter((column) =>
-    dataKeys.has(column.id)
-  );
-
-  const filteredRows = rows.filter((row) => {
-    const globalFilterMatch =
-      searchQuery === "" ||
-      Object.values(row).some((value) =>
-        value?.toString().toLowerCase().includes(searchQuery.toLowerCase())
-      );
-
-    const columnFilterMatch = filteredColumns.every((column) => {
-      const filterValue = columnFilters[column.id];
-      if (
-        filterValue === undefined ||
-        filterValue === null ||
-        (Array.isArray(filterValue) && filterValue.length === 0)
-      )
-        return true;
-      const cellValue = row[column.id];
-
-      switch (column.filterType) {
-        case "search":
-          return cellValue
-            ?.toString()
-            .toLowerCase()
-            .includes((filterValue as string).toLowerCase());
-        case "dropdown":
-          return cellValue?.toString() === filterValue?.toString();
-        case "multiselect":
-          return (filterValue as string[]).includes(cellValue as string);
-        case "radiobutton":
-          return cellValue?.toString() === filterValue?.toString();
-        default:
-          return true;
-      }
-    });
-
-    return globalFilterMatch && columnFilterMatch;
+  const filteredColumns = orderedColumns.filter((column) => {
+    console.log(`Checking Column ID: ${column.id}`);
+    if (dataKeys.has(column.id)) {
+      console.log(`Column ID ${column.id} exists in data keys.`);
+      return true;
+    } else {
+      console.log(`Column ID ${column.id} does NOT exist in data keys.`);
+      return false;
+    }
   });
+
+  console.log("Ordered Columns:", orderedColumns);
+  console.log("Data Keys:", Array.from(dataKeys));
+
+
 
   const handleColumnFilterChange = (
     value: ColumnFilterValue,
@@ -186,6 +189,43 @@ const TableComponent: React.FC<TableComponentProps> = ({
     setSearchQuery("");
   };
 
+  const filteredRows = rows.filter((row) => {
+    const globalFilterMatch =
+      searchQuery === "" ||
+      Object.values(row).some((value) =>
+        value?.toString().toLowerCase().includes(searchQuery.toLowerCase())
+      );
+
+    const columnFilterMatch = filteredColumns.every((column) => {
+      const filterValue = columnFilters[column.id];
+      if (
+        filterValue === undefined ||
+        filterValue === null ||
+        (Array.isArray(filterValue) && filterValue.length === 0)
+      )
+        return true;
+      const cellValue = row[column.id as keyof T];
+
+      switch (column.filterType) {
+        case "search":
+          return cellValue
+            ?.toString()
+            .toLowerCase()
+            .includes((filterValue as string).toLowerCase());
+        case "dropdown":
+          return cellValue?.toString() === filterValue?.toString();
+        case "multiselect":
+          return (filterValue as string[]).includes(cellValue as string);
+        case "radiobutton":
+          return cellValue?.toString() === filterValue?.toString();
+        default:
+          return true;
+      }
+    });
+
+    return globalFilterMatch && columnFilterMatch;
+  });
+
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -202,6 +242,11 @@ const TableComponent: React.FC<TableComponentProps> = ({
     page * currentRowsPerPage + currentRowsPerPage
   );
 
+  console.log('Rows being passed to TableComponent:', rows);
+  console.log("Filtered Columns:", filteredColumns);
+  console.log("Filtered Rows:", filteredRows);
+  console.log("Paginated Rows:", paginatedRows);
+
   return (
     <Box sx={{ ...combinedStyles }}>
       <Accordion>
@@ -209,6 +254,49 @@ const TableComponent: React.FC<TableComponentProps> = ({
           <Typography>Filtros</Typography>
         </AccordionSummary>
         <AccordionDetails>
+          {filteredColumns.length > 5 && (
+            <Button variant="outlined" onClick={handleOpenFilterDialog} sx={{ mb: 2 }}>
+              {t("Seleccionar Filtros")}
+            </Button>
+          )}
+
+          <Dialog open={filterDialogOpen} onClose={handleCloseFilterDialog} maxWidth="xs" fullWidth>
+            <DialogTitle sx={{ fontSize: "1.25rem", fontWeight: "bold" }}>
+              {t("Seleccionar Filtros a Usar")}
+            </DialogTitle>
+            <DialogContent dividers sx={{ px: 3, py: 2 }}>
+              <Typography variant="body2" color="textSecondary" sx={{ mb: 2 }}>
+                {t("Elige los filtros que deseas aplicar para reducir la lista de columnas.")}
+              </Typography>
+              <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1 }}>
+                {filteredColumns.map((column) => (
+                  <FormControlLabel
+                    key={column.id}
+                    control={
+                      <Checkbox
+                        checked={selectedFilters.includes(column.id)}
+                        onChange={() => toggleFilterSelection(column.id)}
+                      />
+                    }
+                    label={t(column.titleKey)}
+                    sx={{ fontSize: "0.875rem" }}
+                  />
+                ))}
+              </Box>
+            </DialogContent>
+            <DialogActions sx={{ px: 3, pb: 2, justifyContent: "space-between" }}>
+              <Button onClick={handleClearSelection} color="secondary">
+                {t("Limpiar Selección")}
+              </Button>
+              <Button onClick={handleCloseFilterDialog} color="secondary">
+                {t("Cancelar")}
+              </Button>
+              <Button onClick={confirmSelectedFilters} variant="contained" color="primary">
+                {t("Aceptar")}
+              </Button>
+            </DialogActions>
+          </Dialog>
+
           <Box
             sx={{
               mb: 2,
@@ -219,7 +307,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
             }}
           >
             <TextField
-              label="Buscar"
+              label={t("Buscar")}
               variant="outlined"
               size="small"
               value={searchQuery}
@@ -238,26 +326,21 @@ const TableComponent: React.FC<TableComponentProps> = ({
               }}
             />
             {filteredColumns.map((column) => {
-              if (!column.filterType) return null;
+              if (!column.filterType || !selectedFilters.includes(column.id)) return null;
               const filterValue = columnFilters[column.id] || "";
 
               switch (column.filterType) {
                 case "search":
                   return (
-                    <Box
-                      key={column.id}
-                      sx={{ display: "flex", alignItems: "center", gap: 1 }}
-                    >
+                    <Box key={column.id} sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                       <TextField
                         key={column.id}
-                        label={column.titleKey}
+                        label={t(column.titleKey)}
                         variant="outlined"
                         size="small"
                         sx={{ minWidth: 150 }}
                         value={filterValue}
-                        onChange={(e) =>
-                          handleColumnFilterChange(e.target.value, column.id)
-                        }
+                        onChange={(e) => handleColumnFilterChange(e.target.value, column.id)}
                         InputProps={{
                           endAdornment: filterValue && (
                             <IconButton
@@ -274,38 +357,17 @@ const TableComponent: React.FC<TableComponentProps> = ({
                   );
                 case "dropdown":
                   return (
-                    <Box
-                      key={column.id}
-                      sx={{ display: "flex", alignItems: "center", gap: 1 }}
-                    >
-                      <FormControl
-                        key={column.id}
-                        variant="outlined"
-                        size="small"
-                        sx={{ minWidth: 150 }}
-                      >
-                        <InputLabel>{column.titleKey}</InputLabel>
+                    <Box key={column.id} sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                      <FormControl key={column.id} variant="outlined" size="small" sx={{ minWidth: 150 }}>
+                        <InputLabel>{t(column.titleKey)}</InputLabel>
                         <Select
-                          label={column.titleKey}
+                          label={t(column.titleKey)}
                           value={filterValue}
-                          onChange={(e) =>
-                            handleColumnFilterChange(e.target.value, column.id)
-                          }
-                          endAdornment={
-                            filterValue && (
-                              <IconButton
-                                size="small"
-                                onClick={() => clearFilter(column.id)}
-                                aria-label="Clear"
-                              >
-                                <Clear fontSize="small" />
-                              </IconButton>
-                            )
-                          }
+                          onChange={(e) => handleColumnFilterChange(e.target.value, column.id)}
                         >
                           {column.options?.map((option) => (
                             <MenuItem key={option.value} value={option.value}>
-                              {option.label}
+                              {t(option.label)}
                             </MenuItem>
                           ))}
                         </Select>
@@ -314,41 +376,20 @@ const TableComponent: React.FC<TableComponentProps> = ({
                   );
                 case "multiselect":
                   return (
-                    <Box
-                      key={column.id}
-                      sx={{ display: "flex", alignItems: "center", gap: 1 }}
-                    >
-                      <FormControl
-                        key={column.id}
-                        variant="outlined"
-                        size="small"
-                        sx={{ minWidth: 150 }}
-                      >
-                        <InputLabel>{column.titleKey}</InputLabel>
+                    <Box key={column.id} sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                      <FormControl key={column.id} variant="outlined" size="small" sx={{ minWidth: 150 }}>
+                        <InputLabel>{t(column.titleKey)}</InputLabel>
                         <Select
-                          label={column.titleKey}
+                          label={t(column.titleKey)}
                           multiple
                           value={filterValue}
-                          onChange={(e) =>
-                            handleColumnFilterChange(
-                              e.target.value as string[],
-                              column.id
-                            )
-                          }
-                          renderValue={(selected) =>
-                            (selected as string[]).join(", ")
-                          }
+                          onChange={(e) => handleColumnFilterChange(e.target.value as string[], column.id)}
+                          renderValue={(selected) => (selected as string[]).map((value) => t(value)).join(", ")}
                         >
                           {column.options?.map((option) => (
                             <MenuItem key={option.value} value={option.value}>
-                              <Checkbox
-                                checked={
-                                  (filterValue as string[]).indexOf(
-                                    option.value.toString()
-                                  ) > -1
-                                }
-                              />
-                              <ListItemText primary={option.label} />
+                              <Checkbox checked={(filterValue as string[]).includes(option.value.toString())} />
+                              <ListItemText primary={t(option.label)} />
                             </MenuItem>
                           ))}
                         </Select>
@@ -366,30 +407,20 @@ const TableComponent: React.FC<TableComponentProps> = ({
                   );
                 case "radiobutton":
                   return (
-                    <Box
-                      key={column.id}
-                      sx={{ display: "flex", alignItems: "center", gap: 1 }}
-                    >
-                      <FormControl
-                        component="fieldset"
-                        key={column.id}
-                        variant="outlined"
-                        size="small"
-                        sx={{ minWidth: 150 }}
-                      >
+                    <Box key={column.id} sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                      <FormControl component="fieldset" key={column.id} variant="outlined" size="small" sx={{ minWidth: 150 }}>
+                        <Typography component="legend">{t(column.titleKey)}</Typography>
                         <RadioGroup
                           row
                           value={filterValue}
-                          onChange={(e) =>
-                            handleColumnFilterChange(e.target.value, column.id)
-                          }
+                          onChange={(e) => handleColumnFilterChange(e.target.value, column.id)}
                         >
                           {column.options?.map((option) => (
                             <FormControlLabel
                               key={option.value}
                               value={option.value}
                               control={<Radio size="small" />}
-                              label={option.label}
+                              label={t(option.label)}
                             />
                           ))}
                         </RadioGroup>
@@ -415,7 +446,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
               onClick={clearAllFilters}
               startIcon={<ClearAll />}
             >
-              Limpiar Filtros
+              {t("Limpiar Filtros")}
             </Button>
           </Box>
         </AccordionDetails>
@@ -425,6 +456,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
         sx={{
           maxWidth: maxWidth,
           maxHeight: maxHeight,
+          minHeight: minHeight,
           overflow: "auto",
         }}
       >
@@ -443,13 +475,19 @@ const TableComponent: React.FC<TableComponentProps> = ({
                   }}
                 />
               ))}
+              {(handleView || handleEdit || handleDelete) && (
+                <col style={{ width: "150px" }} />
+              )}
             </colgroup>
             <TableHead>
               <TableRow>
                 {showRowNumber && <TableCell>#</TableCell>}
                 {filteredColumns.map((column) => (
-                  <TableCell key={column.id}>{column.titleKey}</TableCell>
+                  <TableCell key={column.id}>{t(column.titleKey)}</TableCell>
                 ))}
+                {(handleView || handleEdit || handleDelete) && (
+                  <TableCell>{t("Acciones")}</TableCell>
+                )}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -461,7 +499,10 @@ const TableComponent: React.FC<TableComponentProps> = ({
                     </TableCell>
                   )}
                   {filteredColumns.map((column) => {
-                    const cellData = row[column.id];
+                    console.log("Rendering Table Body");
+                    // Utiliza la función de acceso a propiedades anidadas
+                    const cellData = getNestedProperty(row, column.id);
+                    console.log(`Column ID: ${column.id}, Cell Data:`, cellData); // Agrega esto para depurar
                     let cellContent;
 
                     if (column.renderLogic) {
@@ -469,43 +510,71 @@ const TableComponent: React.FC<TableComponentProps> = ({
                     } else {
                       switch (column.dataType) {
                         case "String":
-                          cellContent =
-                            cellData !== undefined && cellData !== null
-                              ? cellData.toString()
-                              : "";
+                          cellContent = cellData !== undefined && cellData !== null ? cellData.toString() : "";
                           break;
                         case "Number":
-                          cellContent =
-                            cellData !== undefined && cellData !== null
-                              ? cellData.toString()
-                              : "";
+                          cellContent = cellData !== undefined && cellData !== null ? cellData.toString() : "";
                           break;
                         case "Boolean":
-                          cellContent =
-                            cellData !== undefined && cellData !== null
-                              ? cellData
-                                ? "True"
-                                : "False"
-                              : "";
+                          cellContent = cellData !== undefined && cellData !== null ? (cellData ? "True" : "False") : "";
                           break;
                         case "Date":
-                          cellContent =
-                            cellData !== undefined && cellData !== null
-                              ? new Date(
-                                  cellData as string
-                                ).toLocaleDateString()
-                              : "";
+                          cellContent = cellData !== undefined && cellData !== null ? new Date(cellData).toLocaleDateString() : "";
                           break;
                         default:
-                          cellContent =
-                            cellData !== undefined && cellData !== null
-                              ? cellData.toString()
-                              : "";
+                          cellContent = cellData !== undefined && cellData !== null ? cellData.toString() : "";
                       }
                     }
 
                     return <TableCell key={column.id}>{cellContent}</TableCell>;
                   })}
+
+                  {(handleView || handleEdit || handleDelete) && (
+                    <TableCell>
+                      {handleView && (
+                        <IconButton
+                          onClick={() => handleView(row)}
+                          aria-label="View"
+                          sx={{
+                            color: "primary.main", // Azul del tema
+                            "&:hover": {
+                              color: "primary.dark", // Azul más oscuro al hacer hover
+                            },
+                          }}
+                        >
+                          <Visibility />
+                        </IconButton>
+                      )}
+                      {handleEdit && (
+                        <IconButton
+                          onClick={() => handleEdit(row)}
+                          aria-label="Edit"
+                          sx={{
+                            color: "success.main", // Verde del tema
+                            "&:hover": {
+                              color: "success.dark", // Verde más oscuro al hacer hover
+                            },
+                          }}
+                        >
+                          <Edit />
+                        </IconButton>
+                      )}
+                      {handleDelete && (
+                        <IconButton
+                          onClick={() => handleDelete(row)}
+                          aria-label="Delete"
+                          sx={{
+                            color: "error.main", // Rojo del tema
+                            "&:hover": {
+                              color: "error.dark", // Rojo más oscuro al hacer hover
+                            },
+                          }}
+                        >
+                          <Delete />
+                        </IconButton>
+                      )}
+                    </TableCell>
+                  )}
                 </TableRow>
               ))}
             </TableBody>

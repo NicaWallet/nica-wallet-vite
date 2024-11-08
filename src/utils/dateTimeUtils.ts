@@ -1,3 +1,5 @@
+import i18n from "../i18n";
+
 export class DateTimeUtils {
     // Formatear una fecha en un formato específico
     /**
@@ -104,6 +106,24 @@ export class DateTimeUtils {
         const parsedDate = new Date(date);
         return !isNaN(parsedDate.getTime());
     }
+
+    // Formatear fecha en un formato más legible, como "15 de octubre de 2024 a las 3:45 PM"
+    static formatHumanReadable(date: Date, includeTime = false, locale?: string): string {
+        const language = locale || i18n.language || 'en-US';
+        const options: Intl.DateTimeFormatOptions = {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+        };
+
+        if (includeTime) {
+            options.hour = 'numeric';
+            options.minute = '2-digit';
+            options.hour12 = true;
+        }
+
+        return new Intl.DateTimeFormat(language, options).format(date);
+    }
 }
 
 /**
@@ -131,4 +151,6 @@ export const formatTime = (date: Date): string => {
     const strTime = `${hours}:${minutes} ${ampm}`;
     return strTime;
 };
+
+
 

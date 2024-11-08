@@ -9,6 +9,7 @@ import {
 import { UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { RegisterFormData } from "../../types/auth/auth.types";
+import InputField from "../../components/Input";
 
 /**
  * Props for the RegisterForm component.
@@ -40,28 +41,26 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
     <>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
-          <TextField
+          <InputField
             {...register("first_name")}
-            autoComplete="given-name"
-            required
-            fullWidth
-            id="firstName"
             label={t("FIRST_NAME")}
+            autoComplete="given-name"
             autoFocus
             error={!!errors.first_name}
             helperText={errors.first_name?.message as string}
+            size="medium"
+            required
           />
         </Grid>
         <Grid item xs={12} sm={6}>
-          <TextField
+          <InputField
             {...register("last_name")}
-            required
-            fullWidth
-            id="lastName"
             label={t("LAST_NAME")}
             autoComplete="family-name"
             error={!!errors.last_name}
             helperText={errors.last_name?.message as string}
+            size="medium"
+            required
           />
         </Grid>
         <Grid item xs={12}>

@@ -22,6 +22,7 @@ export interface AvatarComponentProps {
   isLoading?: boolean;
   disabled?: boolean;
   menuOptions?: Array<{ label: string; onClick: () => void }>;
+  icon?: React.ReactNode; // Nueva prop para el icono
 }
 
 /**
@@ -43,6 +44,7 @@ const AvatarComponent: React.FC<AvatarComponentProps> = ({
   isLoading = false,
   disabled = false,
   menuOptions = [],
+  icon, 
 }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -86,7 +88,8 @@ const AvatarComponent: React.FC<AvatarComponentProps> = ({
             ...sx,
           }}
         >
-          {!isLoading && !src && fallbackText?.[0]}
+          {!isLoading && !src && !icon && fallbackText?.[0]}
+          {!isLoading && !src && icon}
         </Avatar>
 
         {isLoading && (
