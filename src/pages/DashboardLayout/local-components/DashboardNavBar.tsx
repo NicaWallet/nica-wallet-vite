@@ -19,7 +19,6 @@ import {
 import {
   Search as SearchIcon,
   Notifications as NotificationsIcon,
-  Settings as SettingsIcon,
   AccountCircle,
   Circle as CircleIcon,
 } from "@mui/icons-material";
@@ -27,39 +26,8 @@ import { useState } from "react";
 import { format } from "date-fns";
 import LanguageSwitcher from "../../../components/LanguageSwitcher";
 import { useTranslation } from "react-i18next";
-
-const exampleNotifications = [
-  {
-    id: 1,
-    message: "Nueva transacción recibida",
-    read: false,
-    timestamp: "2024-09-25 10:34",
-  },
-  {
-    id: 2,
-    message: "Recordatorio de pago vencido",
-    read: false,
-    timestamp: "2024-09-25 09:15",
-  },
-  {
-    id: 3,
-    message: "Actualización de política de privacidad",
-    read: true,
-    timestamp: "2024-09-24 18:22",
-  },
-  {
-    id: 4,
-    message: "Depósito exitoso en cuenta bancaria",
-    read: true,
-    timestamp: "2024-09-24 17:10",
-  },
-  {
-    id: 5,
-    message: "Alerta de seguridad",
-    read: false,
-    timestamp: "2024-09-23 12:00",
-  },
-];
+import useGetUserNotifications from "../../../services/notifications/getUserNotificationsMock.service";
+import AvatarComponent from "../../../components/Avatar";
 
 /**
  * DashboardNavBar component renders the navigation bar for the dashboard.
@@ -68,12 +36,20 @@ const exampleNotifications = [
 const DashboardNavBar = () => {
   const { t } = useTranslation();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [settingsAnchorEl, setSettingsAnchorEl] = useState<null | HTMLElement>(
-    null
-  );
   const [notificationAnchorEl, setNotificationAnchorEl] =
     useState<null | HTMLElement>(null);
   const [showAllNotifications, setShowAllNotifications] = useState(false);
+
+
+  const { notifications: exampleNotifications, loading, error } = useGetUserNotifications();
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error loading notifications</div>;
+  }
 
   const unreadNotificationsCount = exampleNotifications.filter(
     (notification) => !notification.read
@@ -91,17 +67,12 @@ const DashboardNavBar = () => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleSettingsMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setSettingsAnchorEl(event.currentTarget);
-  };
-
   const handleNotificationMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setNotificationAnchorEl(event.currentTarget);
   };
 
   const handleMenuClose = () => {
     setAnchorEl(null);
-    setSettingsAnchorEl(null);
     setNotificationAnchorEl(null);
   };
 
@@ -191,24 +162,34 @@ const DashboardNavBar = () => {
               </MenuItem>
             )}
           </Menu>
-          <IconButton color="inherit" onClick={handleSettingsMenuOpen}>
-            <SettingsIcon />
-          </IconButton>
-          <Menu
-            anchorEl={settingsAnchorEl}
-            open={Boolean(settingsAnchorEl)}
-            onClose={handleMenuClose}
-          >
-            <MenuItem onClick={handleMenuClose}>Configuración general</MenuItem>
-            <MenuItem onClick={handleMenuClose}>Preferencias</MenuItem>
-          </Menu>
-          <IconButton
-            edge="end"
-            color="inherit"
-            onClick={handleProfileMenuOpen}
-          >
-            <AccountCircle />
-          </IconButton>
+
+          <AvatarComponent
+            fallbackText="U"
+            size="medium"
+            backgroundColor="#3f51b5"
+            textColor="#fff"
+            border="2px solid #fff"
+            sx={{ cursor: "pointer", width: 30, height: 30 }}
+            onClick={() => handleProfileMenuOpen}
+            icon={<AccountCircle />}
+            menuOptions={[
+              {
+                label: "Mi Perfil",
+                onClick: () => {
+                  handleMenuClose();
+                  window.location.href = "/profile";
+                },
+              },
+              {
+                label: "Cerrar Sesión",
+                onClick: () => {
+                  handleMenuClose();
+                  localStorage.clear();
+                  window.location.href = "/auth/login";
+                },
+              },
+            ]}
+          />
           <Menu
             anchorEl={anchorEl}
             open={Boolean(anchorEl)}

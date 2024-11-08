@@ -157,5 +157,20 @@
   "INFO_TITLE": "Information",
   "INFO_MESSAGE": "This is an informational message.",
   "OPEN_MODAL": "Open Modal",
-  "CONFIRMATION_ALERT": "Action confirmed!"
+  "CONFIRMATION_ALERT": "Action confirmed!",
+  "FINANCES": "Finances",
+  "BIRTHDATE": "Birthdate",
+  "CREATED_AT": "Created At",
+  "EMAIL": "Email",
+  "FIRST_SURNAME": "Last Name",
+  "MIDDLE_NAME": "Middle Name",
+  "PHONE_NUMBER": "Phone Number",
+  "SECOND_SURNAME": "Second Name",
+  "UPDATED_AT": "Updated At",
+  "USER_ID": "User ID",
+  "USER_ROLES": "User Roles",
+  "NOT_FOUND": "Not Found",
+  "ROLE_NAME": "Role",
+  "ROLES_PAGE": "Role Management",
+  "ROLES_PAGE_SUBTITLE": "Here you can view and manage user roles."
 }

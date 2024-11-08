@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  Avatar,
-  Button,
-  Box,
-  Typography,
-  Container,
-  Grid,
-  Link,
-} from "@mui/material";
+import { Button, Box, Typography, Container, Link } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { useTheme } from "@mui/material/styles";
 import { useTranslation } from "react-i18next";
@@ -22,6 +14,8 @@ import { RegisterFormData, RegisterPayload } from "../../types/auth/auth.types";
 import RegisterForm from "../../forms/RegisterForm";
 import ErrorSnackbar from "../../components/ErrorSnackbar";
 import { usePasswordStrength } from "../../hooks/usePasswordStrength";
+import AvatarComponent from "../../components/Avatar";
+import { getRandomColor } from "../../utils/getRandomColor";
 
 /**
  * Register component for user registration.
@@ -91,9 +85,7 @@ const Register: React.FC = () => {
     <Container component="main" maxWidth="xs">
       {loading && <Loader />}
       <Box sx={styles.formContainer}>
-        <Avatar sx={styles.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
+        <AvatarComponent icon={<LockOutlinedIcon />} backgroundColor={getRandomColor()} />
         <Typography component="h1" variant="h5">
           {t("REGISTER")}
         </Typography>
@@ -117,19 +109,28 @@ const Register: React.FC = () => {
           >
             {t("REGISTER")}
           </Button>
-          <Grid container justifyContent="flex-end">
-            <Grid item>
-              <Link variant="body2" onClick={() => navigate("/auth/login")}>
-                {t("ALREADY_HAVE_AN_ACCOUNT")}
-              </Link>
-            </Grid>
-          </Grid>
+          <Link
+            sx={{
+              display: "flex",
+              justifyContent: "right",
+            }}
+            variant="body2"
+            onClick={() => navigate("/auth/login")}
+          >
+            {t("ALREADY_HAVE_AN_ACCOUNT")}
+          </Link>
         </Box>
       </Box>
 
       <LanguageSwitcher sx={styles.languageSwitcher} />
 
-      {error && <ErrorSnackbar errorMessage={error} onClose={() => {}} />}
+      {error && (
+        <ErrorSnackbar
+          message={error}
+          onClose={() => {}}
+          open={Boolean(error)}
+        />
+      )}
     </Container>
   );
 };
