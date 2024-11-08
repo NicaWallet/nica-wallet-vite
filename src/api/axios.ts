@@ -9,6 +9,8 @@ const api = axios.create({
     withCredentials: true,
 });
 
+console.log('Base URL:', import.meta.env.VITE_BASE_URL);
+
 /**
  * Interceptor for requests to add authorization token and log requests.
  * @param {AxiosRequestConfig} config - The Axios request configuration.
