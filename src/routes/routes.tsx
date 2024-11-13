@@ -16,6 +16,7 @@ import { TransactionsPage } from "../pages/TransactionsPage";
 import { InvestmentsPage } from "../pages/InvestmentsPage";
 import { BillsPage } from "../pages/BillsPage";
 import { ProfilePage } from "../pages/ProfilePage";
+import PasswordReset from "../pages/PasswordReset";
 
 /**
  * AppRoutes component defines the main routing structure for the application.
@@ -51,6 +52,8 @@ const AppRoutes = () => {
 
         {/* PasswordRecovery page */}
         <Route path="/auth/password-recovery" element={<PasswordRecovery />} />
+
+        <Route path="/reset-password" element={<PasswordReset />} />
 
         {/* Dashboard module (rutas privadas) */}
         <Route element={<DashboardLayout />}>

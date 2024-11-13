@@ -174,5 +174,15 @@
   "NOT_FOUND": "No encontrado",
   "ROLE_NAME": "Rol",
   "ROLES_PAGE": "Manejo de Roles",
-  "ROLES_PAGE_SUBTITLE": "Aquí puedes ver y gestionar los roles de usuario."
+  "ROLES_PAGE_SUBTITLE": "Aquí puedes ver y gestionar los roles de usuario.",
+  "PASSWORD_RESET": "Restablecimiento de Contraseña",
+  "NEW_PASSWORD_PLACEHOLDER": "Nueva Contraseña",
+  "PASSWORD_MIN_LENGTH": "La contraseña debe tener al menos 8 caracteres",
+  "PASSWORD_LOWERCASE": "La contraseña debe incluir al menos una letra minúscula",
+  "PASSWORD_UPPERCASE": "La contraseña debe incluir al menos una letra mayúscula",
+  "PASSWORD_NUMBER": "La contraseña debe incluir al menos un número",
+  "PASSWORD_SPECIAL": "La contraseña debe incluir al menos un carácter especial",
+  "PASSWORDS_MUST_MATCH": "Las contraseñas deben coincidir",
+  "RESET_PASSWORD": "Restablecer Contraseña",
+  "PASSWORD_RESET_SUCCESS": "Tu contraseña ha sido restablecida exitosamente"
 }
