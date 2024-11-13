@@ -1,20 +1,12 @@
 import React, { useState, useEffect } from "react";
-import {
-  Container,
-  Avatar,
-  Box,
-  Typography,
-  Snackbar,
-  Alert,
-} from "@mui/material";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import { Container, Avatar, Box, Snackbar, Alert } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import LanguageSwitcher from "../../components/LanguageSwitcher";
 import PasswordRecoveryForm from "../../forms/PasswordRecoveryForm";
 import Loader from "../../components/Loader";
+import MailLockIcon from "@mui/icons-material/MailLock";
 import { t } from "i18next";
-// import { usePasswordRecovery } from "../../services/auth/passwordRecovery.service";
-import MailLockIcon from '@mui/icons-material/MailLock';
+import { usePasswordRecovery } from "../../services/auth/passwordRecovery.service";
 
 /**
  * PasswordRecovery page component for requesting password recovery.
@@ -24,7 +16,7 @@ import MailLockIcon from '@mui/icons-material/MailLock';
  */
 const PasswordRecovery: React.FC = () => {
   const navigate = useNavigate();
-//   const { recoverPassword, loading, error, success } = usePasswordRecovery();
+  const { recoverPassword, loading, error, success } = usePasswordRecovery();
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
   /**
@@ -33,8 +25,7 @@ const PasswordRecovery: React.FC = () => {
    * @param {string} data.email - The user's email.
    */
   const onSubmit = async (data: { email: string }) => {
-    console.log(data);
-    // await recoverPassword(data.email);
+    await recoverPassword(data.email);
   };
 
   /**
@@ -44,11 +35,16 @@ const PasswordRecovery: React.FC = () => {
     setOpenSnackbar(false);
   };
 
-//   useEffect(() => {
-//     if (error || success) {
-//       setOpenSnackbar(true);
-//     }
-//   }, [error, success]);
+  useEffect(() => {
+    if (error || success) {
+      setOpenSnackbar(true);
+    }
+    if (success) {
+      setTimeout(() => {
+        navigate("/auth/login");
+      }, 2000);
+    }
+  }, [error, success, navigate]);
 
   return (
     <Container
@@ -63,7 +59,7 @@ const PasswordRecovery: React.FC = () => {
         position: "relative",
       }}
     >
-      {/* {loading && <Loader />} */}
+      {loading && <Loader />}
       <LanguageSwitcher
         sx={{
           position: "fixed",
@@ -81,9 +77,8 @@ const PasswordRecovery: React.FC = () => {
         <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
           <MailLockIcon />
         </Avatar>
-      
 
-        <PasswordRecoveryForm onSubmit={onSubmit} loading={false} />
+        <PasswordRecoveryForm onSubmit={onSubmit} loading={loading} />
 
         <Snackbar
           open={openSnackbar}
@@ -92,11 +87,10 @@ const PasswordRecovery: React.FC = () => {
         >
           <Alert
             onClose={handleCloseSnackbar}
-            // severity={success ? "success" : "error"}
+            severity={success ? "success" : "error"}
             sx={{ width: "100%" }}
           >
-            'Recovery email sent!'
-            {/* {success ? "Recovery email sent!" : error} */}
+            {success ? t("RECOVERY_EMAIL_SENT") : error}
           </Alert>
         </Snackbar>
       </Box>

@@ -172,5 +172,15 @@
   "NOT_FOUND": "Not Found",
   "ROLE_NAME": "Role",
   "ROLES_PAGE": "Role Management",
-  "ROLES_PAGE_SUBTITLE": "Here you can view and manage user roles."
+  "ROLES_PAGE_SUBTITLE": "Here you can view and manage user roles.",
+  "PASSWORD_RESET": "Password Reset",
+  "NEW_PASSWORD_PLACEHOLDER": "New Password",
+  "PASSWORD_MIN_LENGTH": "Password must be at least 8 characters",
+  "PASSWORD_LOWERCASE": "Password must include at least one lowercase letter",
+  "PASSWORD_UPPERCASE": "Password must include at least one uppercase letter",
+  "PASSWORD_NUMBER": "Password must include at least one number",
+  "PASSWORD_SPECIAL": "Password must include at least one special character",
+  "PASSWORDS_MUST_MATCH": "Passwords must match",
+  "RESET_PASSWORD": "Reset Password",
+  "PASSWORD_RESET_SUCCESS": "Your password has been reset successfully"
 }
