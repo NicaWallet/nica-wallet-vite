@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Box, Typography } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useTranslation } from "react-i18next";
 import PasswordStrengthMeter from "../../components/PasswordStrengthMeter";
-import ButtonComponent from "../../components/Button";
-import InputField from "../../components/Input";
+import ButtonComponent from "../../components/ButtonComponent";
+import InputField from "../../components/InputField";
 
 type PasswordResetInputs = {
   password: string;
@@ -25,7 +25,7 @@ const PasswordResetForm: React.FC<PasswordResetFormProps> = ({
   const { t } = useTranslation();
   const [passwordStrength, setPasswordStrength] = useState(0);
   const [showStrengthMeter, setShowStrengthMeter] = useState(false);
-  let hideTimer: NodeJS.Timeout;
+  const hideTimer = useRef<NodeJS.Timeout | null>(null);
 
   const validationSchema = yup.object().shape({
     password: yup
@@ -55,8 +55,10 @@ const PasswordResetForm: React.FC<PasswordResetFormProps> = ({
     setShowStrengthMeter(true);
 
     // Reinicia el temporizador cuando el usuario sigue ingresando texto
-    clearTimeout(hideTimer);
-    hideTimer = setTimeout(() => {
+    if (hideTimer.current) {
+      clearTimeout(hideTimer.current);
+    }
+    hideTimer.current = setTimeout(() => {
       setShowStrengthMeter(false);
     }, 2000); // Tiempo en milisegundos para ocultar el medidor después de inactividad
   };
@@ -73,9 +75,9 @@ const PasswordResetForm: React.FC<PasswordResetFormProps> = ({
   useEffect(() => {
     return () => {
       // Limpia el temporizador si el componente se desmonta
-      clearTimeout(hideTimer);
+      clearTimeout(hideTimer.current as NodeJS.Timeout);
     };
-  }, []);
+  }, [hideTimer]);
 
   return (
     <Box
@@ -95,7 +97,7 @@ const PasswordResetForm: React.FC<PasswordResetFormProps> = ({
           <>
             <InputField
               value={value}
-              onChange={(e) => {
+              onChange={(e: { target: { value: string; }; }) => {
                 onChange(e);
                 handlePasswordChange(e.target.value);
               }}

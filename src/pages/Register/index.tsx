@@ -14,7 +14,7 @@ import { RegisterFormData, RegisterPayload } from "../../types/auth/auth.types";
 import RegisterForm from "../../forms/RegisterForm";
 import ErrorSnackbar from "../../components/ErrorSnackbar";
 import { usePasswordStrength } from "../../hooks/usePasswordStrength";
-import AvatarComponent from "../../components/Avatar";
+import AvatarComponent from "../../components/AvatarComponent";
 import { getRandomColor } from "../../utils/getRandomColor";
 
 /**
