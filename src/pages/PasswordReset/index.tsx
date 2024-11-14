@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Box, Snackbar } from "@mui/material";
+import { Container, Box } from "@mui/material";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import PasswordResetForm from "../../forms/PasswordResetForm";
 import { usePasswordReset } from "../../services/auth/passwordReset.service";
@@ -9,7 +9,7 @@ import LockResetIcon from "@mui/icons-material/LockReset";
 import { getRandomColor } from "../../utils/getRandomColor";
 import { t } from "i18next";
 import ErrorSnackbar from "../../components/ErrorSnackbar";
-import AvatarComponent from "../../components/Avatar";
+import AvatarComponent from "../../components/AvatarComponent";
 
 /**
  * PasswordReset page for handling the password reset process.

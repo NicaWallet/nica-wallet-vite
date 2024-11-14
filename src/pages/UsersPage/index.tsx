@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Box } from "@mui/material";
-import TableComponent from "../../components/Table";
+import TableComponent from "../../components/TableComponent";
 import { GetAllUser, useGetAllUsers } from "../../services/users/getAllUsers.service";
 import Loader from "../../components/Loader";
 import ErrorSnackbar from "../../components/ErrorSnackbar";

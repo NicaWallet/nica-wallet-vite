@@ -3,7 +3,7 @@ import ErrorSnackbar from "../../components/ErrorSnackbar";
 import Loader from "../../components/Loader";
 import PageHeader from "../../components/PageHeader";
 import { IUserRoleResponse, useGetAllUsersRoles } from "../../services/user-roles/getAllUserRoles.service";
-import TableComponent from "../../components/Table";
+import TableComponent from "../../components/TableComponent";
 import { useState } from "react";
 
 export const RolesPage = () => {

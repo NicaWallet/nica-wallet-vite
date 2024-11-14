@@ -9,7 +9,7 @@ import {
 import { UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { RegisterFormData } from "../../types/auth/auth.types";
-import InputField from "../../components/Input";
+import InputField from "../../components/InputField";
 
 /**
  * Props for the RegisterForm component.

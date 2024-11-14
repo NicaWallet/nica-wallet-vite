@@ -27,7 +27,7 @@ import { format } from "date-fns";
 import LanguageSwitcher from "../../../components/LanguageSwitcher";
 import { useTranslation } from "react-i18next";
 import useGetUserNotifications from "../../../services/notifications/getUserNotificationsMock.service";
-import AvatarComponent from "../../../components/Avatar";
+import AvatarComponent from "../../../components/AvatarComponent";
 
 /**
  * DashboardNavBar component renders the navigation bar for the dashboard.

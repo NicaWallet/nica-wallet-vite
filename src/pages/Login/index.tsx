@@ -5,7 +5,7 @@ import LanguageSwitcher from "../../components/LanguageSwitcher";
 import LoginForm from "../../forms/LoginForm";
 import Loader from "../../components/Loader";
 import { useLogin } from "../../services/auth/login.service";
-import AvatarComponent from "../../components/Avatar";
+import AvatarComponent from "../../components/AvatarComponent";
 import { HomeFloatingButton } from "./local-components/HomeFloatingButton";
 import ErrorSnackbar from "../../components/ErrorSnackbar";
 import LoginIcon from '@mui/icons-material/Login';
