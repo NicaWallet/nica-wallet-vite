@@ -34,17 +34,17 @@ export interface CardComponentProps {
     | "unset"
     | "initial"
     | "revert"
-    | "inherit"
-    | "revert";
+    | "inherit";
   imageHeight?: string;
+  customBody?: React.ReactNode;
 }
 
 /**
- * CardComponent is a reusable card component that displays a title, description, image or icon, and an optional button.
- * It supports loading state and various customization options.
+ * CardComponent es un componente reutilizable que muestra un título, descripción, imagen o ícono, y un botón opcional.
+ * Soporta estado de carga y varias opciones de personalización.
  *
- * @param {CardComponentProps} props - The properties for the CardComponent.
- * @returns {JSX.Element} The rendered CardComponent.
+ * @param {CardComponentProps} props - Las propiedades para el CardComponent.
+ * @returns {JSX.Element} El CardComponent renderizado.
  */
 const CardComponent: React.FC<CardComponentProps> = ({
   title,
@@ -63,6 +63,7 @@ const CardComponent: React.FC<CardComponentProps> = ({
   imageBoxShadow = "none",
   imageObjectFit = "cover",
   imageHeight = "140px",
+  customBody,
 }) => {
   return (
     <Card
@@ -127,9 +128,13 @@ const CardComponent: React.FC<CardComponentProps> = ({
                 overflowY: "auto",
               }}
             >
-              <Typography variant="body2" color="text.secondary">
-                {description}
-              </Typography>
+              {customBody ? (
+                customBody
+              ) : (
+                <Typography variant="body2" color="text.secondary">
+                  {description}
+                </Typography>
+              )}
             </Box>
           </>
         )}
