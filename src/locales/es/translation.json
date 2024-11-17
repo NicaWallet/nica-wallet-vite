@@ -184,5 +184,6 @@
   "PASSWORD_SPECIAL": "La contraseña debe incluir al menos un carácter especial",
   "PASSWORDS_MUST_MATCH": "Las contraseñas deben coincidir",
   "RESET_PASSWORD": "Restablecer Contraseña",
-  "PASSWORD_RESET_SUCCESS": "Tu contraseña ha sido restablecida exitosamente"
+  "PASSWORD_RESET_SUCCESS": "Tu contraseña ha sido restablecida exitosamente",
+  "TRANSACTIONS": "Transacciones"
 }

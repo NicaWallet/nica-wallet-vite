@@ -156,6 +156,16 @@ const SideNav = () => {
               >
                 <ListItemText primary={t("BILLS")} />
               </ListItem>
+              <ListItem
+                onClick={() => handleNavigate("/finances/transactions")}
+                sx={{
+                  pl: 4,
+                  cursor: "pointer",
+                  "&:hover": { backgroundColor: "#f0f0f0" },
+                }}
+              >
+                <ListItemText primary={t("TRANSACTIONS")} />
+              </ListItem>
             </List>
           </Collapse>
         )}

@@ -182,5 +182,6 @@
   "PASSWORD_SPECIAL": "Password must include at least one special character",
   "PASSWORDS_MUST_MATCH": "Passwords must match",
   "RESET_PASSWORD": "Reset Password",
-  "PASSWORD_RESET_SUCCESS": "Your password has been reset successfully"
+  "PASSWORD_RESET_SUCCESS": "Your password has been reset successfully",
+  "TRANSACTIONS": "Transactions"
 }
