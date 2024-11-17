@@ -367,6 +367,59 @@ const columnConfig: IColumnConfig[] = [
     loadingStateType: "medium-text",
     renderLogic: (data) => (data.role as { role_name: string }).role_name,
   },
+  {
+    id: "budget_id",
+    titleKey: "ID",
+    dataType: "Number",
+    filterId: "budget_id",
+    filterType: "search",
+    width: 100,
+    loadingStateType: "medium-text",
+  },
+  {
+    id: "amount",
+    titleKey: "AMOUNT",
+    dataType: "Number",
+    filterId: "amount",
+    filterType: "search",
+    width: 100,
+    loadingStateType: "medium-text",
+  },
+  {
+    id: "start_date",
+    titleKey: "START_DATE",
+    dataType: "Date",
+    filterId: "start_date",
+    filterType: "search",
+    width: 150,
+    loadingStateType: "medium-text",
+    renderLogic: (data) => {
+      const startDate = new Date((data as { start_date: string }).start_date);
+      return DateTimeUtils.formatHumanReadable(startDate);
+    },
+  },
+  {
+    id: "end_date",
+    titleKey: "END_DATE",
+    dataType: "Date",
+    filterId: "end_date",
+    filterType: "search",
+    width: 150,
+    loadingStateType: "medium-text",
+    renderLogic: (data) => {
+      const endDate = new Date((data as { end_date: string }).end_date);
+      return DateTimeUtils.formatHumanReadable(endDate);
+    },
+  },
+  {
+    id: "category",
+    titleKey: "CATEGORY",
+    dataType: "String",
+    filterId: "category",
+    filterType: "search",
+    width: 150,
+    loadingStateType: "medium-text",
+  },
 ];
 
 validateUniqueIds(columnConfig);
