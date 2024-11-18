@@ -201,6 +201,16 @@
   "DELETING_BUDGET": "Deleting budget",
   "FEATURE_NOT_AVAILABLE": "Feature not currently available, please try again in future updates",
   "ID": "ID",
-  "START_DATE" : "Start Date",
-  "END_DATE" : "End Date"
+  "START_DATE": "Start Date",
+  "END_DATE": "End Date",
+  "TOTAL_TRANSACTIONS": "Total Transactions",
+  "HIGHEST_TRANSACTION": "Highest Transaction",
+  "DATE": "Date",
+  "SUBCATEGORY": "Subcategory",
+  "CLASSIFICATION": "Classification",
+  "TRANSACTIONS_PAGE": "Transactions",
+  "TRANSACTION_OVERVIEW": "Transaction Overview",
+  "TRANSACTION_HISTORY": "Transaction History",
+  "CATEGORIES": "Categories",
+  "SUB_CATEGORIES": "Subcategories"
 }

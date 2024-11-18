@@ -204,5 +204,15 @@
   "FEATURE_NOT_AVAILABLE": "Función no disponible actualmente, por favor intente de nuevo en futuras actualizaciones",
   "ID": "ID",
   "START_DATE": "Fecha de Inicio",
-  "END_DATE": "Fecha de Fin"
+  "END_DATE": "Fecha de Fin",
+  "TOTAL_TRANSACTIONS": "Total de Transacciones",
+  "HIGHEST_TRANSACTION": "Transacción Más Alta",
+  "DATE": "Fecha",
+  "SUBCATEGORY": "Subcategoria",
+  "CLASSIFICATION": "Clasificación",
+  "TRANSACTIONS_PAGE": "Transacciones",
+  "TRANSACTION_OVERVIEW": "Resumen de Transacciones",
+  "TRANSACTION_HISTORY": "Historial de Transacciones",
+  "CATEGORIES": "Categorías",
+  "SUB_CATEGORIES": "Subcategorías"
 }

@@ -420,6 +420,96 @@ const columnConfig: IColumnConfig[] = [
     width: 150,
     loadingStateType: "medium-text",
   },
+  /**
+   * Transaction columns
+   */
+  {
+    id: "transaction_id",
+    titleKey: "ID",
+    dataType: "Number",
+    filterId: "transaction_id",
+    filterType: "search",
+    width: 100,
+    loadingStateType: "medium-text",
+  },
+  {
+    id: "amount",
+    titleKey: "AMOUNT",
+    dataType: "Number",
+    filterId: "amount",
+    filterType: "search",
+    width: 100,
+    loadingStateType: "medium-text",
+  },
+  {
+    id: "date",
+    titleKey: "DATE",
+    dataType: "Date",
+    filterId: "date",
+    filterType: "search",
+    width: 150,
+    loadingStateType: "medium-text",
+    renderLogic: (data) => {
+      const date = new Date((data as { date: string }).date);
+      return DateTimeUtils.formatHumanReadable(date);
+    },
+  },
+  {
+    id: "category.name",
+    titleKey: "CATEGORY",
+    dataType: "String",
+    filterId: "category_name",
+    filterType: "search",
+    width: 150,
+    loadingStateType: "medium-text",
+    renderLogic: (data) => (data.category as { name: string }).name,
+  },
+  {
+    id: "subcategory.name",
+    titleKey: "SUBCATEGORY",
+    dataType: "String",
+    filterId: "subcategory_name",
+    filterType: "search",
+    width: 150,
+    loadingStateType: "medium-text",
+    renderLogic: (data) => (data.subcategory as { name: string }).name,
+  },
+  {
+    id: "classification.name",
+    titleKey: "CLASSIFICATION",
+    dataType: "String",
+    filterId: "classification_name",
+    filterType: "search",
+    width: 150,
+    loadingStateType: "medium-text",
+    renderLogic: (data) => (data.classification as { name: string }).name,
+  },
+  {
+    id: "created_at",
+    titleKey: "CREATED_AT",
+    dataType: "Date",
+    filterId: "created_at",
+    filterType: "search",
+    width: 150,
+    loadingStateType: "medium-text",
+    renderLogic: (data) => {
+      const createdAt = new Date((data as { created_at: string }).created_at);
+      return DateTimeUtils.formatHumanReadable(createdAt, true);
+    },
+  },
+  {
+    id: "updated_at",
+    titleKey: "UPDATED_AT",
+    dataType: "Date",
+    filterId: "updated_at",
+    filterType: "search",
+    width: 150,
+    loadingStateType: "medium-text",
+    renderLogic: (data) => {
+      const updatedAt = new Date((data as { updated_at: string }).updated_at);
+      return DateTimeUtils.formatHumanReadable(updatedAt, true);
+    },
+  },
 ];
 
 validateUniqueIds(columnConfig);
