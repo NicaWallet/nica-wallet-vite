@@ -7,23 +7,33 @@ import {
   Button,
   IconButton,
   Typography,
+  useTheme,
+  useMediaQuery,
+  Slide,
+  DialogProps,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import WarningIcon from "@mui/icons-material/Warning";
 import ErrorIcon from "@mui/icons-material/Error";
 import InfoIcon from "@mui/icons-material/Info";
+import { TransitionProps } from "@mui/material/transitions";
+import { t } from "i18next";
 
-export interface ModalProps {
+export interface ModalProps extends Omit<DialogProps, "content"> {
   isOpen: boolean;
   title: string;
-  content: React.ReactNode;
   onClose: () => void;
   onConfirm?: () => void;
   confirmText?: string;
   cancelText?: string;
   variant?: "success" | "warning" | "error" | "info" | "default";
   importantAction?: boolean;
+  disableBackdropClick?: boolean;
+  fullWidth?: boolean;
+  maxWidth?: "xs" | "sm" | "md" | "lg" | "xl";
+  showCloseIcon?: boolean;
+  modalContent: React.ReactNode;
 }
 
 const getIcon = (variant: string) => {
@@ -41,33 +51,40 @@ const getIcon = (variant: string) => {
   }
 };
 
+const Transition = React.forwardRef(function Transition(
+  props: TransitionProps & {
+    children: React.ReactElement;
+  },
+  ref: React.Ref<unknown>
+) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
 /**
  * Modal component that displays a dialog with customizable content and actions.
  *
- * @param {boolean} isOpen - Determines if the modal is open or closed.
- * @param {string} title - The title of the modal.
- * @param {React.ReactNode} content - The content to be displayed inside the modal.
- * @param {() => void} onClose - Callback function to handle the modal close action.
- * @param {() => void} [onConfirm] - Optional callback function to handle the confirm action.
- * @param {string} [confirmText] - Optional text for the confirm button. Defaults to "Confirm".
- * @param {string} [cancelText] - Optional text for the cancel button. Defaults to "Cancel".
- * @param {"default" | "warning" | "error"} [variant="default"] - The variant of the modal, which affects its styling.
- * @param {boolean} [importantAction=false] - If true, an additional confirmation dialog is shown before closing.
- *
+ * @param {ModalProps} props - The properties for the component.
  * @returns {JSX.Element} The rendered modal component.
  */
 const Modal: React.FC<ModalProps> = ({
   isOpen,
   title,
-  content,
+  modalContent,
   onClose,
   onConfirm,
-  confirmText,
-  cancelText,
+  confirmText = "Confirm",
+  cancelText = "Cancel",
   variant = "default",
   importantAction = false,
+  disableBackdropClick = false,
+  fullWidth = true,
+  maxWidth = "sm",
+  showCloseIcon = true,
+  ...props
 }) => {
   const [confirmClose, setConfirmClose] = useState(false);
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   const handleClose = () => {
     if (importantAction) {
@@ -84,12 +101,30 @@ const Modal: React.FC<ModalProps> = ({
 
   return (
     <>
-      <Dialog open={isOpen} onClose={handleClose}>
+      <Dialog
+        onClose={disableBackdropClick ? undefined : handleClose}
+        fullScreen={fullScreen}
+        fullWidth={fullWidth}
+        maxWidth={maxWidth}
+        TransitionComponent={Transition}
+        {...props}
+        open={isOpen}
+      >
         <DialogTitle
           sx={{
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
+            bgcolor:
+              variant === "success"
+                ? "green.100"
+                : variant === "warning"
+                ? "orange.100"
+                : variant === "error"
+                ? "red.100"
+                : variant === "info"
+                ? "blue.100"
+                : undefined,
           }}
         >
           <span style={{ display: "flex", alignItems: "center" }}>
@@ -98,18 +133,20 @@ const Modal: React.FC<ModalProps> = ({
               {title}
             </Typography>
           </span>
-          <IconButton aria-label="close" onClick={handleClose}>
-            <CloseIcon />
-          </IconButton>
+          {showCloseIcon && (
+            <IconButton aria-label="close" onClick={handleClose}>
+              <CloseIcon />
+            </IconButton>
+          )}
         </DialogTitle>
-        <DialogContent dividers>{content}</DialogContent>
+        <DialogContent dividers>{modalContent}</DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            {cancelText || "Cancel"}
+          <Button onClick={handleClose} color="secondary">
+            {cancelText}
           </Button>
           {onConfirm && (
             <Button onClick={onConfirm} color="primary" variant="contained">
-              {confirmText || "Confirm"}
+              {confirmText}
             </Button>
           )}
         </DialogActions>
@@ -117,16 +154,14 @@ const Modal: React.FC<ModalProps> = ({
 
       {importantAction && (
         <Dialog open={confirmClose} onClose={() => setConfirmClose(false)}>
-          <DialogTitle>Are you sure?</DialogTitle>
+          <DialogTitle>{t("CONFIRMATION_TITLE")}</DialogTitle>
           <DialogContent>
-            <Typography>
-              Unsaved changes will be lost. Do you want to proceed?
-            </Typography>
+            <Typography>{t("CONFIRMATION_MESSAGE")}</Typography>
           </DialogContent>
           <DialogActions>
-            <Button onClick={() => setConfirmClose(false)}>No</Button>
+            <Button onClick={() => setConfirmClose(false)}>{t("NO")}</Button>
             <Button onClick={handleConfirmClose} color="primary">
-              Yes, continue
+              {t("YES_CONTINUE")}
             </Button>
           </DialogActions>
         </Dialog>
