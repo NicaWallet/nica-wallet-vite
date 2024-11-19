@@ -214,5 +214,17 @@
   "TRANSACTION_OVERVIEW": "Resumen de Transacciones",
   "TRANSACTION_HISTORY": "Historial de Transacciones",
   "CATEGORIES": "Categorías",
-  "SUB_CATEGORIES": "Subcategorías"
+  "SUB_CATEGORIES": "Subcategorías",
+  "TRANSACTION_HISTORY_PAGE": "Historial de Transacciones",
+  "DETAILS_OF_TRANSACTION": "Detalles de la Transacción",
+  "CREATE_TRANSACTION_TITLE": "Creacion de Transacción",
+  "CONFIRMATION_TITLE": "Confirmación",
+  "CREATE_TRANSACTION": "Crear Transacción",
+  "CONFIRMATION_MESSAGE": "¿Estás seguro de que deseas salir?",
+  "YES_CONTINUE": "Sí, continuar",
+  "UPDATE_TRANSACTION_TITLE": "Actualización de Transacción",
+  "CONFIRM_DELETION": "Confirmar eliminación",
+  "DELETE_CONFIRMATION_MESSAGE_WITH_NAME": "¿Estás seguro de que quieres eliminar \"{{recordName}}\"? Esta acción no se puede deshacer.",
+  "DELETE_CONFIRMATION_MESSAGE": "¿Estás seguro de que quieres eliminar este registro? Esta acción no se puede deshacer.",
+  "DELETE": "Eliminar"
 }
