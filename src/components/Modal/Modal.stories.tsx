@@ -94,7 +94,7 @@ const Template: StoryFn<ModalProps> = (args) => {
 export const Default = Template.bind({});
 Default.args = {
   title: "Default Modal",
-  content: (
+  modalContent: (
     <Typography>
       This is the default modal content. You can customize the modal content and
       actions.
@@ -104,18 +104,20 @@ Default.args = {
   importantAction: false,
 };
 
+
 export const SuccessModal = Template.bind({});
 SuccessModal.args = {
   title: "Success Modal",
-  content: <Typography>Operation successful.</Typography>,
+  modalContent: <Typography>Operation successful.</Typography>,
   variant: "success",
   importantAction: true,
 };
 
+
 export const WarningModal = Template.bind({});
 WarningModal.args = {
   title: "Warning Modal",
-  content: <Typography>Please pay attention before proceeding.</Typography>,
+  modalContent: <Typography>Proceed with caution.</Typography>,
   variant: "warning",
   importantAction: true,
 };
@@ -123,7 +125,7 @@ WarningModal.args = {
 export const ErrorModal = Template.bind({});
 ErrorModal.args = {
   title: "Error Modal",
-  content: <Typography>An error occurred.</Typography>,
+  modalContent: <Typography>An error occurred.</Typography>,
   variant: "error",
   importantAction: true,
 };
@@ -131,7 +133,7 @@ ErrorModal.args = {
 export const InfoModal = Template.bind({});
 InfoModal.args = {
   title: "Information Modal",
-  content: <Typography>This is an informational message.</Typography>,
+  modalContent: <Typography>This is an informational message.</Typography>,
   variant: "info",
   importantAction: false,
 };
