@@ -30,6 +30,7 @@ const drawerWidth = 240;
 const SideNav = () => {
   const [open, setOpen] = useState(true);
   const [openFinances, setOpenFinances] = useState(false);
+  const [openTransactions, setOpenTransactions] = useState(false); // Nuevo estado para el submenú de transacciones
   const [openAnalytics, setOpenAnalytics] = useState(false);
   const navigate = useNavigate();
 
@@ -156,6 +157,74 @@ const SideNav = () => {
               >
                 <ListItemText primary={t("BILLS")} />
               </ListItem>
+              {/* Transactions Submenu */}
+              <ListItem
+                onClick={() => setOpenTransactions(!openTransactions)}
+                sx={{
+                  pl: 4,
+                  cursor: "pointer",
+                  "&:hover": { backgroundColor: "#f0f0f0" },
+                }}
+              >
+                <ListItemText primary={t("TRANSACTIONS")} />
+                {openTransactions ? <ExpandLess /> : <ExpandMore />}
+              </ListItem>
+              <Collapse in={openTransactions} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
+                  <ListItem
+                    onClick={() => handleNavigate("/finances/transactions/overview")}
+                    sx={{
+                      pl: 6,
+                      cursor: "pointer",
+                      "&:hover": { backgroundColor: "#f0f0f0" },
+                    }}
+                  >
+                    <ListItemText primary={t("TRANSACTION_OVERVIEW")} />
+                  </ListItem>
+                  <ListItem
+                    onClick={() => handleNavigate("/finances/transactions/categories")}
+                    sx={{
+                      pl: 6,
+                      cursor: "pointer",
+                      "&:hover": { backgroundColor: "#f0f0f0" },
+                    }}
+                  >
+                    <ListItemText primary={t("CATEGORIES")} />
+                  </ListItem>
+                  <ListItem
+                    onClick={() => handleNavigate("/finances/transactions/sub-categories")}
+                    sx={{
+                      pl: 6,
+                      cursor: "pointer",
+                      "&:hover": { backgroundColor: "#f0f0f0" },
+                    }}
+                  >
+                    <ListItemText primary={t("SUB_CATEGORIES")} />
+                  </ListItem>
+                  <ListItem
+                    onClick={() => handleNavigate("/finances/transactions/classification")}
+                    sx={{
+                      pl: 6,
+                      cursor: "pointer",
+                      "&:hover": { backgroundColor: "#f0f0f0" },
+                    }}
+                  >
+                    <ListItemText primary={t("CLASSIFICATION")} />
+                  </ListItem>
+                  <ListItem
+                    onClick={() =>
+                      handleNavigate("/finances/transactions/transaction-history")
+                    }
+                    sx={{
+                      pl: 6,
+                      cursor: "pointer",
+                      "&:hover": { backgroundColor: "#f0f0f0" },
+                    }}
+                  >
+                    <ListItemText primary={t("TRANSACTION_HISTORY")} />
+                  </ListItem>
+                </List>
+              </Collapse>
             </List>
           </Collapse>
         )}
