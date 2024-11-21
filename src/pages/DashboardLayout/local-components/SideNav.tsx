@@ -25,14 +25,24 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { AdminPanelSettings } from "@mui/icons-material";
 
+interface UserRole {
+  role: {
+    role_name: string;
+  };
+}
+
 const drawerWidth = 240;
 
 const SideNav = () => {
   const [open, setOpen] = useState(true);
   const [openFinances, setOpenFinances] = useState(false);
-  const [openTransactions, setOpenTransactions] = useState(false); // Nuevo estado para el submenú de transacciones
+  const [openTransactions, setOpenTransactions] = useState(false);
   const [openAnalytics, setOpenAnalytics] = useState(false);
   const navigate = useNavigate();
+
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+
+  const userRoles = user?.userRoles?.map((role: UserRole) => role.role.role_name) || [];
 
   const handleDrawerToggle = () => {
     setOpen(!open);
@@ -299,15 +309,17 @@ const SideNav = () => {
           </ListItemIcon>
           {open && <ListItemText primary={t("SECURITY")} />}
         </ListItem>
-        <ListItem
-          onClick={() => handleNavigate("/admin-panel")}
-          sx={{ cursor: "pointer", "&:hover": { backgroundColor: "#f0f0f0" } }}
-        >
-          <ListItemIcon>
-            <AdminPanelSettings />
-          </ListItemIcon>
-          {open && <ListItemText primary={t("ADMIN_PANEL")} />}
-        </ListItem>
+        {userRoles.includes("Admin") && (
+          <ListItem
+            onClick={() => handleNavigate("/admin-panel")}
+            sx={{ cursor: "pointer", "&:hover": { backgroundColor: "#f0f0f0" } }}
+          >
+            <ListItemIcon>
+              <AdminPanelSettings />
+            </ListItemIcon>
+            {open && <ListItemText primary={t("ADMIN_PANEL")} />}
+          </ListItem>
+        )}
       </List>
     </Drawer>
   );
