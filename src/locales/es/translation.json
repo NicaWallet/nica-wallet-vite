@@ -226,5 +226,9 @@
   "CONFIRM_DELETION": "Confirmar eliminación",
   "DELETE_CONFIRMATION_MESSAGE_WITH_NAME": "¿Estás seguro de que quieres eliminar \"{{recordName}}\"? Esta acción no se puede deshacer.",
   "DELETE_CONFIRMATION_MESSAGE": "¿Estás seguro de que quieres eliminar este registro? Esta acción no se puede deshacer.",
-  "DELETE": "Eliminar"
+  "DELETE": "Eliminar",
+  "CLASSIFICATION_PAGE": "Clasificaciones",
+  "CLASSIFICATION_ID": "ID",
+  "CREATE_CLASSIFICATION": "Crear Clasificación",
+  "SUBCATEGORY_PAGE": "Subcategorías"
 }
