@@ -118,7 +118,7 @@ const SideNav = () => {
           <Collapse in={openFinances} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
               <ListItem
-                onClick={() => handleNavigate("/finances/budget")}
+                onClick={() => handleNavigate("/budget")}
                 sx={{
                   pl: 4,
                   cursor: "pointer",
@@ -128,7 +128,7 @@ const SideNav = () => {
                 <ListItemText primary={t("BUDGET")} />
               </ListItem>
               <ListItem
-                onClick={() => handleNavigate("/finances/goals")}
+                onClick={() => handleNavigate("/goals")}
                 sx={{
                   pl: 4,
                   cursor: "pointer",
@@ -138,7 +138,7 @@ const SideNav = () => {
                 <ListItemText primary={t("GOALS")} />
               </ListItem>
               <ListItem
-                onClick={() => handleNavigate("/finances/investments")}
+                onClick={() => handleNavigate("/investments")}
                 sx={{
                   pl: 4,
                   cursor: "pointer",
@@ -148,7 +148,7 @@ const SideNav = () => {
                 <ListItemText primary={t("INVESTMENTS")} />
               </ListItem>
               <ListItem
-                onClick={() => handleNavigate("/finances/bills")}
+                onClick={() => handleNavigate("/bills")}
                 sx={{
                   pl: 4,
                   cursor: "pointer",
@@ -172,7 +172,7 @@ const SideNav = () => {
               <Collapse in={openTransactions} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
                   <ListItem
-                    onClick={() => handleNavigate("/finances/transactions/overview")}
+                    onClick={() => handleNavigate("/transactions-overview")}
                     sx={{
                       pl: 6,
                       cursor: "pointer",
@@ -182,7 +182,7 @@ const SideNav = () => {
                     <ListItemText primary={t("TRANSACTION_OVERVIEW")} />
                   </ListItem>
                   <ListItem
-                    onClick={() => handleNavigate("/finances/transactions/categories")}
+                    onClick={() => handleNavigate("/transactions-categories")}
                     sx={{
                       pl: 6,
                       cursor: "pointer",
@@ -192,7 +192,7 @@ const SideNav = () => {
                     <ListItemText primary={t("CATEGORIES")} />
                   </ListItem>
                   <ListItem
-                    onClick={() => handleNavigate("/finances/transactions/sub-categories")}
+                    onClick={() => handleNavigate("/transactions-sub-categories")}
                     sx={{
                       pl: 6,
                       cursor: "pointer",
@@ -202,7 +202,7 @@ const SideNav = () => {
                     <ListItemText primary={t("SUB_CATEGORIES")} />
                   </ListItem>
                   <ListItem
-                    onClick={() => handleNavigate("/finances/transactions/classification")}
+                    onClick={() => handleNavigate("/transactions-classification")}
                     sx={{
                       pl: 6,
                       cursor: "pointer",
@@ -213,7 +213,7 @@ const SideNav = () => {
                   </ListItem>
                   <ListItem
                     onClick={() =>
-                      handleNavigate("/finances/transactions/transaction-history")
+                      handleNavigate("/transactions-history")
                     }
                     sx={{
                       pl: 6,
@@ -244,7 +244,7 @@ const SideNav = () => {
           <Collapse in={openAnalytics} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
               <ListItem
-                onClick={() => handleNavigate("/analytics/statistics")}
+                onClick={() => handleNavigate("/statistics")}
                 sx={{
                   pl: 4,
                   cursor: "pointer",
@@ -254,7 +254,7 @@ const SideNav = () => {
                 <ListItemText primary={t("STATISTICS")} />
               </ListItem>
               <ListItem
-                onClick={() => handleNavigate("/analytics/trends")}
+                onClick={() => handleNavigate("/trends")}
                 sx={{
                   pl: 4,
                   cursor: "pointer",

@@ -17,7 +17,6 @@ import { InvestmentsPage } from "../pages/InvestmentsPage";
 import { BillsPage } from "../pages/BillsPage";
 import { ProfilePage } from "../pages/ProfilePage";
 import PasswordReset from "../pages/PasswordReset";
-import { Classification, Subcategory } from '../types/Transactions/transactions.types';
 import { TransactionHistoryPage } from "../pages/TransactionHistoryPage";
 import { ClassificationPage } from "../pages/ClassificationPage";
 import { SubcategoryPage } from "../pages/SubcategoryPage";
@@ -69,29 +68,29 @@ const AppRoutes = () => {
 
           {/* Finances */}
           {/* Finances - Budget */}
-          <Route path="/finances/budget" element={<BudgetPage />} />
+          <Route path="/budget" element={<BudgetPage />} />
           {/* Finances - Goals */}
-          <Route path="/finances/goals" element={<GoalsPage />} />
+          <Route path="/goals" element={<GoalsPage />} />
           {/* Finances - Transactions */}
-          <Route path="/finances/transactions/overview" element={<TransactionsPage />} />
+          <Route path="/transactions-overview" element={<TransactionsPage />} />
           {/* Finances - Categories */}
-          <Route path="/finances/transactions/categories" element={<>categories</>} />
+          <Route path="/transactions-categories" element={<>categories</>} />
           {/* Finances - Subcategories */}
-          <Route path="/finances/transactions/sub-categories" element={<SubcategoryPage />} />
+          <Route path="/transactions-sub-categories" element={<SubcategoryPage />} />
           {/* Finances - Classifications */}
-          <Route path="/finances/transactions/classification" element={<ClassificationPage />} />
+          <Route path="/transactions-classification" element={<ClassificationPage />} />
           {/* Finances - History */}
-          <Route path="/finances/transactions/transaction-history" element={<TransactionHistoryPage />} />
+          <Route path="/transactions-history" element={<TransactionHistoryPage />} />
           {/* Finances - Investments */}
-          <Route path="/finances/investments" element={<InvestmentsPage />} />
+          <Route path="/investments" element={<InvestmentsPage />} />
           {/* Finances - Bills */}
-          <Route path="/finances/bills" element={<BillsPage />} />
+          <Route path="/bills" element={<BillsPage />} />
 
           {/* Analytics */}
           {/* Analytics - Statiscs */}
-          <Route path="/analytics/statistics" element={<div>Statistics</div>} />
+          <Route path="/statistics" element={<div>Statistics</div>} />
           {/* Analytics - Trends */}
-          <Route path="/analytics/trends" element={<div>Trends</div>} />
+          <Route path="/trends" element={<div>Trends</div>} />
 
           {/* Support */}
           <Route path="/support" element={<div>Support</div>} />

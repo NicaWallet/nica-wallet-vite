@@ -152,18 +152,18 @@ const TableComponent = <T extends Record<string, unknown>>({
     : [...columns].sort((a, b) => a.titleKey.localeCompare(b.titleKey));
 
   const filteredColumns = orderedColumns.filter((column) => {
-    console.log(`Checking Column ID: ${column.id}`);
+    // console.log(`Checking Column ID: ${column.id}`);
     if (dataKeys.has(column.id)) {
-      console.log(`Column ID ${column.id} exists in data keys.`);
+      // console.log(`Column ID ${column.id} exists in data keys.`);
       return true;
     } else {
-      console.log(`Column ID ${column.id} does NOT exist in data keys.`);
+      // console.log(`Column ID ${column.id} does NOT exist in data keys.`);
       return false;
     }
   });
 
-  console.log("Ordered Columns:", orderedColumns);
-  console.log("Data Keys:", Array.from(dataKeys));
+  // console.log("Ordered Columns:", orderedColumns);
+  // console.log("Data Keys:", Array.from(dataKeys));
 
 
 
@@ -242,10 +242,10 @@ const TableComponent = <T extends Record<string, unknown>>({
     page * currentRowsPerPage + currentRowsPerPage
   );
 
-  console.log('Rows being passed to TableComponent:', rows);
-  console.log("Filtered Columns:", filteredColumns);
-  console.log("Filtered Rows:", filteredRows);
-  console.log("Paginated Rows:", paginatedRows);
+  // console.log('Rows being passed to TableComponent:', rows);
+  // console.log("Filtered Columns:", filteredColumns);
+  // console.log("Filtered Rows:", filteredRows);
+  // console.log("Paginated Rows:", paginatedRows);
 
   return (
     <Box sx={{ ...combinedStyles }}>
@@ -499,10 +499,10 @@ const TableComponent = <T extends Record<string, unknown>>({
                     </TableCell>
                   )}
                   {filteredColumns.map((column) => {
-                    console.log("Rendering Table Body");
+                    // console.log("Rendering Table Body");
                     // Utiliza la función de acceso a propiedades anidadas
                     const cellData = getNestedProperty(row, column.id);
-                    console.log(`Column ID: ${column.id}, Cell Data:`, cellData); // Agrega esto para depurar
+                    // console.log(`Column ID: ${column.id}, Cell Data:`, cellData); // Agrega esto para depurar
                     let cellContent;
 
                     if (column.renderLogic) {

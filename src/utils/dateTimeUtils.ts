@@ -19,12 +19,12 @@ export class DateTimeUtils {
      */
     static formatDate(date: Date, format: string): string {
         const map: { [key: string]: string } = {
-            dd: date.getDate().toString().padStart(2, '0'),
-            mm: (date.getMonth() + 1).toString().padStart(2, '0'),
-            yyyy: date.getFullYear().toString(),
-            hh: date.getHours().toString().padStart(2, '0'),
-            MM: date.getMinutes().toString().padStart(2, '0'),
-            ss: date.getSeconds().toString().padStart(2, '0'),
+            dd: date.toLocaleString('en-GB', { day: '2-digit', timeZone: 'UTC' }),
+            mm: date.toLocaleString('en-GB', { month: '2-digit', timeZone: 'UTC' }),
+            yyyy: date.toLocaleString('en-GB', { year: 'numeric', timeZone: 'UTC' }),
+            hh: date.toLocaleString('en-GB', { hour: '2-digit', hour12: false, timeZone: 'UTC' }),
+            MM: date.toLocaleString('en-GB', { minute: '2-digit', timeZone: 'UTC' }),
+            ss: date.toLocaleString('en-GB', { second: '2-digit', timeZone: 'UTC' }),
         };
 
         return format.replace(/dd|mm|yyyy|hh|MM|ss/gi, matched => map[matched]);
@@ -108,22 +108,34 @@ export class DateTimeUtils {
     }
 
     // Formatear fecha en un formato más legible, como "15 de octubre de 2024 a las 3:45 PM"
-    static formatHumanReadable(date: Date, includeTime = false, locale?: string): string {
-        const language = locale || i18n.language || 'en-US';
+    static formatHumanReadable(date: unknown, includeTime = false, locale?: string): string {
+        console.log("Input to formatHumanReadable:", date);
+
+        if (typeof date === "string") {
+            date = new Date(date); // Si es una cadena, intenta convertirla a Date
+        }
+
+        if (!(date instanceof Date) || isNaN(date.getTime())) {
+            console.warn("Invalid Date detected:", date);
+            return i18n.t("INVALID_DATE"); // Texto para fechas inválidas
+        }
+
+        const language = locale || i18n.language || "en-US";
         const options: Intl.DateTimeFormatOptions = {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric',
+            day: "numeric",
+            month: "long",
+            year: "numeric",
         };
 
         if (includeTime) {
-            options.hour = 'numeric';
-            options.minute = '2-digit';
+            options.hour = "numeric";
+            options.minute = "2-digit";
             options.hour12 = true;
         }
 
         return new Intl.DateTimeFormat(language, options).format(date);
     }
+
 }
 
 /**

@@ -1,9 +1,7 @@
 import React from "react";
 import { t, TFunction } from "i18next";
-import { IconButton, Chip } from "@mui/material";
-import PhoneIcon from "@mui/icons-material/Phone";
-import StarIcon from "@mui/icons-material/Star";
-import { DateTimeUtils } from '../../utils/dateTimeUtils';
+import { Chip } from "@mui/material";
+import { DateTimeUtils } from "../../utils/dateTimeUtils";
 
 /**
  * Interface for column configuration.
@@ -24,28 +22,6 @@ export interface IColumnConfig<T = Record<string, unknown>> {
     t: TFunction
   ) => React.ReactNode;
 }
-
-/**
- * Renders a call button with the name.
- * @param data - The data record containing name and phoneNumber.
- * @returns A React node with the call button and name.
- */
-const renderCallName = (data: Record<string, unknown>): React.ReactNode => {
-  const name = data.name as string | undefined;
-  const phoneNumber = data.phoneNumber as string | undefined;
-
-  return (
-    <div style={{ display: "flex", alignItems: "center" }}>
-      <IconButton
-        aria-label="Call"
-        onClick={() => console.log(`Llamando a ${phoneNumber}`)}
-      >
-        <PhoneIcon />
-      </IconButton>
-      <span style={{ marginLeft: "8px" }}>{name}</span>
-    </div>
-  );
-};
 
 /**
  * Renders a status chip.
@@ -70,24 +46,6 @@ const renderStatusChip = (data: Record<string, unknown>): React.ReactNode => {
   );
 };
 
-/**
- * Renders rating stars.
- * @param data - The data record containing rating.
- * @returns A React node with the rating stars.
- */
-const renderRatingStars = (data: Record<string, unknown>): React.ReactNode => {
-  const rating = data.rating as number | undefined;
-  const score = Math.round(rating || 0);
-  const totalStars = 5;
-  const stars = [];
-
-  for (let i = 1; i <= totalStars; i++) {
-    const color = i <= score ? "#FFD700" : "#E0E0E0";
-    stars.push(<StarIcon key={i} style={{ color }} />);
-  }
-
-  return <div style={{ display: "flex" }}>{stars}</div>;
-};
 
 /**
  * Validates and logs a warning for duplicate IDs in the column configuration.
@@ -111,6 +69,37 @@ const validateStringNotNull = (value: string | null | undefined): React.ReactNod
   }
   return value;
 };
+
+/**
+ * Renders a formatted birthdate.
+ * @param data - The data record containing birthdate.
+ * @returns A formatted birthdate string.
+ */
+const renderFormattedDate = (
+  data: Record<string, unknown>,
+  key: string
+): React.ReactNode => {
+  const rawDate = data[key] as string | undefined;
+
+  if (!rawDate) {
+    return t("N/A");
+  }
+
+  const dateParts = rawDate.split("-");
+  const date = new Date(Date.UTC(
+    parseInt(dateParts[0], 10),
+    parseInt(dateParts[1], 10) - 1,
+    parseInt(dateParts[2], 10)
+  ));
+
+  if (isNaN(date.getTime())) {
+    console.warn(`Invalid date detected for key "${key}":`, rawDate);
+    return t("INVALID_DATE");
+  }
+
+  return DateTimeUtils.formatDate(date, "dd-mm-yyyy");
+};
+
 
 /**
  * Array of column configurations.
@@ -161,8 +150,7 @@ const columnConfig: IColumnConfig[] = [
     filterType: "search",
     renderType: "custom",
     width: 150,
-    loadingStateType: "medium-text",
-    renderLogic: renderRatingStars,
+    loadingStateType: "medium-text"
   },
   /**
    * User columns
@@ -247,28 +235,7 @@ const columnConfig: IColumnConfig[] = [
     filterType: "search",
     width: 150,
     loadingStateType: "medium-text",
-    renderLogic: (data) => {
-      const birthdate = new Date((data as { birthdate: string }).birthdate);
-      return DateTimeUtils.formatHumanReadable(birthdate);
-    },
-  },
-  {
-    id: "created_at",
-    titleKey: "CREATED_AT",
-    dataType: "Date",
-    filterId: "created_at",
-    filterType: "search",
-    width: 150,
-    loadingStateType: "medium-text",
-  },
-  {
-    id: "updated_at",
-    titleKey: "UPDATED_AT",
-    dataType: "Date",
-    filterId: "updated_at",
-    filterType: "search",
-    width: 150,
-    loadingStateType: "medium-text",
+    renderLogic: (data) => renderFormattedDate(data, "birthdate"),
   },
   {
     id: "userRoles",
@@ -351,10 +318,7 @@ const columnConfig: IColumnConfig[] = [
     filterType: "search",
     width: 150,
     loadingStateType: "medium-text",
-    renderLogic: (data) => {
-      const createdAt = new Date((data.user as { created_at: string }).created_at);
-      return DateTimeUtils.formatHumanReadable(createdAt, true);
-    },
+    renderLogic: (data) => renderFormattedDate(data.user as Record<string, unknown>, "created_at"),
   },
   {
     id: "role.role_name",
@@ -366,6 +330,9 @@ const columnConfig: IColumnConfig[] = [
     loadingStateType: "medium-text",
     renderLogic: (data) => (data.role as { role_name: string }).role_name,
   },
+  /**
+   * Budget columns
+   */
   {
     id: "budget_id",
     titleKey: "ID",
@@ -392,10 +359,7 @@ const columnConfig: IColumnConfig[] = [
     filterType: "search",
     width: 150,
     loadingStateType: "medium-text",
-    renderLogic: (data) => {
-      const startDate = new Date((data as { start_date: string }).start_date);
-      return DateTimeUtils.formatHumanReadable(startDate);
-    },
+    renderLogic: (data) => renderFormattedDate(data, "start_date"),
   },
   {
     id: "end_date",
@@ -405,19 +369,7 @@ const columnConfig: IColumnConfig[] = [
     filterType: "search",
     width: 150,
     loadingStateType: "medium-text",
-    renderLogic: (data) => {
-      const endDate = new Date((data as { end_date: string }).end_date);
-      return DateTimeUtils.formatHumanReadable(endDate);
-    },
-  },
-  {
-    id: "category",
-    titleKey: "CATEGORY",
-    dataType: "String",
-    filterId: "category",
-    filterType: "search",
-    width: 150,
-    loadingStateType: "medium-text",
+    renderLogic: (data) => renderFormattedDate(data, "end_date"),
   },
   /**
    * Transaction columns
@@ -448,10 +400,7 @@ const columnConfig: IColumnConfig[] = [
     filterType: "search",
     width: 150,
     loadingStateType: "medium-text",
-    renderLogic: (data) => {
-      const date = new Date((data as { date: string }).date);
-      return DateTimeUtils.formatHumanReadable(date);
-    },
+    renderLogic: (data) => renderFormattedDate(data, "date"),
   },
   {
     id: "category.name",
@@ -491,10 +440,7 @@ const columnConfig: IColumnConfig[] = [
     filterType: "search",
     width: 150,
     loadingStateType: "medium-text",
-    renderLogic: (data) => {
-      const createdAt = new Date((data as { created_at: string }).created_at);
-      return DateTimeUtils.formatHumanReadable(createdAt, true);
-    },
+    renderLogic: (data) => renderFormattedDate(data, "created_at"),
   },
   {
     id: "classification_id",
@@ -513,10 +459,7 @@ const columnConfig: IColumnConfig[] = [
     filterType: "search",
     width: 150,
     loadingStateType: "medium-text",
-    renderLogic: (data) => {
-      const updatedAt = new Date((data as { updated_at: string }).updated_at);
-      return DateTimeUtils.formatHumanReadable(updatedAt, true);
-    },
+    renderLogic: (data) => renderFormattedDate(data, "updated_at"),
   },
 ];
 

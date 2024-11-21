@@ -1,43 +1,29 @@
-import axios from 'axios';
-import { BASE_URL } from '../config/config';
+import axios from "axios";
+import { BASE_URL } from "../config/config";
+import { handleGlobalError } from "../context/errorHandler";
 
 const api = axios.create({
     baseURL: BASE_URL,
     timeout: 5000,
 });
 
-/**
- * Interceptor to add authorization token to request headers if available.
- */
+// Interceptor para agregar el token en las solicitudes
 api.interceptors.request.use(
     config => {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem("token");
         if (token) {
-            config.headers['Authorization'] = `Bearer ${token}`;
+            config.headers["Authorization"] = `Bearer ${token}`;
         }
         return config;
     },
-    error => {
-        return Promise.reject(error);
-    }
+    error => Promise.reject(error)
 );
 
-/**
- * Interceptor to handle responses and errors.
- */
+// Interceptor para manejar respuestas y errores
 api.interceptors.response.use(
     response => response,
     error => {
-        if (error.response) {
-            if (error.response.status === 401) {
-                console.error("Unauthorized access - perhaps redirect to login?");
-            }
-        } else if (error.request) {
-            console.error("No response received from server.");
-        } else {
-            console.error("Error during request setup:", error.message);
-        }
-
+        handleGlobalError(error); // Llama al manejador global
         return Promise.reject(error);
     }
 );
