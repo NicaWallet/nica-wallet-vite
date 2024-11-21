@@ -3,11 +3,12 @@ import { Box, Typography, Divider, Grid, Paper, Avatar } from "@mui/material";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import CategoryIcon from "@mui/icons-material/Category";
 import { DateTimeUtils } from "../../../utils/dateTimeUtils";
-import { TransactionDetailType } from "../../../types/Transactions/transactions.types";
+import { ITransactionWithDetails } from "../../../types/Transactions/transactions.types";
+import { t } from "i18next";
 
 
 interface IDetailTransactionProps {
-  transaction: TransactionDetailType;
+  transaction: ITransactionWithDetails;
 }
 
 export const DetailTransaction: React.FC<IDetailTransactionProps> = ({
@@ -24,13 +25,13 @@ export const DetailTransaction: React.FC<IDetailTransactionProps> = ({
             <Avatar sx={{ bgcolor: "primary.main", mr: 2 }}>
               <MonetizationOnIcon />
             </Avatar>
-            <Typography variant="h6">Transaction Information</Typography>
+            <Typography variant="h6">{t('TRANSACTION_INFO')}</Typography>
           </Box>
           <Typography variant="body1">
-            <strong>Transaction ID:</strong> {transaction.transaction_id || "N/A"}
+            <strong>{t('TRANSACTION_ID')}</strong> {transaction.transaction_id || "N/A"}
           </Typography>
           <Typography variant="body1">
-            <strong>Amount:</strong> ${transaction.amount.toFixed(2) || "N/A"}
+            <strong>{t('')}</strong> ${transaction.amount.toFixed(2) || "N/A"}
           </Typography>
           <Typography variant="body1">
             <strong>Date:</strong>{" "}

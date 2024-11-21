@@ -9,7 +9,7 @@ const api = axios.create({
     withCredentials: true,
 });
 
-console.log('Base URL:', import.meta.env.VITE_BASE_URL);
+// console.log('Base URL:', import.meta.env.VITE_BASE_URL);
 
 /**
  * Interceptor for requests to add authorization token and log requests.
@@ -22,7 +22,7 @@ api.interceptors.request.use(
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
-        console.log('Request:', config);
+        // console.log('Request:', config);
         return config;
     },
     (error) => {
@@ -37,7 +37,7 @@ api.interceptors.request.use(
  */
 api.interceptors.response.use(
     (response) => {
-        console.log('Response:', response);
+        // console.log('Response:', response);
         return response;
     },
     (error) => {

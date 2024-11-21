@@ -4,6 +4,7 @@ import App from "./App";
 import "./index.css";
 import { I18nextProvider } from "react-i18next";
 import i18n from "./i18n";
+import { ErrorProvider } from "./context/ErrorContext";
 
 // Initialize the React application and render it into the root element
 createRoot(document.getElementById("root")!).render(
@@ -12,7 +13,9 @@ createRoot(document.getElementById("root")!).render(
     {/* Provide internationalization support to the application */}
     <I18nextProvider i18n={i18n}>
       {/* Render the main application component */}
-      <App />
+      <ErrorProvider>
+        <App />
+      </ErrorProvider>
     </I18nextProvider>
   </StrictMode>
 );

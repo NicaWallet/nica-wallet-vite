@@ -1,164 +1,194 @@
-import { useState } from "react";
-import { Box, Container, Typography, Chip } from "@mui/material";
+import React, { useState, useEffect } from "react";
 import TableComponent from "../../components/TableComponent";
 import Loader from "../../components/Loader";
 import ErrorSnackbar from "../../components/ErrorSnackbar";
 import PageHeader from "../../components/PageHeader";
-import CardComponent from "../../components/CardComponent";
-import { useMockBudgets } from "./Butget";
-import { useTranslation } from "react-i18next";
-import { DateTimeUtils } from "../../utils/dateTimeUtils";
+import { getCategoryById } from "../../services/categories/getCategoryById.service";
+import { t } from "i18next";
+import { BudgetDetailModal } from "./local-components/BudgetDetailModal";
+import { CreateOrUpdateBudgetModal } from "./local-components/CreateOrUpdateBudgetModal";
+import { getAllCategories } from "../../services/categories/getAllCategories.service";
+import { useGetAllBudgets } from "../../services/budget/getAllBudgets.service";
+import { deleteBudget } from "../../services/budget/deleteBudget.service";
+import { IBudget } from "../../types/Transactions/Budgets/budgets.types";
+import CardGroup from "./local-components/CardGroup/CardGroup";
+import ActionButton from "../../components/ActionButton";
+import DeleteConfirmationModal from "../../components/DeleteConfirmationModal";
 
 export const BudgetPage = () => {
-  const { t } = useTranslation();
-  const budgets = useMockBudgets();
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const { budgets, loading, error, fetchBudgets } = useGetAllBudgets();
+  const [categoryNames, setCategoryNames] = useState<{ [key: number]: string }>({});
+  const [loadingCategories, setLoadingCategories] = useState(true);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [isCreateOrUpdateModalOpen, setIsCreateOrUpdateModalOpen] = useState(false);
+  const [selectedBudgetId, setSelectedBudgetId] = useState<number | null>(null);
+  const [modalMode, setModalMode] = useState<"create" | "update">("create");
+  const [categories, setCategories] = useState<{ category_id: number; name: string }[]>([]);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState<string | null>(null);
 
-  const handleSnackbarClose = () => {
-    setSnackbarOpen(false);
-  };
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await getAllCategories();
+        setCategories(response || []);
+      } catch (err) {
+        console.error("Error fetching categories:", err);
+      }
+    };
 
-  const FeatureNotAvailable = () => {
-    setSnackbarOpen(true);
-  };
+    fetchCategories();
+  }, []);
 
-  const handleView = (budget: any) => {
-    console.log(t("VIEWING_BUDGET"), budget);
-    FeatureNotAvailable();
-  };
+  useEffect(() => {
+    const fetchCategories = async () => {
+      setLoadingCategories(true);
+      const uniqueCategoryIds = Array.from(new Set(budgets.map((budget) => budget.category_id)));
+      const categoryMap: { [key: number]: string } = {};
 
-  const handleEdit = (budget: any) => {
-    console.log(t("EDITING_BUDGET"), budget);
-    FeatureNotAvailable();
-  };
+      try {
+        await Promise.all(
+          uniqueCategoryIds.map(async (categoryId) => {
+            const category = await getCategoryById(categoryId);
+            if (category) {
+              categoryMap[categoryId] = category.name;
+            } else {
+              categoryMap[categoryId] = `Category ${categoryId}`;
+            }
+          })
+        );
+        setCategoryNames(categoryMap);
+      } catch (err) {
+        console.error("Error fetching categories:", err);
+      } finally {
+        setLoadingCategories(false);
+      }
+    };
 
-  const handleDelete = (budget: any) => {
-    console.log(t("DELETING_BUDGET"), budget);
-    FeatureNotAvailable();
-  };
-
-  // Cálculo del monto total por categoría
-  const totalAmountByCategory = budgets.reduce((acc, budget) => {
-    if (!acc[budget.category]) {
-      acc[budget.category] = budget.amount;
-    } else {
-      acc[budget.category] += budget.amount;
+    if (budgets.length > 0) {
+      fetchCategories();
     }
-    return acc;
-  }, {} as { [key: string]: number });
+  }, [budgets]);
 
-  // Información adicional
-  const totalBudgets = budgets.length;
-  const totalAmount = budgets.reduce((sum, budget) => sum + budget.amount, 0);
-  const highestBudget = budgets.reduce(
-    (prev, current) => (prev.amount > current.amount ? prev : current),
-    budgets[0]
-  );
+  const handleDelete = async () => {
+    if (!selectedBudgetId) return;
 
-  if (!budgets.length) return <Loader overlayVariant="transparent" />;
+    const success = await deleteBudget(selectedBudgetId);
+    if (success) {
+      setSnackbarMessage(t("BUDGET_DELETED_SUCCESS"));
+      fetchBudgets();
+    } else {
+      setSnackbarMessage(t("BUDGET_DELETE_ERROR"));
+    }
+
+    setIsDeleteModalOpen(false);
+    setSelectedBudgetId(null);
+  };
+
+  const openDeleteModal = (budgetId: number) => {
+    setSelectedBudgetId(budgetId);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleCloseDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+    setSelectedBudgetId(null);
+  };
+
+  const handleView = (budgetId: number) => {
+    setSelectedBudgetId(budgetId);
+    setIsViewModalOpen(true);
+  };
+
+  const handleEdit = (budgetId: number) => {
+    setSelectedBudgetId(budgetId);
+    setModalMode("update");
+    setIsCreateOrUpdateModalOpen(true);
+  };
+
+  const handleCreate = () => {
+    setModalMode("create");
+    setIsCreateOrUpdateModalOpen(true);
+  };
+
+  const handleCloseCreateOrUpdateModal = () => {
+    setIsCreateOrUpdateModalOpen(false);
+    setSelectedBudgetId(null);
+    fetchBudgets();
+  };
+
+  if (loading || loadingCategories) return <Loader overlayVariant="transparent" />;
+  if (error) return <ErrorSnackbar message={t("BUDGETS_FETCH_FAILED")} open={true} onClose={() => { }} />;
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 4 }}>
+    <>
       <PageHeader titleKey={t("BUDGET_PAGE")} />
 
-      <Box
-        display="flex"
-        sx={{ p: 2, justifyContent: "space-between" }}
-        mb={4}
-      >
-        {/* Total amount by category */}
-        <CardComponent
-          title={t("TOTAL_AMOUNT_BY_CATEGORY")}
-          description={t("TOP_5_CATEGORIES_HIGHEST_AMOUNTS")}
-          customBody={
-            <>
-              {Object.entries(totalAmountByCategory)
-                .sort(([, amountA], [, amountB]) => amountB - amountA)
-                .slice(0, 5)
-                .map(([category, amount]) => (
-                  <Chip
-                    key={category}
-                    label={`${t(category)}: $${amount.toFixed(2)}`}
-                    sx={{ mt: 1, mr: 1 }}
-                    variant="outlined"
-                    color="primary"
-                    size="small"
-                  />
-                ))}
-            </>
-          }
-        />
-
-        {/* Budget overview */}
-        <CardComponent
-          title={t("BUDGET_OVERVIEW")}
-          description={t("SUMMARY_OF_BUDGET_STATISTICS")}
-          customBody={
-            <>
-              <Box sx={{ mt: 1, mr: 1 }}>
-                <Typography variant="body2">
-                  {t("TOTAL_BUDGETS")}: {totalBudgets}
-                </Typography>
-              </Box>
-              <Box sx={{ mt: 1, mr: 1 }}>
-                <Typography variant="body2">
-                  {t("TOTAL_AMOUNT")}: ${totalAmount.toFixed(2)}
-                </Typography>
-              </Box>
-            </>
-          }
-        />
-
-          
-        <CardComponent
-          title={t("HIGHEST_BUDGET")}
-          description={t("DETAILS_OF_HIGHEST_BUDGET")}
-          customBody={
-            <>
-              <Box sx={{ mt: 1, mr: 1 }}>
-                <Typography variant="body2">
-                  {t("CATEGORY")}: {highestBudget?.category}
-                </Typography>
-              </Box>
-              <Box sx={{ mt: 1, mr: 1 }}>
-                <Typography variant="body2">
-                  {t("AMOUNT")}: ${highestBudget?.amount.toFixed(2)}
-                </Typography>
-              </Box>
-              <Box sx={{ mt: 1, mr: 1 }}>
-                <Typography variant="body2">
-                  {t("PERIOD")}: {DateTimeUtils.formatHumanReadable(new Date(highestBudget?.start_date))} -{" "}
-                  {DateTimeUtils.formatHumanReadable(new Date(highestBudget?.end_date))}
-                </Typography>
-              </Box>
-            </>
-          }
-        />
-      </Box>
-
-      <Box sx={{ p: 2 }}>
-        <TableComponent<any>
-          rows={budgets}
-          columnOrder={[
-            "budget_id",
-            "amount",
-            "start_date",
-            "end_date",
-            "category",
-          ]}
-          handleView={handleView}
-          handleEdit={handleEdit}
-          handleDelete={handleDelete}
-        />
-      </Box>
-
-      <ErrorSnackbar
-        message={t("FEATURE_NOT_AVAILABLE")}
-        open={snackbarOpen}
-        onClose={handleSnackbarClose}
-        autoHideDuration={5000}
-        severity="info"
+      <CardGroup
+        totalAmountByCategory={budgets.reduce((acc, budget) => {
+          const categoryKey = categoryNames[budget.category_id] || `Category ${budget.category_id}`;
+          acc[categoryKey] = (acc[categoryKey] || 0) + budget.amount;
+          return acc;
+        }, {} as { [key: string]: number })}
+        totalBudgets={budgets.length}
+        totalAmount={budgets.reduce((sum, budget) => sum + budget.amount, 0)}
+        highestBudget={budgets.reduce((prev, current) => (prev.amount > current.amount ? prev : current), budgets[0] || {})}
+        categoryNames={categoryNames}
+        isLoading={loading}
       />
-    </Container>
+
+      <ActionButton
+        label={t("CREATE_BUDGET")}
+        onClick={handleCreate}
+        variant="outlined"
+        size="large"
+        iconType="add"
+        iconPosition="start"
+        color="secondary"
+      />
+
+      <TableComponent<IBudget>
+        rows={budgets}
+        columnOrder={["budget_id", "category.name", "amount", "start_date", "end_date", "created_at", "updated_at"]}
+        handleView={(budget) => handleView(budget.budget_id)}
+        handleEdit={(budget) => handleEdit(budget.budget_id)}
+        handleDelete={(budget) => openDeleteModal(budget.budget_id)}
+        sx={{ m: 4 }}
+      />
+
+      {isViewModalOpen && selectedBudgetId !== null && (
+        <BudgetDetailModal
+          isOpen={isViewModalOpen}
+          onClose={() => setIsViewModalOpen(false)}
+          budgetId={selectedBudgetId}
+        />
+      )}
+
+      {isCreateOrUpdateModalOpen && (
+        <CreateOrUpdateBudgetModal
+          isOpen={isCreateOrUpdateModalOpen}
+          onClose={handleCloseCreateOrUpdateModal}
+          mode={modalMode}
+          budgetId={selectedBudgetId || undefined}
+          categories={categories}
+        />
+      )}
+
+      <DeleteConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onClose={handleCloseDeleteModal}
+        onConfirm={handleDelete}
+        recordName={selectedBudgetId ? t("BUDGET", { id: selectedBudgetId }) : undefined}
+      />
+
+      {snackbarMessage && (
+        <ErrorSnackbar
+          message={snackbarMessage}
+          open={!!snackbarMessage}
+          onClose={() => setSnackbarMessage(null)}
+          severity="info"
+        />
+      )}
+    </>
   );
 };

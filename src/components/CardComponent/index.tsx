@@ -21,30 +21,31 @@ export interface CardComponentProps {
   width?: string;
   borderColor?: string;
   bgColor?: string;
+  gradientBg?: string; // Nuevo: fondo degradado
   customHeight?: string;
+  rounded?: boolean; // Nuevo: bordes redondeados
+  shadowLevel?: "none" | "low" | "medium" | "high"; // Nuevo: nivel de sombra
+  titleColor?: string; // Nuevo: color del título
+  descriptionColor?: string; // Nuevo: color de la descripción
   maxDescriptionHeight?: string;
   imageBorderRadius?: string;
   imageBoxShadow?: string;
   imageObjectFit?:
-    | "cover"
-    | "contain"
-    | "fill"
-    | "none"
-    | "scale-down"
-    | "unset"
-    | "initial"
-    | "revert"
-    | "inherit";
+  | "cover"
+  | "contain"
+  | "fill"
+  | "none"
+  | "scale-down"
+  | "unset"
+  | "initial"
+  | "revert"
+  | "inherit";
   imageHeight?: string;
   customBody?: React.ReactNode;
 }
 
 /**
- * CardComponent es un componente reutilizable que muestra un título, descripción, imagen o ícono, y un botón opcional.
- * Soporta estado de carga y varias opciones de personalización.
- *
- * @param {CardComponentProps} props - Las propiedades para el CardComponent.
- * @returns {JSX.Element} El CardComponent renderizado.
+ * CardComponent mejorado con variantes de diseño adicionales.
  */
 const CardComponent: React.FC<CardComponentProps> = ({
   title,
@@ -57,7 +58,12 @@ const CardComponent: React.FC<CardComponentProps> = ({
   width = "345px",
   borderColor = "transparent",
   bgColor = "white",
+  gradientBg,
   customHeight = "auto",
+  rounded = false,
+  shadowLevel = "medium",
+  titleColor = "text.primary",
+  descriptionColor = "text.secondary",
   maxDescriptionHeight = "100px",
   imageBorderRadius = "0px",
   imageBoxShadow = "none",
@@ -65,15 +71,31 @@ const CardComponent: React.FC<CardComponentProps> = ({
   imageHeight = "140px",
   customBody,
 }) => {
+  const boxShadow =
+    shadowLevel === "none"
+      ? "none"
+      : shadowLevel === "low"
+        ? "0px 1px 3px rgba(0, 0, 0, 0.1)"
+        : shadowLevel === "medium"
+          ? "0px 3px 6px rgba(0, 0, 0, 0.16)"
+          : "0px 6px 12px rgba(0, 0, 0, 0.25)";
+
   return (
     <Card
       sx={{
         maxWidth: width,
         width: "100%",
+        background: gradientBg ? gradientBg : bgColor,
+        borderRadius: rounded ? "16px" : "4px",
         borderColor: borderColor,
-        backgroundColor: bgColor,
         border: `1px solid ${borderColor}`,
+        boxShadow: boxShadow,
         height: customHeight,
+        transition: "transform 0.3s ease, box-shadow 0.3s ease",
+        "&:hover": {
+          transform: "scale(1.02)",
+          boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.2)",
+        },
       }}
     >
       {isLoading ? (
@@ -110,7 +132,12 @@ const CardComponent: React.FC<CardComponentProps> = ({
         )
       )}
 
-      <CardContent>
+      <CardContent
+        sx={{
+          flex: 1,
+          textAlign: "left",
+        }}
+      >
         {isLoading ? (
           <>
             <Skeleton width="60%" height={30} />
@@ -119,7 +146,12 @@ const CardComponent: React.FC<CardComponentProps> = ({
           </>
         ) : (
           <>
-            <Typography gutterBottom variant="h5" component="div">
+            <Typography
+              gutterBottom
+              variant="h5"
+              component="div"
+              sx={{ color: titleColor }}
+            >
               {title}
             </Typography>
             <Box
@@ -131,7 +163,7 @@ const CardComponent: React.FC<CardComponentProps> = ({
               {customBody ? (
                 customBody
               ) : (
-                <Typography variant="body2" color="text.secondary">
+                <Typography variant="body2" sx={{ color: descriptionColor }}>
                   {description}
                 </Typography>
               )}
@@ -145,7 +177,7 @@ const CardComponent: React.FC<CardComponentProps> = ({
           {isLoading ? (
             <Skeleton width="80px" height="36px" />
           ) : (
-            <Button size="small" onClick={onClick}>
+            <Button size="small" onClick={onClick} variant="outlined">
               {buttonText}
             </Button>
           )}

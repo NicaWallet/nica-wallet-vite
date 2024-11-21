@@ -1,5 +1,6 @@
-import axios from 'axios';
+// import axios from 'axios';
 import { useState, useEffect } from 'react';
+import notificationMock from './notificationsMock.json';
 
 interface Notification {
     id: string;
@@ -16,7 +17,8 @@ const useGetUserNotifications = () => {
     useEffect(() => {
         const fetchNotifications = async () => {
             try {
-                const response = await axios.get<Notification[]>('https://672aff7c976a834dd02529ee.mockapi.io/Notifications'); // Especificamos el tipo de los datos esperados en la respuesta
+                // const response = await axios.get<Notification[]>('/api/notifications'); //TODO: Descomentar esta línea para hacer la petición real
+                const response = { data: notificationMock } as { data: Notification[] }; // Simulamos la respuesta de la API
                 setNotifications(response.data);
             } catch (err) {
                 setError(err);
