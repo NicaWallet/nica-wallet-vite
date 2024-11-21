@@ -127,7 +127,6 @@ const columnConfig: IColumnConfig[] = [
     renderType: "custom",
     width: 120,
     loadingStateType: "medium-text",
-    renderLogic: renderCallName,
   },
   {
     id: "age",
@@ -496,6 +495,15 @@ const columnConfig: IColumnConfig[] = [
       const createdAt = new Date((data as { created_at: string }).created_at);
       return DateTimeUtils.formatHumanReadable(createdAt, true);
     },
+  },
+  {
+    id: "classification_id",
+    titleKey: "CLASSIFICATION_ID",
+    dataType: "Number",
+    filterId: "classification_id",
+    filterType: "search",
+    width: 100,
+    loadingStateType: "medium-text",
   },
   {
     id: "updated_at",

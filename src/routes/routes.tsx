@@ -18,6 +18,9 @@ import { BillsPage } from "../pages/BillsPage";
 import { ProfilePage } from "../pages/ProfilePage";
 import PasswordReset from "../pages/PasswordReset";
 import { Classification, Subcategory } from '../types/Transactions/transactions.types';
+import { TransactionHistoryPage } from "../pages/TransactionHistoryPage";
+import { ClassificationPage } from "../pages/ClassificationPage";
+import { SubcategoryPage } from "../pages/SubcategoryPage";
 
 /**
  * AppRoutes component defines the main routing structure for the application.
@@ -74,11 +77,11 @@ const AppRoutes = () => {
           {/* Finances - Categories */}
           <Route path="/finances/transactions/categories" element={<>categories</>} />
           {/* Finances - Subcategories */}
-          <Route path="/finances/transactions/sub-categories" element={<>Subcategory</>} />
+          <Route path="/finances/transactions/sub-categories" element={<SubcategoryPage />} />
           {/* Finances - Classifications */}
-          <Route path="/finances/transactions/classification" element={<>Classification</>} />
+          <Route path="/finances/transactions/classification" element={<ClassificationPage />} />
           {/* Finances - History */}
-          <Route path="/finances/transactions/transaction-history" element={<>transaction-history</>} />
+          <Route path="/finances/transactions/transaction-history" element={<TransactionHistoryPage />} />
           {/* Finances - Investments */}
           <Route path="/finances/investments" element={<InvestmentsPage />} />
           {/* Finances - Bills */}

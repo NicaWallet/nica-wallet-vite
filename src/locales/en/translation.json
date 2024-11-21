@@ -212,5 +212,21 @@
   "TRANSACTION_OVERVIEW": "Transaction Overview",
   "TRANSACTION_HISTORY": "Transaction History",
   "CATEGORIES": "Categories",
-  "SUB_CATEGORIES": "Subcategories"
+  "SUB_CATEGORIES": "Subcategories",
+  "TRANSACTION_HISTORY_PAGE": "Transaction History",
+  "DETAILS_OF_TRANSACTION": "Details of transaction",
+  "CREATE_TRANSACTION_TITLE": "Create Transaction",
+  "CONFIRMATION_TITLE": "Confirmation",
+  "CREATE_TRANSACTION": "Create Transaction",
+  "CONFIRMATION_MESSAGE": "Are you sure you want to leave?",
+  "YES_CONTINUE": "Yes, continue",
+  "UPDATE_TRANSACTION_TITLE": "Update Transaction",
+  "CONFIRM_DELETION": "Confirm Deletion",
+  "DELETE_CONFIRMATION_MESSAGE_WITH_NAME": "Are you sure you want to delete {{name}}?",
+  "DELETE_CONFIRMATION_MESSAGE": "Are you sure you want to delete this item?",
+  "DELETE": "Delete",
+  "CLASSIFICATION_PAGE": "Classification",
+  "CLASSIFICATION_ID": "ID",
+  "CREATE_CLASSIFICATION": "Create Classification",
+  "SUBCATEGORY_PAGE": "Subcategory"
 }

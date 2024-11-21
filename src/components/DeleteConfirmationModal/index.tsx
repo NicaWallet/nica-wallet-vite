@@ -8,6 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import WarningIcon from "@mui/icons-material/Warning";
+import { useTranslation } from "react-i18next";
 
 interface DeleteConfirmationModalProps {
   isOpen: boolean;
@@ -22,6 +23,8 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
   onConfirm,
   recordName,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <Dialog open={isOpen} onClose={onClose} maxWidth="xs" fullWidth>
       <DialogTitle
@@ -33,21 +36,21 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
         }}
       >
         <WarningIcon color="warning" />
-        Confirm Deletion
+        {t("CONFIRM_DELETION")}
       </DialogTitle>
       <DialogContent>
         <Typography variant="body1">
           {recordName
-            ? `Are you sure you want to delete "${recordName}"? This action cannot be undone.`
-            : "Are you sure you want to delete this record? This action cannot be undone."}
+            ? t("DELETE_CONFIRMATION_MESSAGE_WITH_NAME", { recordName })
+            : t("DELETE_CONFIRMATION_MESSAGE")}
         </Typography>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="primary" variant="outlined">
-          Cancel
+          {t("CANCEL")}
         </Button>
         <Button onClick={onConfirm} color="error" variant="contained">
-          Delete
+          {t("DELETE")}
         </Button>
       </DialogActions>
     </Dialog>
