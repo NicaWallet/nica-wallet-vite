@@ -20,104 +20,62 @@ import PasswordReset from "../pages/PasswordReset";
 import { TransactionHistoryPage } from "../pages/TransactionHistoryPage";
 import { ClassificationPage } from "../pages/ClassificationPage";
 import { SubcategoryPage } from "../pages/SubcategoryPage";
+import ProtectedRoute from "../components/ProtectedRoute";
+import AuthRoute from "../components/AuthRoute";
 
-/**
- * AppRoutes component defines the main routing structure for the application.
- * It uses React Router to map different paths to their respective components.
- *
- * Routes:
- * - `*`: Renders the `NotFoundPage` for any undefined routes.
- * - `/`: Renders the `LandingPage`.
- * - `/auth/login`: Renders the `Login` component.
- * - `/auth/register`: Renders the `Register` component.
- * - `/welcome`: Renders the `WelcomePage` within the `DashboardLayout`.
- *
- * Note: Additional routes for the dashboard module are commented out and can be enabled as needed.
- *
- * @returns {JSX.Element} The routing structure of the application.
- */
 const AppRoutes = () => {
   return (
     <Router>
       <Routes>
-        {/* NOT FOUND */}
+        {/* Rutas públicas */}
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/auth/login" element={<Login />} />
+        <Route path="/auth/register" element={<Register />} />
+        <Route path="/auth/password-recovery" element={<PasswordRecovery />} />
+        <Route path="/reset-password" element={<PasswordReset />} />
         <Route path="*" element={<NotFoundPage />} />
 
-        {/* Landing Page */}
-        <Route path="/" element={<LandingPage />} />
+        {/* Rutas protegidas */}
+        <Route element={<AuthRoute />}>
+          <Route element={<DashboardLayout />}>
+            {/* Rutas de bienvenida y dashboard */}
+            <Route path="/welcome" element={<WelcomePage />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
 
-        {/* Auth module */}
-        {/* Login page */}
-        <Route path="/auth/login" element={<Login />} />
+            {/* Rutas financieras */}
+            <Route path="/budget" element={<BudgetPage />} />
+            <Route path="/goals" element={<GoalsPage />} />
+            <Route path="/transactions-overview" element={<TransactionsPage />} />
+            <Route path="/transactions-categories" element={<div>Categories</div>} />
+            <Route path="/transactions-sub-categories" element={<SubcategoryPage />} />
+            <Route path="/transactions-classification" element={<ClassificationPage />} />
+            <Route path="/transactions-history" element={<TransactionHistoryPage />} />
+            <Route path="/investments" element={<InvestmentsPage />} />
+            <Route path="/bills" element={<BillsPage />} />
 
-        {/* Register page */}
-        <Route path="/auth/register" element={<Register />} />
+            {/* Rutas analíticas */}
+            <Route path="/statistics" element={<div>Statistics</div>} />
+            <Route path="/trends" element={<div>Trends</div>} />
 
-        {/* PasswordRecovery page */}
-        <Route path="/auth/password-recovery" element={<PasswordRecovery />} />
+            {/* Soporte */}
+            <Route path="/support" element={<div>Support</div>} />
 
-        <Route path="/reset-password" element={<PasswordReset />} />
+            {/* Configuración */}
+            <Route path="/settings" element={<div>Settings</div>} />
 
-        {/* Dashboard module (rutas privadas) */}
-        <Route element={<DashboardLayout />}>
-          {/* Welcome page */}
-          <Route path="/welcome" element={<WelcomePage />} />
+            {/* Seguridad */}
+            <Route path="/security" element={<div>Security</div>} />
 
-          {/* Dashboard page */}
-          <Route path="/dashboard" element={<DashboardPage />} />
+            {/* Admin Panel protegido */}
+            <Route path="/admin-panel" element={<ProtectedRoute allowedRoles={["Admin"]} />}>
+              <Route index element={<AdminPanel />} />
+              <Route path="users" element={<UsersPage />} />
+              <Route path="roles" element={<RolesPage />} />
+            </Route>
 
-          {/* Finances */}
-          {/* Finances - Budget */}
-          <Route path="/budget" element={<BudgetPage />} />
-          {/* Finances - Goals */}
-          <Route path="/goals" element={<GoalsPage />} />
-          {/* Finances - Transactions */}
-          <Route path="/transactions-overview" element={<TransactionsPage />} />
-          {/* Finances - Categories */}
-          <Route path="/transactions-categories" element={<>categories</>} />
-          {/* Finances - Subcategories */}
-          <Route path="/transactions-sub-categories" element={<SubcategoryPage />} />
-          {/* Finances - Classifications */}
-          <Route path="/transactions-classification" element={<ClassificationPage />} />
-          {/* Finances - History */}
-          <Route path="/transactions-history" element={<TransactionHistoryPage />} />
-          {/* Finances - Investments */}
-          <Route path="/investments" element={<InvestmentsPage />} />
-          {/* Finances - Bills */}
-          <Route path="/bills" element={<BillsPage />} />
-
-          {/* Analytics */}
-          {/* Analytics - Statiscs */}
-          <Route path="/statistics" element={<div>Statistics</div>} />
-          {/* Analytics - Trends */}
-          <Route path="/trends" element={<div>Trends</div>} />
-
-          {/* Support */}
-          <Route path="/support" element={<div>Support</div>} />
-
-          {/* Settings */}
-          <Route path="/settings" element={<div>Settings</div>} />
-
-          {/* Security */}
-          <Route path="/security" element={<div>Security</div>} />
-
-          {/* Admin Panel */}
-          <Route path="/admin-panel" element={<AdminPanel />}/>
-          {/* Admin Panel - users */}
-          <Route path="/admin-panel/users" element={<UsersPage />} />
-          {/* Admin Panel - roles */}
-          <Route path="/admin-panel/roles" element={<RolesPage />} />
-          {/* Admin Panel - settings */}
-          {/* <Route path="/admin-panel/settings" element={<SettingsPage />} /> */}
-          {/* Admin Panel - reports */}
-          {/* <Route path="/admin-panel/reports" element={<ReportsPage />} /> */}
-          {/* Admin Panel - analytics */}
-          {/* <Route path="/admin-panel/analytics" element={<AnalyticsPage />} /> */}
-          {/* Admin Panel - notifications */}
-          {/* <Route path="/admin-panel/notifications" element={<NotificationsPage />} /> */}
-
-          {/* Profile */}
-          <Route path="/profile" element={<ProfilePage />} />
+            {/* Perfil */}
+            <Route path="/profile" element={<ProfilePage />} />
+          </Route>
         </Route>
       </Routes>
     </Router>

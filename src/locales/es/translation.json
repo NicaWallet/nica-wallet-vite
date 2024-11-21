@@ -237,5 +237,8 @@
   "TRANSACTIONS_SUB_CATEGORIES": "Subcategoría de Transacciones",
   "TRANSACTIONS_CLASSIFICATIONS": "Clasificaciones de Transacciones",
   "TRANSACTIONS_HISTORY": "Historial de Transacciones",
-  "BUDGET_DELETED_SUCCESS": "Presupuesto eliminado exitosamente"
+  "BUDGET_DELETED_SUCCESS": "Presupuesto eliminado exitosamente",
+  "ACCESS_DENIED_TITLE": "Acceso Denegado",
+  "ACCESS_DENIED_MESSAGE": "No tienes permiso para acceder a esta página.",
+  "GO_BACK": "Regresar"
 }
