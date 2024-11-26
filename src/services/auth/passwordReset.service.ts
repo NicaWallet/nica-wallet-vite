@@ -51,9 +51,14 @@ export const usePasswordReset = (): IPasswordReset => {
           response.data.message || "Failed to reset password. Please try again."
         );
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       // Maneja el error y verifica que err.response esté presente
-      setError(err.response?.data?.message || "An unexpected error occurred.");
+      if (err instanceof Error && (err as { response?: { data?: { message?: string } } }).response) {
+        const errorResponse = err as { response?: { data?: { message?: string } } };
+        setError(errorResponse.response?.data?.message || "An unexpected error occurred.");
+      } else {
+        setError("An unexpected error occurred.");
+      }
     } finally {
       setLoading(false);
     }

@@ -22,6 +22,8 @@ import { ClassificationPage } from "../pages/ClassificationPage";
 import { SubcategoryPage } from "../pages/SubcategoryPage";
 import ProtectedRoute from "../components/ProtectedRoute";
 import AuthRoute from "../components/AuthRoute";
+import { ChangePassword } from "../pages/ChangePassword";
+import { ProfileEdit } from "../pages/ProfileEdit";
 
 const AppRoutes = () => {
   return (
@@ -66,15 +68,17 @@ const AppRoutes = () => {
             {/* Seguridad */}
             <Route path="/security" element={<div>Security</div>} />
 
+            {/* Perfil */}
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/profile/edit" element={<ProfileEdit/>} />
+            <Route path="/profile/change-password" element={<ChangePassword/>} />
+
             {/* Admin Panel protegido */}
             <Route path="/admin-panel" element={<ProtectedRoute allowedRoles={["Admin"]} />}>
               <Route index element={<AdminPanel />} />
               <Route path="users" element={<UsersPage />} />
               <Route path="roles" element={<RolesPage />} />
             </Route>
-
-            {/* Perfil */}
-            <Route path="/profile" element={<ProfilePage />} />
           </Route>
         </Route>
       </Routes>
