@@ -257,5 +257,13 @@
   "CURRENT_PASSWORD_REQUIRED": "Current password is required",
   "NEW_PASSWORD_REQUIRED": "New password is required",
   "CURRENT_PASSWORD_PLACEHOLDER": "Current Password",
-  "CONFIRM_NEW_PASSWORD_PLACEHOLDER": "Confirm New Password"
+  "CONFIRM_NEW_PASSWORD_PLACEHOLDER": "Confirm New Password",
+  "INCOME": "Income",
+  "EXPENSE": "Expense",
+  "TYPE": "Type",
+  "SUMMARY_OF_TRANSACTIONS": "Summary of Transactions",
+  "TOTAL_TRANSACTIONS_INCOMES": "Total Income Transactions",
+  "TOTAL_TRANSACTIONS_EXPENSES": "Total Expense Transactions",
+  "TOTAL_SUM_TRANSACTIONS_INCOMES": "Total Sum of Income Transactions",
+  "TOTAL_SUM_TRANSACTIONS_EXPENSES": "Total Sum of Expense Transactions"
 }

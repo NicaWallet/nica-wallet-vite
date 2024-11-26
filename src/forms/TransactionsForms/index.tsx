@@ -3,21 +3,15 @@ import { Box, Grid, MenuItem } from "@mui/material";
 import { UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import InputField from "../../components/InputField";
-
-interface TransactionFormData {
-  amount: number;
-  category_id: number;
-  subcategory_id: number;
-  classification_id: number;
-}
+import { ITransactionForm, TransactionType } from "../../types/Transactions/transactions.types";
 
 interface ITransactionFormProps {
-  form: UseFormReturn<TransactionFormData>;
+  form: UseFormReturn<ITransactionForm>;
   categories: { category_id: number; name: string }[];
   subcategories: { subcategory_id: number; name: string }[];
   classifications: { classification_id: number; name: string }[];
   mode: "create" | "update";
-  initialData?: Partial<TransactionFormData>;
+  initialData?: Partial<ITransactionForm>;
 }
 
 const TransactionForm: React.FC<ITransactionFormProps> = ({
@@ -115,6 +109,20 @@ const TransactionForm: React.FC<ITransactionFormProps> = ({
             ))}
           </InputField>
         </Grid>
+        <Grid item xs={12} md={6}>
+          <InputField
+            label={t("TRANSACTION_TYPE")}
+            select
+            value={watch("type") || ""}
+            onChange={(value) => setValue("type", value as TransactionType)}
+            errorText={errors.type?.message}
+            size="large"
+          >
+            <MenuItem value="EXPENSE">{t("EXPENSE")}</MenuItem>
+            <MenuItem value="INCOME">{t("INCOME")}</MenuItem>
+          </InputField>
+        </Grid>
+
       </Grid>
     </Box>
   );

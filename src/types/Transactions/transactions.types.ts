@@ -9,7 +9,7 @@ export type TransactionType = 'INCOME' | 'EXPENSE';
 export type ITransactionBase = BaseEntity & {
   transaction_id: number;
   amount: number;
-  date: Date;
+  date: string;
   type: TransactionType;
 };
 
@@ -28,12 +28,12 @@ export type ITransactionWithDetails = ITransaction & {
   histories: IHistory[];
 };
 
-export type TransactionForm = {
+export type ITransactionForm = {
   amount: number;
   category_id: number;
   subcategory_id: number;
   classification_id: number;
   recurring_transaction_id?: number | null;
   type: TransactionType;
-  date?: Date;
+  date?: string; // Asegúrate de que sea string para cumplir con la compatibilidad
 };
