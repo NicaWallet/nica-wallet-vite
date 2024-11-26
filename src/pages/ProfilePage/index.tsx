@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
     Box,
     Grid,
     Typography,
-    Avatar,
     Paper,
     Button,
     Stack,
@@ -18,22 +17,45 @@ import {
     AccountBalanceWallet as AccountBalanceWalletIcon,
     Flag as FlagIcon,
     Category as CategoryIcon,
-    Repeat as RepeatIcon,
-    LocationOn as LocationOnIcon,
     Edit as EditIcon,
     Lock as LockIcon,
     Logout as LogoutIcon,
-    Timeline as TimelineIcon,
     Dashboard as DashboardIcon,
     Layers as LayersIcon,
     ListAlt as ListAltIcon,
     History as HistoryIcon,
 } from "@mui/icons-material";
+import { useTranslation } from "react-i18next";
+import AvatarComponent from "../../components/AvatarComponent";
+import { useNavigate } from "react-router-dom"
+import Modal from "../../components/Modal";
 
 export const ProfilePage = () => {
     const [profileData, setProfileData] = useState<UserResponseDto | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const { t } = useTranslation();
+    const navigate = useNavigate();
+
+    const [openLogoutModal, setOpenLogoutModal] = useState(false);
+    const [loggingOut, setLoggingOut] = useState(false); // Estado para el loader después de confirmar
+
+    // Función para manejar el logout con loader
+    const handleLogout = () => {
+        setLoggingOut(true); // Activa el loader
+        setTimeout(() => {
+            localStorage.removeItem("token");
+            navigate("/auth/login");
+        }, 3000); // 3 segundos de retraso
+    };
+
+    const handleOpenLogoutModal = () => {
+        setOpenLogoutModal(true);
+    };
+
+    const handleCloseLogoutModal = () => {
+        setOpenLogoutModal(false);
+    };
 
     useEffect(() => {
         const fetchProfileData = async () => {
@@ -42,16 +64,16 @@ export const ProfilePage = () => {
                 setProfileData(data);
             } catch (err) {
                 console.error("Error fetching profile data:", err);
-                setError("Failed to fetch profile data.");
+                setError(t("ERROR_FETCH_PROFILE"));
             } finally {
                 setLoading(false);
             }
         };
 
         fetchProfileData();
-    }, []);
+    }, [t]);
 
-    if (loading) return <Loader overlayVariant="transparent" />;
+    if (loading || loggingOut) return <Loader overlayVariant="transparent" />;
     if (error)
         return (
             <ErrorSnackbar
@@ -85,7 +107,7 @@ export const ProfilePage = () => {
                     }}
                 >
                     <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
-                        <Avatar
+                        <AvatarComponent
                             alt={profileData?.first_name}
                             sx={{
                                 width: 120,
@@ -94,9 +116,9 @@ export const ProfilePage = () => {
                                 fontSize: "2.5rem",
                                 textTransform: "uppercase",
                             }}
-                        >
-                            {profileData?.first_name[0]}
-                        </Avatar>
+                            src={`https://i.pravatar.cc/150?u=${profileData?.email}`}
+
+                        />
                         <Box>
                             <Typography variant="h4" sx={{ mb: 1, fontWeight: "bold" }}>
                                 {profileData?.first_name} {profileData?.first_surname}
@@ -105,7 +127,7 @@ export const ProfilePage = () => {
                                 {profileData?.email}
                             </Typography>
                             <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                                Member since:{" "}
+                                {t("MEMBER_SINCE")}
                                 {new Date(profileData?.created_at || "").toLocaleDateString()}
                             </Typography>
                         </Box>
@@ -114,7 +136,7 @@ export const ProfilePage = () => {
                     {/* Stats Section */}
                     <Box sx={{ textAlign: "center", flex: 1, minWidth: "200px" }}>
                         <Typography variant="h5" sx={{ fontWeight: "bold", mb: 1 }}>
-                            Quick Stats
+                            {t("PROFILE_STATS")}
                         </Typography>
                         <Typography
                             variant="body2"
@@ -128,7 +150,7 @@ export const ProfilePage = () => {
                                 fontWeight: "bold",
                             }}
                         >
-                            Total Resources:{" "}
+                            {t("TOTAL_RESOURCES")}{" "}
                             {(profileData?._count?.addresses || 0) +
                                 (profileData?._count?.budgets || 0) +
                                 (profileData?._count?.Category || 0) +
@@ -139,43 +161,43 @@ export const ProfilePage = () => {
                             variant="body2"
                             sx={{ mt: 1, color: "text.secondary", fontStyle: "italic" }}
                         >
-                            Explore your resources below.
+                            {t("TOTAL_TRANSACTIONS")} {profileData?._count?.transactions || 0}
                         </Typography>
                     </Box>
                 </Paper>
 
                 {/* Quick Actions Section */}
                 <Typography variant="h5" sx={{ mb: 2, fontWeight: "bold" }}>
-                    Quick Actions
+                    {t("QUICK_ACTIONS")}
                 </Typography>
                 <Stack direction="row" spacing={2} sx={{ mb: 4 }}>
                     <Button
                         variant="contained"
                         startIcon={<EditIcon />}
-                        onClick={() => console.log("Edit Profile")}
+                        onClick={() => navigate("/profile/edit")}
                     >
-                        Edit Profile
+                        {t("EDIT_PROFILE")}
                     </Button>
                     <Button
                         variant="outlined"
                         startIcon={<LockIcon />}
-                        onClick={() => console.log("Change Password")}
+                        onClick={() => navigate("/profile/change-password")}
                     >
-                        Change Password
+                        {t("CHANGE_PASSWORD")}
                     </Button>
                     <Button
                         variant="outlined"
                         color="error"
                         startIcon={<LogoutIcon />}
-                        onClick={() => console.log("Logout")}
+                        onClick={handleOpenLogoutModal}
                     >
-                        Logout
+                        {t("LOGOUT")}
                     </Button>
                 </Stack>
 
                 {/* Transactions Actions Section */}
                 <Typography variant="h5" sx={{ mb: 2, fontWeight: "bold" }}>
-                    Transactions Actions
+                    {t("TRANSACTIONS_ACTIONS")}
                 </Typography>
                 <Grid container spacing={3} sx={{ mb: 4 }}>
                     {/* Transaction Overview */}
@@ -184,7 +206,7 @@ export const ProfilePage = () => {
                             title="Transaction Overview"
                             description="Overview of all transactions"
                             icon={<DashboardIcon color="primary" fontSize="large" />}
-                            onClick={() => console.log("Navigate to Transaction Overview")}
+                            onClick={() => navigate("/transactions-overview")}
                         />
                     </Grid>
 
@@ -194,7 +216,7 @@ export const ProfilePage = () => {
                             title="Categories"
                             description="Manage transaction categories"
                             icon={<CategoryIcon color="secondary" fontSize="large" />}
-                            onClick={() => console.log("Navigate to Categories")}
+                            onClick={() => navigate("/transactions-categories")}
                         />
                     </Grid>
 
@@ -204,7 +226,7 @@ export const ProfilePage = () => {
                             title="Subcategories"
                             description="Manage transaction subcategories"
                             icon={<LayersIcon color="action" fontSize="large" />}
-                            onClick={() => console.log("Navigate to Subcategories")}
+                            onClick={() => navigate("/transactions-sub-categories")}
                         />
                     </Grid>
 
@@ -214,7 +236,7 @@ export const ProfilePage = () => {
                             title="Classification"
                             description="Organize transactions by type"
                             icon={<ListAltIcon color="success" fontSize="large" />}
-                            onClick={() => console.log("Navigate to Classification")}
+                            onClick={() => navigate("/transactions-classification")}
                         />
                     </Grid>
 
@@ -224,14 +246,14 @@ export const ProfilePage = () => {
                             title="Transaction History"
                             description="View detailed transaction history"
                             icon={<HistoryIcon color="error" fontSize="large" />}
-                            onClick={() => console.log("Navigate to Transaction History")}
+                            onClick={() => navigate("/transactions-history")}
                         />
                     </Grid>
                 </Grid>
 
                 {/* Resources Section */}
                 <Typography variant="h5" sx={{ mb: 2, fontWeight: "bold" }}>
-                    Your Resources
+                    {t("RESOURCES")}
                 </Typography>
                 <Grid container spacing={3}>
                     {/* Budgets */}
@@ -245,7 +267,7 @@ export const ProfilePage = () => {
                                     {profileData?._count?.budgets || 0}
                                 </Typography>
                             }
-                            onClick={() => console.log("Navigate to budgets")}
+                            onClick={() => navigate("/budgets")}
                         />
                     </Grid>
 
@@ -260,7 +282,7 @@ export const ProfilePage = () => {
                                     {profileData?._count?.goals || 0}
                                 </Typography>
                             }
-                            onClick={() => console.log("Navigate to goals")}
+                            onClick={() => navigate("/goals")}
                         />
                     </Grid>
 
@@ -275,11 +297,24 @@ export const ProfilePage = () => {
                                     {profileData?._count?.Category || 0}
                                 </Typography>
                             }
-                            onClick={() => console.log("Navigate to categories")}
+                            onClick={() => navigate("/transactions-categories")}
                         />
                     </Grid>
                 </Grid>
             </Box>
+
+            {/* Logout Confirmation Modal */}
+            <Modal
+                isOpen={openLogoutModal}
+                onClose={handleCloseLogoutModal}
+                onConfirm={handleLogout}
+                title={t("LOGOUT_CONFIRMATION_TITLE")}
+                modalContent={<Typography>{t("LOGOUT_CONFIRMATION_MESSAGE")}</Typography>}
+                confirmText={t("LOGOUT")}
+                cancelText={t("CANCEL")}
+                variant="warning"
+                open={false}
+            />
         </>
     );
 };

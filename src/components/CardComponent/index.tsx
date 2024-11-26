@@ -8,6 +8,7 @@ import {
   CardMedia,
   Box,
   Skeleton,
+  CardActionArea,
 } from "@mui/material";
 
 export interface CardComponentProps {
@@ -21,12 +22,12 @@ export interface CardComponentProps {
   width?: string;
   borderColor?: string;
   bgColor?: string;
-  gradientBg?: string; // Nuevo: fondo degradado
+  gradientBg?: string; // Fondo degradado
   customHeight?: string;
-  rounded?: boolean; // Nuevo: bordes redondeados
-  shadowLevel?: "none" | "low" | "medium" | "high"; // Nuevo: nivel de sombra
-  titleColor?: string; // Nuevo: color del título
-  descriptionColor?: string; // Nuevo: color de la descripción
+  rounded?: boolean; // Bordes redondeados
+  shadowLevel?: "none" | "low" | "medium" | "high"; // Nivel de sombra
+  titleColor?: string; // Color del título
+  descriptionColor?: string; // Color de la descripción
   maxDescriptionHeight?: string;
   imageBorderRadius?: string;
   imageBoxShadow?: string;
@@ -98,79 +99,81 @@ const CardComponent: React.FC<CardComponentProps> = ({
         },
       }}
     >
-      {isLoading ? (
-        <Skeleton
-          variant="rectangular"
-          width="100%"
-          height={icon ? 80 : imageHeight}
-        />
-      ) : icon ? (
-        <Box
+      <CardActionArea onClick={onClick}>
+        {isLoading ? (
+          <Skeleton
+            variant="rectangular"
+            width="100%"
+            height={icon ? 80 : imageHeight}
+          />
+        ) : icon ? (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: 80,
+              backgroundColor: "background.default",
+            }}
+          >
+            {icon}
+          </Box>
+        ) : (
+          imageUrl && (
+            <CardMedia
+              component="img"
+              image={imageUrl}
+              alt={title}
+              height={imageHeight}
+              sx={{
+                borderRadius: imageBorderRadius,
+                boxShadow: imageBoxShadow,
+                objectFit: imageObjectFit,
+              }}
+            />
+          )
+        )}
+
+        <CardContent
           sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: 80,
-            backgroundColor: "background.default",
+            flex: 1,
+            textAlign: "left",
           }}
         >
-          {icon}
-        </Box>
-      ) : (
-        imageUrl && (
-          <CardMedia
-            component="img"
-            image={imageUrl}
-            alt={title}
-            height={imageHeight}
-            sx={{
-              borderRadius: imageBorderRadius,
-              boxShadow: imageBoxShadow,
-              objectFit: imageObjectFit,
-            }}
-          />
-        )
-      )}
-
-      <CardContent
-        sx={{
-          flex: 1,
-          textAlign: "left",
-        }}
-      >
-        {isLoading ? (
-          <>
-            <Skeleton width="60%" height={30} />
-            <Skeleton width="100%" height={20} />
-            <Skeleton width="80%" height={20} />
-          </>
-        ) : (
-          <>
-            <Typography
-              gutterBottom
-              variant="h5"
-              component="div"
-              sx={{ color: titleColor }}
-            >
-              {title}
-            </Typography>
-            <Box
-              sx={{
-                maxHeight: maxDescriptionHeight,
-                overflowY: "auto",
-              }}
-            >
-              {customBody ? (
-                customBody
-              ) : (
-                <Typography variant="body2" sx={{ color: descriptionColor }}>
-                  {description}
-                </Typography>
-              )}
-            </Box>
-          </>
-        )}
-      </CardContent>
+          {isLoading ? (
+            <>
+              <Skeleton width="60%" height={30} />
+              <Skeleton width="100%" height={20} />
+              <Skeleton width="80%" height={20} />
+            </>
+          ) : (
+            <>
+              <Typography
+                gutterBottom
+                variant="h5"
+                component="div"
+                sx={{ color: titleColor }}
+              >
+                {title}
+              </Typography>
+              <Box
+                sx={{
+                  maxHeight: maxDescriptionHeight,
+                  overflowY: "auto",
+                }}
+              >
+                {customBody ? (
+                  customBody
+                ) : (
+                  <Typography variant="body2" sx={{ color: descriptionColor }}>
+                    {description}
+                  </Typography>
+                )}
+              </Box>
+            </>
+          )}
+        </CardContent>
+      </CardActionArea>
 
       {buttonText && (
         <CardActions>

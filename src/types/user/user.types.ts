@@ -15,6 +15,8 @@ export interface CountDto {
     recurringTransactions?: number;
     Category?: number;
     Subcategory?: number;
+    transactions?: number;
+    notifications?: number;
 }
 
 export interface Address {
