@@ -49,7 +49,7 @@ const Template: StoryFn<DatePickerComponentProps> = (args) => {
       <DatePickerComponent
         {...args}
         value={value}
-        onChange={(e) => setValue(e.target.value)}
+        onChange={(date: string) => setValue(date)}
       />
     </CenteredTemplate>
   );

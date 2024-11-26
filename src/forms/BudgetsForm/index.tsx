@@ -61,12 +61,12 @@ export const BudgetForm: React.FC<IBudgetFormProps> = ({
                     <InputField
                         {...register("amount", {
                             required: t("REQUIRED_FIELD"),
-                            valueAsNumber: true, // Ensure the input value is treated as a number
+                            valueAsNumber: true,
                         })}
                         label={t("AMOUNT")}
                         type="number"
-                        value={watch("amount")} // Ensure the value is updated and displayed
-                        onChange={(e) => setValue("amount", Number(e.target.value))}
+                        value={watch("amount") || 0}
+                        onChange={(value) => setValue("amount", Number(value))}
                         errorText={errors.amount?.message as string}
                         required
                         size="large"
@@ -77,8 +77,8 @@ export const BudgetForm: React.FC<IBudgetFormProps> = ({
                         {...register("category_id", { required: t("REQUIRED_FIELD") })}
                         select
                         label={t("CATEGORY")}
-                        value={watch("category_id")} // Ensure the value is updated and displayed
-                        onChange={(e) => setValue("category_id", Number(e.target.value))}
+                        value={watch("category_id") || ""}
+                        onChange={(value) => setValue("category_id", Number(value))}
                         errorText={errors.category_id?.message as string}
                         required
                         size="large"
@@ -96,8 +96,8 @@ export const BudgetForm: React.FC<IBudgetFormProps> = ({
                         labelEnd={t("END_DATE")}
                         startDate={startDate}
                         endDate={endDate}
-                        onStartDateChange={handleStartDateChange}
-                        onEndDateChange={handleEndDateChange}
+                        onStartDateChange={(value) => handleStartDateChange(value)}
+                        onEndDateChange={(value) => handleEndDateChange(value)}
                         size="large"
                     />
                 </Grid>

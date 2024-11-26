@@ -1,51 +1,40 @@
 import React from "react";
-import { Box, Typography, Paper, Divider } from "@mui/material";
-import { useForm, Controller } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import { Box, Paper, Typography, Divider, Button } from "@mui/material";
 import * as yup from "yup";
-import { useTranslation } from "react-i18next";
-import ButtonComponent from "../../components/ButtonComponent";
+import { yupResolver } from "@hookform/resolvers/yup";
 import InputField from "../../components/InputField";
-import AvatarComponent from "../../components/AvatarComponent";
-import { LockResetOutlined } from "@mui/icons-material";
+import { useTranslation } from "react-i18next";
+import Loader from "../../components/Loader";
 
-type ChangePasswordInputs = {
+interface ChangePasswordInputs {
     currentPassword: string;
     newPassword: string;
-    confirmNewPassword: string;
-};
+    confirmPassword: string;
+}
 
-interface ChangePasswordFormProps {
+interface PasswordResetFormProps {
     onSubmit: (data: ChangePasswordInputs) => void;
     loading: boolean;
 }
 
-const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({
-    onSubmit,
-    loading,
-}) => {
+const PasswordResetForm: React.FC<PasswordResetFormProps> = ({ onSubmit, loading }) => {
     const { t } = useTranslation();
 
     const validationSchema = yup.object().shape({
-        currentPassword: yup.string().required(t("CURRENT_PASSWORD_REQUIRED")),
-        newPassword: yup
+        currentPassword: yup.string().required(t("PASSWORD_REQUIRED")),
+        newPassword: yup.string().required(t("PASSWORD_REQUIRED")),
+        confirmPassword: yup
             .string()
-            .required(t("NEW_PASSWORD_REQUIRED"))
-            .min(8, t("PASSWORD_MIN_LENGTH"))
-            .matches(/[a-z]/, t("PASSWORD_LOWERCASE"))
-            .matches(/[A-Z]/, t("PASSWORD_UPPERCASE"))
-            .matches(/[0-9]/, t("PASSWORD_NUMBER"))
-            .matches(/[@$!%*?&#]/, t("PASSWORD_SPECIAL")),
-        confirmNewPassword: yup
-            .string()
-            .oneOf([yup.ref("newPassword"), undefined], t("PASSWORDS_MUST_MATCH"))
+            .oneOf([yup.ref("newPassword")], t("PASSWORDS_MUST_MATCH"))
             .required(t("CONFIRM_PASSWORD_REQUIRED")),
     });
 
     const {
         handleSubmit,
-        control,
         formState: { errors },
+        watch,
+        setValue,
     } = useForm<ChangePasswordInputs>({
         resolver: yupResolver(validationSchema),
     });
@@ -54,112 +43,70 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({
         <Paper
             elevation={4}
             sx={{
+                position: "relative",
                 padding: 4,
                 borderRadius: 4,
                 boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
-                maxWidth: "35%",
+                maxWidth: 500,
                 margin: "0 auto",
                 backgroundColor: "#ffffff",
             }}
         >
+            {loading && <Loader overlayVariant="transparent" />}
             <Box sx={{ textAlign: "center", marginBottom: 2 }}>
-                <AvatarComponent
-                    size="large"
-                    backgroundColor="#1976d2"
-                    textColor="#fff"
-                    fallbackText="P"
-                    icon={<LockResetOutlined />}
-                    sx={{ margin: "0 auto", marginBottom: 1 }}
-                />
                 <Typography component="h1" variant="h5" sx={{ fontWeight: "bold" }}>
-                    {t("CHANGE_PASSWORD")}
+                    {t("RESET_PASSWORD")}
                 </Typography>
             </Box>
             <Divider sx={{ marginBottom: 3 }} />
-            <Box
-                component="form"
-                onSubmit={handleSubmit(onSubmit)}
-                noValidate
-                sx={{ mt: 1 }}
-            >
-                <Controller
-                    name="currentPassword"
-                    control={control}
-                    defaultValue=""
-                    render={({ field }) => (
-                        <InputField
-                            {...field}
-                            margin="normal"
-                            required
-                            fullWidth
-                            label={t("CURRENT_PASSWORD_PLACEHOLDER")}
-                            type="password"
-                            error={!!errors.currentPassword}
-                            helperText={
-                                errors.currentPassword
-                                    ? t(errors.currentPassword.message || "")
-                                    : ""
-                            }
-                        />
-                    )}
+            <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
+                <InputField
+                    label={t("CURRENT_PASSWORD")}
+                    type="password"
+                    value={watch("currentPassword") || ""}
+                    onChange={(value) => setValue("currentPassword", String(value))}
+                    required
+                    errorText={
+                        errors.currentPassword ? t(errors.currentPassword.message || "") : ""
+                    }
                 />
-                <Controller
-                    name="newPassword"
-                    control={control}
-                    defaultValue=""
-                    render={({ field }) => (
-                        <InputField
-                            {...field}
-                            margin="normal"
-                            required
-                            fullWidth
-                            label={t("NEW_PASSWORD_PLACEHOLDER")}
-                            type="password"
-                            error={!!errors.newPassword}
-                            helperText={
-                                errors.newPassword ? t(errors.newPassword.message || "") : ""
-                            }
-                        />
-                    )}
+                <InputField
+                    label={t("NEW_PASSWORD")}
+                    type="password"
+                    value={watch("newPassword") || ""}
+                    onChange={(value) => setValue("newPassword", String(value))}
+                    required
+                    errorText={errors.newPassword ? t(errors.newPassword.message || "") : ""}
+                    sx={{ mt: 2 }}
                 />
-                <Controller
-                    name="confirmNewPassword"
-                    control={control}
-                    defaultValue=""
-                    render={({ field }) => (
-                        <InputField
-                            {...field}
-                            margin="normal"
-                            required
-                            fullWidth
-                            label={t("CONFIRM_NEW_PASSWORD_PLACEHOLDER")}
-                            type="password"
-                            error={!!errors.confirmNewPassword}
-                            helperText={
-                                errors.confirmNewPassword
-                                    ? t(errors.confirmNewPassword.message || "")
-                                    : ""
-                            }
-                        />
-                    )}
+                <InputField
+                    label={t("CONFIRM_NEW_PASSWORD")}
+                    type="password"
+                    value={watch("confirmPassword") || ""}
+                    onChange={(value) => setValue("confirmPassword", String(value))}
+                    required
+                    errorText={
+                        errors.confirmPassword ? t(errors.confirmPassword.message || "") : ""
+                    }
+                    sx={{ mt: 2 }}
                 />
-                <ButtonComponent
-                    label={t("CHANGE_PASSWORD")}
-                    onClick={handleSubmit(onSubmit)}
+                <Button
+                    type="submit"
                     variant="contained"
                     color="primary"
-                    SxProps={{
+                    sx={{
                         mt: 3,
-                        mb: 2,
                         width: "100%",
                         "&:hover": { backgroundColor: "primary.dark" },
                     }}
-                    isLoading={loading}
                     size="large"
-                />
+                    disabled={loading}
+                >
+                    {t("RESET_PASSWORD")}
+                </Button>
             </Box>
         </Paper>
     );
 };
 
-export default ChangePasswordForm;
+export default PasswordResetForm;

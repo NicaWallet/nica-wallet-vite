@@ -43,14 +43,13 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({
     const {
         handleSubmit,
         control,
-        reset, // Método para actualizar los valores iniciales
+        reset,
         formState: { errors },
     } = useForm<EditProfileInputs>({
         resolver: yupResolver(validationSchema),
-        defaultValues: initialValues, // Carga inicial
+        defaultValues: initialValues,
     });
 
-    // Actualizar valores iniciales cuando cambien
     useEffect(() => {
         reset(initialValues);
     }, [initialValues, reset]);
@@ -84,15 +83,12 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({
                     control={control}
                     render={({ field }) => (
                         <InputField
-                            {...field}
-                            margin="normal"
-                            required
-                            fullWidth
                             label={t("FIRST_NAME")}
-                            error={!!errors.first_name}
-                            helperText={
-                                errors.first_name ? t(errors.first_name.message || "") : ""
-                            }
+                            value={field.value}
+                            onChange={field.onChange}
+                            required
+                            errorText={errors.first_name ? t(errors.first_name.message || "") : ""}
+                            sx={{ mb: 2 }}
                         />
                     )}
                 />
@@ -101,14 +97,11 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({
                     control={control}
                     render={({ field }) => (
                         <InputField
-                            {...field}
-                            margin="normal"
-                            fullWidth
                             label={t("MIDDLE_NAME")}
-                            error={!!errors.middle_name}
-                            helperText={
-                                errors.middle_name ? t(errors.middle_name.message || "") : ""
-                            }
+                            value={field.value || ""}
+                            onChange={field.onChange}
+                            errorText={errors.middle_name ? t(errors.middle_name.message || "") : ""}
+                            sx={{ mb: 2 }}
                         />
                     )}
                 />
@@ -117,16 +110,11 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({
                     control={control}
                     render={({ field }) => (
                         <InputField
-                            {...field}
-                            margin="normal"
-                            fullWidth
                             label={t("FIRST_SURNAME")}
-                            error={!!errors.first_surname}
-                            helperText={
-                                errors.first_surname
-                                    ? t(errors.first_surname.message || "")
-                                    : ""
-                            }
+                            value={field.value || ""}
+                            onChange={field.onChange}
+                            errorText={errors.first_surname ? t(errors.first_surname.message || "") : ""}
+                            sx={{ mb: 2 }}
                         />
                     )}
                 />
@@ -135,16 +123,11 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({
                     control={control}
                     render={({ field }) => (
                         <InputField
-                            {...field}
-                            margin="normal"
-                            fullWidth
                             label={t("SECOND_SURNAME")}
-                            error={!!errors.second_surname}
-                            helperText={
-                                errors.second_surname
-                                    ? t(errors.second_surname.message || "")
-                                    : ""
-                            }
+                            value={field.value || ""}
+                            onChange={field.onChange}
+                            errorText={errors.second_surname ? t(errors.second_surname.message || "") : ""}
+                            sx={{ mb: 2 }}
                         />
                     )}
                 />
@@ -153,15 +136,12 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({
                     control={control}
                     render={({ field }) => (
                         <InputField
-                            {...field}
-                            margin="normal"
-                            type="text"
-                            fullWidth
                             label={t("PHONE_NUMBER")}
-                            error={!!errors.phone_number}
-                            helperText={
-                                errors.phone_number ? t(errors.phone_number.message || "") : ""
-                            }
+                            value={field.value || ""}
+                            onChange={field.onChange}
+                            type="text"
+                            errorText={errors.phone_number ? t(errors.phone_number.message || "") : ""}
+                            sx={{ mb: 2 }}
                         />
                     )}
                 />

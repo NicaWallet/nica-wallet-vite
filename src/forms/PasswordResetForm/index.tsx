@@ -1,31 +1,24 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Box, Typography } from "@mui/material";
-import { useForm, Controller } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
+import React from "react";
+import { useForm } from "react-hook-form";
+import { Box, Paper, Typography, Divider, Button } from "@mui/material";
 import * as yup from "yup";
-import { useTranslation } from "react-i18next";
-import PasswordStrengthMeter from "../../components/PasswordStrengthMeter";
-import ButtonComponent from "../../components/ButtonComponent";
+import { yupResolver } from "@hookform/resolvers/yup";
 import InputField from "../../components/InputField";
+import { useTranslation } from "react-i18next";
+import Loader from "../../components/Loader";
 
-type PasswordResetInputs = {
+interface PasswordResetFormInputs {
   password: string;
   confirmPassword: string;
-};
-
-interface PasswordResetFormProps {
-  onSubmit: (data: PasswordResetInputs) => void;
-  loading: boolean;
 }
 
-const PasswordResetForm: React.FC<PasswordResetFormProps> = ({
-  onSubmit,
-  loading,
-}) => {
+interface PasswordResetFormProps {
+  onSubmit: (data: PasswordResetFormInputs) => void;
+  isLoading?: boolean;
+}
+
+const PasswordResetForm: React.FC<PasswordResetFormProps> = ({ onSubmit, isLoading }) => {
   const { t } = useTranslation();
-  const [passwordStrength, setPasswordStrength] = useState(0);
-  const [showStrengthMeter, setShowStrengthMeter] = useState(false);
-  const hideTimer = useRef<NodeJS.Timeout | null>(null);
 
   const validationSchema = yup.object().shape({
     password: yup
@@ -35,113 +28,82 @@ const PasswordResetForm: React.FC<PasswordResetFormProps> = ({
       .matches(/[a-z]/, t("PASSWORD_LOWERCASE"))
       .matches(/[A-Z]/, t("PASSWORD_UPPERCASE"))
       .matches(/[0-9]/, t("PASSWORD_NUMBER"))
-      .matches(/[@$!%*?&#]/, t("PASSWORD_SPECIAL")),
+      .matches(/[@$!%*?&#]/, t("PASSWORD_SPECIAL_CHAR")),
     confirmPassword: yup
       .string()
-      .oneOf([yup.ref("password"), undefined], t("PASSWORDS_MUST_MATCH"))
+      .oneOf([yup.ref("password")], t("PASSWORDS_MUST_MATCH"))
       .required(t("CONFIRM_PASSWORD_REQUIRED")),
   });
 
   const {
     handleSubmit,
-    control,
     formState: { errors },
-  } = useForm<PasswordResetInputs>({
+    watch,
+    setValue,
+  } = useForm<PasswordResetFormInputs>({
     resolver: yupResolver(validationSchema),
   });
 
-  const handlePasswordChange = (password: string) => {
-    setPasswordStrength(calculatePasswordStrength(password));
-    setShowStrengthMeter(true);
-
-    // Reinicia el temporizador cuando el usuario sigue ingresando texto
-    if (hideTimer.current) {
-      clearTimeout(hideTimer.current);
-    }
-    hideTimer.current = setTimeout(() => {
-      setShowStrengthMeter(false);
-    }, 2000); // Tiempo en milisegundos para ocultar el medidor después de inactividad
-  };
-
-  const calculatePasswordStrength = (password: string): number => {
-    let strength = 0;
-    if (password.length >= 8) strength += 25;
-    if (/[A-Z]/.test(password)) strength += 25;
-    if (/[a-z]/.test(password)) strength += 25;
-    if (/[0-9@$!%*?&#]/.test(password)) strength += 25;
-    return strength;
-  };
-
-  useEffect(() => {
-    return () => {
-      // Limpia el temporizador si el componente se desmonta
-      clearTimeout(hideTimer.current as NodeJS.Timeout);
-    };
-  }, [hideTimer]);
-
   return (
-    <Box
-      component="form"
-      onSubmit={handleSubmit(onSubmit)}
-      noValidate
-      sx={{ mt: 1 }}
+    <Paper
+      elevation={4}
+      sx={{
+        padding: 4,
+        borderRadius: 4,
+        boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+        maxWidth: 500,
+        margin: "0 auto",
+        backgroundColor: "#ffffff",
+      }}
     >
-      <Typography component="h1" variant="h5" align="center">
-        {t("PASSWORD_RESET")}
-      </Typography>
-      <Controller
-        name="password"
-        control={control}
-        defaultValue=""
-        render={({ field: { onChange, value } }) => (
-          <>
+      {isLoading ? (
+        <Loader overlayVariant="transparent" />
+      ) : (
+        <>
+          <Box sx={{ textAlign: "center", marginBottom: 2 }}>
+            <Typography component="h1" variant="h5" sx={{ fontWeight: "bold" }}>
+              {t("RESET_PASSWORD")}
+            </Typography>
+          </Box>
+          <Divider sx={{ marginBottom: 3 }} />
+          <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
             <InputField
-              value={value}
-              onChange={(e: { target: { value: string; }; }) => {
-                onChange(e);
-                handlePasswordChange(e.target.value);
-              }}
-              margin="normal"
-              required
-              label={t("NEW_PASSWORD_PLACEHOLDER")}
+              label={t("NEW_PASSWORD")}
               type="password"
-              error={!!errors.password}
-              helperText={errors.password ? t(errors.password.message || "") : ""}
+              value={watch("password") || ""}
+              onChange={(value) => setValue("password", String(value))}
+              required
+              errorText={errors.password ? t(errors.password.message || "") : ""}
             />
-            {showStrengthMeter && <PasswordStrengthMeter strength={passwordStrength} />}
-          </>
-        )}
-      />
-      <Controller
-        name="confirmPassword"
-        control={control}
-        defaultValue=""
-        render={({ field: { onChange, value } }) => (
-          <InputField
-            value={value}
-            onChange={onChange}
-            margin="normal"
-            required
-            fullWidth
-            label={t("CONFIRM_PASSWORD_PLACEHOLDER")}
-            type="password"
-            error={!!errors.confirmPassword}
-            helperText={
-              errors.confirmPassword ? t(errors.confirmPassword.message || "") : ""
-            }
-          />
-        )}
-      />
-      <ButtonComponent
-        label={t("RESET_PASSWORD")}
-        onClick={handleSubmit(onSubmit)}
-        variant="contained"
-        color="primary"
-        SxProps={{ mt: 3, mb: 2, width: "100%" }}
-        isLoading={loading}
-        size="large"
-      />
-    </Box>
+            <InputField
+              label={t("CONFIRM_NEW_PASSWORD")}
+              type="password"
+              value={watch("confirmPassword") || ""}
+              onChange={(value) => setValue("confirmPassword", String(value))}
+              required
+              errorText={
+                errors.confirmPassword ? t(errors.confirmPassword.message || "") : ""
+              }
+              sx={{ mt: 2 }}
+            />
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              sx={{
+                mt: 3,
+                width: "100%",
+                "&:hover": { backgroundColor: "primary.dark" },
+              }}
+              size="large"
+            >
+              {t("RESET_PASSWORD")}
+            </Button>
+          </Box>
+        </>
+      )
+      }
+    </Paper>
   );
 };
 

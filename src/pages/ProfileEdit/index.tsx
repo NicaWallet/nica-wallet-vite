@@ -5,7 +5,7 @@ import ErrorSnackbar from "../../components/ErrorSnackbar";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { getUserProfile } from "../../services/users/getUserById.service";
-import { updateUserProfile } from "../../services/users/updateUseRProfile.service";
+import { updateUserProfile } from "../../services/users/updateUserProfile.service";
 
 export const ProfileEdit = () => {
     const { t } = useTranslation();

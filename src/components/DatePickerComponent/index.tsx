@@ -7,7 +7,7 @@ import { TextField, Box, Skeleton, SxProps, Theme } from "@mui/material";
 export interface DatePickerComponentProps {
   label: string;
   value: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (date: string) => void; // Ahora espera un string directamente
   disablePast?: boolean;
   disableFuture?: boolean;
   size?: "small" | "medium" | "large";
@@ -73,12 +73,9 @@ const DatePickerComponent: React.FC<DatePickerComponentProps> = ({
           label={label}
           type="date"
           value={value}
-          onChange={onChange}
+          onChange={(e) => onChange(e.target.value)}
           InputLabelProps={{ shrink: true }}
-          inputProps={{
-            min: minDate,
-            max: maxDate,
-          }}
+          inputProps={{ min: minDate, max: maxDate }}
           size={sizeStyles[size].inputSize as "small" | "medium"}
           fullWidth
           sx={{

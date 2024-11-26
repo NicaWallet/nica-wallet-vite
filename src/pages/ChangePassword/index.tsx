@@ -6,6 +6,11 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useChangePassword } from "../../services/users/changePassword.service";
 
+interface ChangePasswordInputs {
+    currentPassword: string;
+    newPassword: string;
+}
+
 export const ChangePassword = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
@@ -23,11 +28,11 @@ export const ChangePassword = () => {
             setSnackbarOpen(true);
         }
         if (success) {
-            setTimeout(() => navigate("/profile"), 2000); // Redirige tras el éxito
+            setTimeout(() => navigate("/profile"), 2000);
         }
     }, [error, success, navigate, t]);
 
-    const handleSubmit = async (data: { currentPassword: string; newPassword: string }) => {
+    const handleSubmit = async (data: ChangePasswordInputs) => {
         await changePassword(data.currentPassword, data.newPassword);
     };
 

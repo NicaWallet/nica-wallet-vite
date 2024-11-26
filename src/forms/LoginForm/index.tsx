@@ -1,7 +1,8 @@
 import React from "react";
-import { TextField, Button, Box, Grid, Link } from "@mui/material";
-import { useForm, Controller } from "react-hook-form";
+import { Button, Box, Grid, Link } from "@mui/material";
+import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import InputField from "../../components/InputField";
 
 type LoginFormInputs = {
   email: string;
@@ -14,23 +15,13 @@ interface LoginFormProps {
   error?: string;
 }
 
-/**
- * LoginForm component renders a login form with email and password fields.
- * It uses react-hook-form for form handling and validation, and i18next for translations.
- *
- * @param {LoginFormProps} props - The props for the LoginForm component.
- * @param {function} props.onSubmit - The function to call when the form is submitted.
- * @param {boolean} props.loading - Indicates if the form is in a loading state.
- * @param {string} [props.error] - Optional error message to display.
- *
- * @returns {JSX.Element} The rendered LoginForm component.
- */
 const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, loading }) => {
   const { t } = useTranslation();
   const {
     handleSubmit,
-    control,
     formState: { errors },
+    watch,
+    setValue,
   } = useForm<LoginFormInputs>();
 
   return (
@@ -40,48 +31,22 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, loading }) => {
       noValidate
       sx={{ mt: 1 }}
     >
-      <Controller
-        name="email"
-        control={control}
-        defaultValue=""
-        rules={{ required: t("EMAIL_REQUIRED") }}
-        render={({ field: { onChange, value } }) => (
-          <TextField
-            value={value}
-            onChange={onChange}
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label={t("EMAIL_ADDRESS_PLACEHOLDER")}
-            autoComplete="email"
-            autoFocus
-            error={!!errors.email}
-            helperText={errors.email ? t("EMAIL_REQUIRED") : ""}
-          />
-        )}
+      <InputField
+        label={t("EMAIL_ADDRESS_PLACEHOLDER")}
+        type="email"
+        value={watch("email") || ""}
+        onChange={(value) => setValue("email", String(value))}
+        required
+        errorText={errors.email ? t("EMAIL_REQUIRED") : ""}
       />
-      <Controller
-        name="password"
-        control={control}
-        defaultValue=""
-        rules={{ required: t("PASSWORD_REQUIRED") }}
-        render={({ field: { onChange, value } }) => (
-          <TextField
-            value={value}
-            onChange={onChange}
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label={t("PASSWORD_PLACEHOLDER")}
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            error={!!errors.password}
-            helperText={errors.password ? t("PASSWORD_REQUIRED") : ""}
-          />
-        )}
+      <InputField
+        label={t("PASSWORD_PLACEHOLDER")}
+        type="password"
+        value={watch("password") || ""}
+        onChange={(value) => setValue("password", String(value))}
+        required
+        errorText={errors.password ? t("PASSWORD_REQUIRED") : ""}
+        sx={{ mt: 2 }}
       />
       <Button
         type="submit"
