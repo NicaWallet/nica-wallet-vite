@@ -66,7 +66,9 @@ const PasswordResetForm: React.FC<PasswordResetFormProps> = ({ onSubmit, isLoadi
             </Typography>
           </Box>
           <Divider sx={{ marginBottom: 3 }} />
-          <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
+          <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{
+            gap: 4,
+          }}>
             <InputField
               label={t("NEW_PASSWORD")}
               type="password"
