@@ -36,11 +36,17 @@ export const usePasswordRecovery = (): IPasswordRecovery => {
       } else {
         throw new Error(
           response.data.message ||
-            "Failed to send recovery email. Please try again."
+          "Failed to send recovery email. Please try again."
         );
       }
-    } catch (err: any) {
-      setError(err.response?.data?.message || "An unexpected error occurred.");
+    } catch (err: unknown) {
+      // Maneja el error y verifica que err.response esté presente
+      if (err instanceof Error && (err as { response?: { data?: { message?: string } } }).response) {
+        const errorResponse = err as { response?: { data?: { message?: string } } };
+        setError(errorResponse.response?.data?.message || "An unexpected error occurred.");
+      } else {
+        setError("An unexpected error occurred.");
+      }
     } finally {
       setLoading(false);
     }
