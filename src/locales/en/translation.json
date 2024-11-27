@@ -265,5 +265,6 @@
   "TOTAL_TRANSACTIONS_INCOMES": "Total Income Transactions",
   "TOTAL_TRANSACTIONS_EXPENSES": "Total Expense Transactions",
   "TOTAL_SUM_TRANSACTIONS_INCOMES": "Total Sum of Income Transactions",
-  "TOTAL_SUM_TRANSACTIONS_EXPENSES": "Total Sum of Expense Transactions"
+  "TOTAL_SUM_TRANSACTIONS_EXPENSES": "Total Sum of Expense Transactions",
+  "GOALS_PAGE": "Goals"
 }
