@@ -267,5 +267,7 @@
   "TOTAL_TRANSACCIONES_INGRESOS": "Total de Transacciones de Ingresos",
   "TOTAL_TRANSACCIONES_GASTOS": "Total de Transacciones de Gastos",
   "SUMA_TOTAL_TRANSACCIONES_INGRESOS": "Suma Total de Transacciones de Ingresos",
-  "SUMA_TOTAL_TRANSACCIONES_GASTOS": "Suma Total de Transacciones de Gastos"
+  "SUMA_TOTAL_TRANSACCIONES_GASTOS": "Suma Total de Transacciones de Gastos",
+  "GOLDS_PAGE": "Metas",
+  "TRANSACTIONS_CATEGORIES": "Categorías de Transacciones"
 }
