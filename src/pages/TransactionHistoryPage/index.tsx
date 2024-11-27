@@ -1,14 +1,15 @@
 import { useState, useEffect } from "react";
-import { Box, Container, Typography } from "@mui/material";
 import TableComponent from "../../components/TableComponent";
 import Loader from "../../components/Loader";
 import ErrorSnackbar from "../../components/ErrorSnackbar";
 import PageHeader from "../../components/PageHeader";
 import { useTranslation } from "react-i18next";
+import { Transaction } from "../../types/user/user.types";
 
 // Simulación de obtención del historial de transacciones (reemplazar con tu servicio real)
 const useMockTransactionHistory = () => {
-  const [transactionHistory] = useState<any[]>([
+
+  const [transactionHistory] = useState<Transaction[]>([
     {
       transaction_id: 67,
       amount: 100,
@@ -19,6 +20,11 @@ const useMockTransactionHistory = () => {
       classification: { name: "Essential" },
       created_at: "2024-11-17T05:24:31.254Z",
       updated_at: "2024-11-17T05:24:31.254Z",
+      user_id: 0,
+      category_id: 0,
+      subcategory_id: 0,
+      classification_id: 0,
+      type: "EXPENSE"
     },
     {
       transaction_id: 37,
@@ -30,6 +36,11 @@ const useMockTransactionHistory = () => {
       classification: { name: "Essential" },
       created_at: "2024-10-02T16:31:13.027Z",
       updated_at: "2024-11-17T05:39:15.373Z",
+      user_id: 0,
+      category_id: 0,
+      subcategory_id: 0,
+      classification_id: 0,
+      type: "EXPENSE"
     },
   ]);
   const [loading, setLoading] = useState(false);
@@ -45,7 +56,7 @@ const useMockTransactionHistory = () => {
 export const TransactionHistoryPage = () => {
   const { transactionHistory, loading, error } = useMockTransactionHistory();
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [selectedTransaction, setSelectedTransaction] = useState<any | null>(
+  const [, setSelectedTransaction] = useState<Transaction | null>(
     null
   );
   const { t } = useTranslation();
@@ -54,7 +65,7 @@ export const TransactionHistoryPage = () => {
     setSnackbarOpen(false);
   };
 
-  const handleView = (transaction: any) => {
+  const handleView = (transaction: Transaction) => {
     setSelectedTransaction(transaction);
     setSnackbarOpen(true);
   };
@@ -70,10 +81,10 @@ export const TransactionHistoryPage = () => {
     );
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 4 }}>
+    <>
       <PageHeader titleKey="TRANSACTION_HISTORY_PAGE" />
-    
-      <TableComponent<any>
+
+      <TableComponent<Transaction>
         rows={transactionHistory}
         columnOrder={[
           "transaction_id",
@@ -85,20 +96,16 @@ export const TransactionHistoryPage = () => {
           "classification.name",
         ]}
         handleView={handleView}
-        sx={{ p: 2 }}
+        sx={{ p: 4 }}
       />
 
       <ErrorSnackbar
-        message={
-          selectedTransaction
-            ? `${t("VIEW_TRANSACTION_DETAILS")}: ${selectedTransaction.description}`
-            : t("FEATURE_NOT_AVAILABLE")
-        }
+        message="Feature not currently available, please try again in future updates"
         open={snackbarOpen}
         onClose={handleSnackbarClose}
         autoHideDuration={5000}
         severity="info"
       />
-    </Container>
+    </>
   );
 };

@@ -1,16 +1,22 @@
 import { useState, useEffect } from "react";
-import { Box, Container} from "@mui/material";
 import TableComponent from "../../components/TableComponent";
 import Loader from "../../components/Loader";
 import ErrorSnackbar from "../../components/ErrorSnackbar";
 import PageHeader from "../../components/PageHeader";
 import { useTranslation } from "react-i18next";
-import ButtonComponent from "../../components/ButtonComponent";
-import { Add } from "@mui/icons-material";
+import ActionButton from "../../components/ActionButton";
+
+interface Classification {
+  classification_id: number;
+  name: string;
+  created_at: string;
+  updated_at: string;
+  [key: string]: unknown;
+}
 
 // Simulación de obtención de clasificaciones (reemplazar con tu servicio real)
 const useMockClassifications = () => {
-  const [classifications] = useState<any[]>([
+  const [classifications] = useState<Classification[]>([
     {
       classification_id: 36,
       name: "Updated Classification Name",
@@ -32,20 +38,18 @@ const useMockClassifications = () => {
 export const ClassificationPage = () => {
   const { classifications, loading, error } = useMockClassifications();
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [setSelectedClassification] = useState<
-    any | null
-  >(null);
+  const [, setSelectedClassification] = useState<Classification | null>(null);
   const { t } = useTranslation();
 
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
 
-  const handleView = (classification: any) => {
+  const handleView = (classification: Classification) => {
     setSelectedClassification(classification);
   };
 
-  const handleDelete = (classification: any) => {
+  const handleDelete = (classification: Classification) => {
     setSelectedClassification(classification);
   };
 
@@ -60,36 +64,30 @@ export const ClassificationPage = () => {
     );
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 4 }}>
+    <>
       <PageHeader titleKey="CLASSIFICATION_PAGE" />
 
-      <Box display="flex" justifyContent="flex-end" sx={{ p: 2 }}>
-        <ButtonComponent
-          label={t("CREATE_CLASSIFICATION")}
-          color="primary"
-          variant="outlined"
-          size="medium"
-          isLoading={false}
-          startIcon={<Add />}
-          SxProps={{ mb: 2, alignContent: "flex-end", display: "flex" }}
-          onClick={() => {
-            console.log("Create new classification");
-          }}
-        />
-      </Box>
+      <ActionButton
+        label={"CREATE_CLASSIFICATION"}
+        color="secondary"
+        variant="outlined"
+        onClick={() => {}}
+        isLoading={false}
+        iconType="add"
+      />
 
-      <TableComponent<any>
+      <TableComponent<Classification>
         rows={classifications}
         columnOrder={[
-            "classification_id",
-            "name",
-            "created_at",
-            "updated_at",
-            "subcategories",
+          "classification_id",
+          "name",
+          "created_at",
+          "updated_at",
+          "subcategories",
         ]}
         handleView={handleView}
         handleDelete={handleDelete}
-        sx={{ p: 2 }}
+        sx={{ p: 4 }}
       />
 
       <ErrorSnackbar
@@ -99,7 +97,6 @@ export const ClassificationPage = () => {
         autoHideDuration={5000}
         severity="info"
       />
-
-    </Container>
+    </>
   );
 };

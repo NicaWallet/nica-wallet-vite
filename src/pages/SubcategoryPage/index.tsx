@@ -1,16 +1,32 @@
 import { useState, useEffect } from "react";
-import { Box, Container } from "@mui/material";
 import TableComponent from "../../components/TableComponent";
 import Loader from "../../components/Loader";
 import ErrorSnackbar from "../../components/ErrorSnackbar";
 import PageHeader from "../../components/PageHeader";
 import { useTranslation } from "react-i18next";
-import ButtonComponent from "../../components/ButtonComponent";
-import { Add } from "@mui/icons-material";
+import ActionButton from "../../components/ActionButton";
+interface Category {
+  category_id: number;
+  name: string;
+  user_id: number | null;
+  created_at: string;
+  updated_at: string;
+}
 
-// Simulación de obtención de subcategorías (reemplazar con tu servicio real)
+interface Subcategory {
+  subcategory_id: number;
+  name: string;
+  category_id: number;
+  user_id: number | null;
+  created_at: string;
+  updated_at: string;
+  category: Category;
+  category_name?: string;
+  [key: string]: unknown;
+}
+
 const useMockSubcategories = () => {
-  const [subcategories, setSubcategories] = useState<any[]>([
+  const [subcategories, setSubcategories] = useState<Subcategory[]>([
     {
       subcategory_id: 37,
       name: "Movies",
@@ -60,7 +76,7 @@ const useMockSubcategories = () => {
 };
 
 export const SubcategoryPage = () => {
-  const { subcategories, loading, error } = useMockSubcategories();
+  const { subcategories, loading } = useMockSubcategories();
   const { t } = useTranslation();
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -74,17 +90,17 @@ export const SubcategoryPage = () => {
     setSnackbarOpen(true);
   };
 
-  const handleView = (subcategory: any) => {
+  const handleView = (subcategory: Subcategory) => {
     console.log(t("VIEWING_SUBCATEGORY"), subcategory);
     showMessage(`${t("VIEWING_SUBCATEGORY")}: ${subcategory.name}`);
   };
 
-  const handleEdit = (subcategory: any) => {
+  const handleEdit = (subcategory: Subcategory) => {
     console.log(t("EDITING_SUBCATEGORY"), subcategory);
     showMessage(`${t("EDITING_SUBCATEGORY")}: ${subcategory.name}`);
   };
 
-  const handleDelete = (subcategory: any) => {
+  const handleDelete = (subcategory: Subcategory) => {
     console.log(t("DELETING_SUBCATEGORY"), subcategory);
     showMessage(`${t("DELETING_SUBCATEGORY")}: ${subcategory.name}`);
   };
@@ -92,38 +108,26 @@ export const SubcategoryPage = () => {
   if (loading) return <Loader overlayVariant="transparent" />;
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 4 }}>
+    <>
       <PageHeader titleKey={t("SUBCATEGORY_PAGE")} />
 
-      <Box display="flex" justifyContent="flex-end" sx={{ p: 2 }}>
-        <ButtonComponent
-          label={t("CREATE_SUBCATEGORY")}
-          color="primary"
-          variant="outlined"
-          size="medium"
-          isLoading={false}
-          startIcon={<Add />}
-          SxProps={{ mb: 2, alignContent: "flex-end", display: "flex" }}
-          onClick={() => {
-            showMessage(t("CREATE_SUBCATEGORY_CLICK"));
-          }}
-        />
-      </Box>
+      <ActionButton
+        label={"CREATE_SUBCATEGORY"}
+        color="secondary"
+        variant="outlined"
+        onClick={() => {}}
+        isLoading={false}
+        iconType="add"
+      />
 
-      <Box sx={{ p: 2 }}>
-        <TableComponent<any>
-          rows={subcategories}
-          columnOrder={[
-            "name",
-            "category.name", 
-            "created_at",
-            "updated_at",
-          ]}
-          handleView={handleView}
-          handleEdit={handleEdit}
-          handleDelete={handleDelete}
-        />
-      </Box>
+      <TableComponent<Subcategory>
+        rows={subcategories}
+        columnOrder={["name", "category.name", "created_at", "updated_at"]}
+        handleView={handleView}
+        handleEdit={handleEdit}
+        handleDelete={handleDelete}
+        sx={{ p: 4 }}
+      />
 
       <ErrorSnackbar
         message={snackbarMessage}
@@ -132,6 +136,6 @@ export const SubcategoryPage = () => {
         autoHideDuration={5000}
         severity="info"
       />
-    </Container>
+    </>
   );
 };

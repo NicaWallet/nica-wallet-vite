@@ -25,6 +25,7 @@ import { ChangePassword } from "../pages/ChangePassword";
 import { ProfileEdit } from "../pages/ProfileEdit";
 import { CategoryPage } from "../pages/CategoriesPage";
 import DashboardPage from "../pages/DashboardPage";
+import SettingsPage from "../pages/SettingsPage";
 
 const AppRoutes = () => {
   return (
@@ -64,7 +65,7 @@ const AppRoutes = () => {
             <Route path="/support" element={<div>Support</div>} />
 
             {/* Configuración */}
-            <Route path="/settings" element={<div>Settings</div>} />
+            <Route path="/settings" element={<SettingsPage />} />
 
             {/* Seguridad */}
             <Route path="/security" element={<div>Security</div>} />
