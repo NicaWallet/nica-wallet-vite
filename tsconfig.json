@@ -14,7 +14,15 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "types": ["node", "react", "react-dom"]
+    "types": ["node", "react", "react-dom"],
+    "baseUrl": "./",
+    "paths": {
+      "components/*": ["src/components/*"]
+    },
+    "traceResolution": true,
+    "noImplicitAny": false,
+    "outDir": "./dist",
+    "rootDir": "."
   },
   "include": ["src/**/*", ".storybook/**/*"],
   "exclude": ["node_modules", "dist"]
