@@ -23,6 +23,7 @@ import ProtectedRoute from "../components/ProtectedRoute";
 import AuthRoute from "../components/AuthRoute";
 import { ChangePassword } from "../pages/ChangePassword";
 import { ProfileEdit } from "../pages/ProfileEdit";
+import { CategoryPage } from "../pages/CategoriesPage";
 import DashboardPage from "../pages/DashboardPage";
 
 const AppRoutes = () => {
@@ -48,7 +49,7 @@ const AppRoutes = () => {
             <Route path="/budget" element={<BudgetPage />} />
             <Route path="/goals" element={<GoalsPage />} />
             <Route path="/transactions-overview" element={<TransactionsPage />} />
-            <Route path="/transactions-categories" element={<div>Categories</div>} />
+            <Route path="/transactions-categories" element={<CategoryPage />} />
             <Route path="/transactions-sub-categories" element={<SubcategoryPage />} />
             <Route path="/transactions-classification" element={<ClassificationPage />} />
             <Route path="/transactions-history" element={<TransactionHistoryPage />} />
