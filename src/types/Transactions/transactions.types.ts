@@ -1,47 +1,39 @@
-export interface TransactionDetailType {
+import { BaseEntity } from "../common.types";
+import { ICategoryById } from "./Categories/categories.types";
+import { IClassification } from "./Classification/classification.types";
+import { IHistory } from "./History/history.types";
+import { ISubcategory } from "./Subcategories/subcategories.types";
+
+export type TransactionType = 'INCOME' | 'EXPENSE';
+
+export type ITransactionBase = BaseEntity & {
   transaction_id: number;
-  user_id: number;
-  category_id: number;
-  subcategory_id: number;
-  classification_id: number;
   amount: number;
-  date: Date;
-  created_at: Date;
-  updated_at: Date;
-  category: Category;
-  histories: any[];
-  classification: Classification;
-  user: User;
-}
+  date: string;
+  type: TransactionType;
+};
 
-export interface Category {
-  category_id: number;
-  name: string;
-  subcategories: Subcategory[];
-}
-
-export interface Subcategory {
-  subcategory_id: number;
-  name: string;
-}
-
-export interface Classification {
-  classification_id: number;
-  name: string;
-}
-
-export interface User {
+export type ITransaction = ITransactionBase & {
   user_id: number;
-  first_name: string;
-  first_surname: string;
-  email: string;
-  userRoles: UserRole[];
-}
+  category_id: number;
+  subcategory_id: number;
+  classification_id: number;
+  recurring_transaction_id: number | null;
+};
 
-export interface UserRole {
-  role: Role;
-}
+export type ITransactionWithDetails = ITransaction & {
+  category: ICategoryById;
+  subcategory: ISubcategory;
+  classification: IClassification;
+  histories: IHistory[];
+};
 
-export interface Role {
-  role_name: string;
-}
+export type ITransactionForm = {
+  amount: number;
+  category_id: number;
+  subcategory_id: number;
+  classification_id: number;
+  recurring_transaction_id?: number | null;
+  type: TransactionType;
+  date?: string; // Asegúrate de que sea string para cumplir con la compatibilidad
+};

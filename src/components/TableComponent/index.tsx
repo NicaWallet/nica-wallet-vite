@@ -60,7 +60,7 @@ export interface TableComponentProps<T extends Record<string, unknown>>
 
 const TableComponent = <T extends Record<string, unknown>>({
   columns = columnConfig,
-  rows,
+  rows = [],
   variant = "default",
   sx = {},
   columnOrder,
@@ -152,18 +152,18 @@ const TableComponent = <T extends Record<string, unknown>>({
     : [...columns].sort((a, b) => a.titleKey.localeCompare(b.titleKey));
 
   const filteredColumns = orderedColumns.filter((column) => {
-    console.log(`Checking Column ID: ${column.id}`);
+    // console.log(`Checking Column ID: ${column.id}`);
     if (dataKeys.has(column.id)) {
-      console.log(`Column ID ${column.id} exists in data keys.`);
+      // console.log(`Column ID ${column.id} exists in data keys.`);
       return true;
     } else {
-      console.log(`Column ID ${column.id} does NOT exist in data keys.`);
+      // console.log(`Column ID ${column.id} does NOT exist in data keys.`);
       return false;
     }
   });
 
-  console.log("Ordered Columns:", orderedColumns);
-  console.log("Data Keys:", Array.from(dataKeys));
+  // console.log("Ordered Columns:", orderedColumns);
+  // console.log("Data Keys:", Array.from(dataKeys));
 
 
 
@@ -242,10 +242,10 @@ const TableComponent = <T extends Record<string, unknown>>({
     page * currentRowsPerPage + currentRowsPerPage
   );
 
-  console.log('Rows being passed to TableComponent:', rows);
-  console.log("Filtered Columns:", filteredColumns);
-  console.log("Filtered Rows:", filteredRows);
-  console.log("Paginated Rows:", paginatedRows);
+  // console.log('Rows being passed to TableComponent:', rows);
+  // console.log("Filtered Columns:", filteredColumns);
+  // console.log("Filtered Rows:", filteredRows);
+  // console.log("Paginated Rows:", paginatedRows);
 
   return (
     <Box sx={{ ...combinedStyles }}>
@@ -491,92 +491,104 @@ const TableComponent = <T extends Record<string, unknown>>({
               </TableRow>
             </TableHead>
             <TableBody>
-              {paginatedRows.map((row, index) => (
-                <TableRow key={index}>
-                  {showRowNumber && (
-                    <TableCell>
-                      {page * currentRowsPerPage + index + 1}
-                    </TableCell>
-                  )}
-                  {filteredColumns.map((column) => {
-                    console.log("Rendering Table Body");
-                    // Utiliza la función de acceso a propiedades anidadas
-                    const cellData = getNestedProperty(row, column.id);
-                    console.log(`Column ID: ${column.id}, Cell Data:`, cellData); // Agrega esto para depurar
-                    let cellContent;
-
-                    if (column.renderLogic) {
-                      cellContent = column.renderLogic(row, column.titleKey, t);
-                    } else {
-                      switch (column.dataType) {
-                        case "String":
-                          cellContent = cellData !== undefined && cellData !== null ? cellData.toString() : "";
-                          break;
-                        case "Number":
-                          cellContent = cellData !== undefined && cellData !== null ? cellData.toString() : "";
-                          break;
-                        case "Boolean":
-                          cellContent = cellData !== undefined && cellData !== null ? (cellData ? "True" : "False") : "";
-                          break;
-                        case "Date":
-                          cellContent = cellData !== undefined && cellData !== null ? new Date(cellData).toLocaleDateString() : "";
-                          break;
-                        default:
-                          cellContent = cellData !== undefined && cellData !== null ? cellData.toString() : "";
-                      }
+              {paginatedRows.length === 0 ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={
+                      filteredColumns.length +
+                      (showRowNumber ? 1 : 0) +
+                      (handleView || handleEdit || handleDelete ? 1 : 0)
                     }
-
-                    return <TableCell key={column.id}>{cellContent}</TableCell>;
-                  })}
-
-                  {(handleView || handleEdit || handleDelete) && (
-                    <TableCell>
-                      {handleView && (
-                        <IconButton
-                          onClick={() => handleView(row)}
-                          aria-label="View"
-                          sx={{
-                            color: "primary.main", // Azul del tema
-                            "&:hover": {
-                              color: "primary.dark", // Azul más oscuro al hacer hover
-                            },
-                          }}
-                        >
-                          <Visibility />
-                        </IconButton>
-                      )}
-                      {handleEdit && (
-                        <IconButton
-                          onClick={() => handleEdit(row)}
-                          aria-label="Edit"
-                          sx={{
-                            color: "success.main", // Verde del tema
-                            "&:hover": {
-                              color: "success.dark", // Verde más oscuro al hacer hover
-                            },
-                          }}
-                        >
-                          <Edit />
-                        </IconButton>
-                      )}
-                      {handleDelete && (
-                        <IconButton
-                          onClick={() => handleDelete(row)}
-                          aria-label="Delete"
-                          sx={{
-                            color: "error.main", // Rojo del tema
-                            "&:hover": {
-                              color: "error.dark", // Rojo más oscuro al hacer hover
-                            },
-                          }}
-                        >
-                          <Delete />
-                        </IconButton>
-                      )}
-                    </TableCell>
-                  )}
+                    align="center"
+                  >
+                    {t("NO_DATA_AVAILABLE")}
+                  </TableCell>
                 </TableRow>
-              ))}
+              ) : (
+                paginatedRows.map((row, index) => (
+                  <TableRow key={index}>
+                    {showRowNumber && (
+                      <TableCell>
+                        {page * currentRowsPerPage + index + 1}
+                      </TableCell>
+                    )}
+                    {filteredColumns.map((column) => {
+                      const cellData = getNestedProperty(row, column.id);
+                      let cellContent;
+
+                      if (column.renderLogic) {
+                        cellContent = column.renderLogic(row, column.titleKey, t);
+                      } else {
+                        switch (column.dataType) {
+                          case "String":
+                            cellContent = cellData !== undefined && cellData !== null ? cellData.toString() : "";
+                            break;
+                          case "Number":
+                            cellContent = cellData !== undefined && cellData !== null ? cellData.toString() : "";
+                            break;
+                          case "Boolean":
+                            cellContent = cellData !== undefined && cellData !== null ? (cellData ? "True" : "False") : "";
+                            break;
+                          case "Date":
+                            cellContent = cellData !== undefined && cellData !== null ? new Date(cellData).toLocaleDateString() : "";
+                            break;
+                          default:
+                            cellContent = cellData !== undefined && cellData !== null ? cellData.toString() : "";
+                        }
+                      }
+
+                      return <TableCell key={column.id}>{cellContent}</TableCell>;
+                    })}
+
+                    {(handleView || handleEdit || handleDelete) && (
+                      <TableCell>
+                        {handleView && (
+                          <IconButton
+                            onClick={() => handleView(row)}
+                            aria-label="View"
+                            sx={{
+                              color: "primary.main",
+                              "&:hover": {
+                                color: "primary.dark",
+                              },
+                            }}
+                          >
+                            <Visibility />
+                          </IconButton>
+                        )}
+                        {handleEdit && (
+                          <IconButton
+                            onClick={() => handleEdit(row)}
+                            aria-label="Edit"
+                            sx={{
+                              color: "success.main",
+                              "&:hover": {
+                                color: "success.dark",
+                              },
+                            }}
+                          >
+                            <Edit />
+                          </IconButton>
+                        )}
+                        {handleDelete && (
+                          <IconButton
+                            onClick={() => handleDelete(row)}
+                            aria-label="Delete"
+                            sx={{
+                              color: "error.main",
+                              "&:hover": {
+                                color: "error.dark",
+                              },
+                            }}
+                          >
+                            <Delete />
+                          </IconButton>
+                        )}
+                      </TableCell>
+                    )}
+                  </TableRow>
+                ))
+              )}
             </TableBody>
           </Table>
         </TableContainer>

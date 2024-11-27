@@ -137,7 +137,7 @@ const WelcomePage: React.FC = () => {
           }}
         >
           <Typography variant="h6" fontWeight="bold">
-            {t("CREATE_BUDGET_TITLE")}
+            {t("CREATE_BUDGET")}
           </Typography>
           <Typography variant="body2">
             {t("CREATE_BUDGET_DESCRIPTION")}

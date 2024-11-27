@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { Box, Container, Typography, Chip } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Box, Typography } from "@mui/material";
 import TableComponent from "../../components/TableComponent";
 import Loader from "../../components/Loader";
 import ErrorSnackbar from "../../components/ErrorSnackbar";
@@ -7,91 +7,92 @@ import PageHeader from "../../components/PageHeader";
 import CardComponent from "../../components/CardComponent";
 import { useTranslation } from "react-i18next";
 import { CreateOrUpdateTransactionModal } from "./local-components/CreateOrUpdateTransactionModal";
-import transactionDataMock from "./transactionDataMock.json"; // Este es un mock de ejemplo
 import { TransactionDetailModal } from "./local-components/TransactionDetailModal";
 import DeleteConfirmationModal from "../../components/DeleteConfirmationModal";
-import ButtonComponent from "../../components/ButtonComponent";
-import { Add } from "@mui/icons-material";
-
-// Simulación de obtención de transacciones (reemplazar con tu servicio real)
-const useMockTransactions = () => {
-  const [transactions, setTransactions] = useState<any[]>([
-    {
-      transaction_id: 67,
-      amount: 100,
-      date: "2024-11-17T05:24:31.252Z",
-      category: { name: "Groceries" },
-      subcategory: { name: "Food" },
-      classification: { name: "Essential" },
-      created_at: "2024-11-17T05:24:31.254Z",
-      updated_at: "2024-11-17T05:24:31.254Z",
-    },
-    {
-      transaction_id: 37,
-      amount: 200,
-      date: "2024-09-20T00:00:00.000Z",
-      category: { name: "Groceries" },
-      subcategory: { name: "Food" },
-      classification: { name: "Essential" },
-      created_at: "2024-10-02T16:31:13.027Z",
-      updated_at: "2024-11-17T05:39:15.373Z",
-    },
-  ]);
-  const [loading, setLoading] = useState(false);
-  const [error] = useState<string | null>(null);
-
-  useEffect(() => {
-    setLoading(false);
-  }, []);
-
-  return { transactions, loading, error };
-};
+import { useGetAllTransactions } from "../../services/transactions/getAllTransactions.service";
+import { getAllCategories } from "../../services/categories/getAllCategories.service";
+import { getAllSubcategories } from "../../services/subcategories/getAllSubcategories.service";
+import { getAllClassifications } from "../../services/classification/getAllClassifications.service";
+import { ICategory } from "../../types/Transactions/Categories/categories.types";
+import { ISubcategory } from "../../types/Transactions/Subcategories/subcategories.types";
+import { IClassification } from "../../types/Transactions/Classification/classification.types";
+import { deleteTransaction } from "../../services/transactions/deleteTransaction.service";
+import { ITransactionWithDetails } from "../../types/Transactions/transactions.types";
+import ActionButton from "../../components/ActionButton";
 
 export const TransactionsPage = () => {
-  const { transactions, loading, error } = useMockTransactions();
+  const { transactions, loading, fetchTransactions } = useGetAllTransactions();
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [isCreateOrUpdateModalOpen, setIsCreateOrUpdateModalOpen] =
     useState(false);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<"create" | "update">("create");
-  const [selectedTransaction, setSelectedTransaction] = useState<any | null>(
-    null
-  );
+  const [selectedTransactionId, setSelectedTransactionId] = useState<
+    number | null
+  >(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const { t } = useTranslation();
+  const [categories, setCategories] = useState<ICategory[]>([]);
+  const [subcategories, setSubcategories] = useState<ISubcategory[]>([]);
+  const [classifications, setClassifications] = useState<IClassification[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [categoriesData, subcategoriesData, classificationsData] =
+          await Promise.all([
+            getAllCategories(),
+            getAllSubcategories(),
+            getAllClassifications(),
+          ]);
+        setCategories(categoriesData);
+        setSubcategories(subcategoriesData);
+        setClassifications(classificationsData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, []);
 
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
 
-  const handleView = (transaction: any) => {
-    setSelectedTransaction(transaction);
+  const handleView = (transaction: ITransactionWithDetails) => {
+    setSelectedTransactionId(transaction.transaction_id);
     setIsDetailModalOpen(true);
   };
 
-  const handleEdit = (transaction: any) => {
+  const handleEdit = (transaction: ITransactionWithDetails) => {
     setModalMode("update");
-    setSelectedTransaction(transaction);
+    setSelectedTransactionId(transaction.transaction_id);
     setIsCreateOrUpdateModalOpen(true);
   };
 
-  const handleDelete = (transaction: any) => {
-    setSelectedTransaction(transaction);
+  const handleDelete = (transaction: ITransactionWithDetails) => {
+    setSelectedTransactionId(transaction.transaction_id);
     setIsDeleteModalOpen(true);
   };
 
+  const handleConfirmDelete = async () => {
+    if (selectedTransactionId !== null) {
+      const success = await deleteTransaction(selectedTransactionId);
+      if (success) {
+        setSnackbarOpen(true);
+        fetchTransactions();
+      } else {
+        console.error("Error deleting transaction");
+      }
+      setIsDeleteModalOpen(false);
+      setSelectedTransactionId(null);
+    }
+  };
+
   if (loading) return <Loader overlayVariant="transparent" />;
-  if (error)
-    return (
-      <ErrorSnackbar
-        message={t("ERROR_LOADING_TRANSACTIONS")}
-        open={true}
-        autoHideDuration={5000}
-      />
-    );
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 4 }}>
+    <>
       <PageHeader titleKey="TRANSACTIONS_PAGE" />
       <Box display="flex" sx={{ p: 2 }} gap={6} mb={4}>
         <CardComponent
@@ -101,7 +102,48 @@ export const TransactionsPage = () => {
             <>
               <Box sx={{ mt: 1, mr: 1 }}>
                 <Typography variant="body2">
-                  {t("TOTAL_TRANSACTIONS")}: {transactions.length}
+                  {t("TOTAL_TRANSACTIONS")}: {transactions?.length || 0}
+                </Typography>
+              </Box>
+            </>
+          }
+        />
+        <CardComponent
+          title={t("TOTAL_TRANSACTIONS")}
+          description={t("SUMMARY_OF_TRANSACTIONS")}
+          customBody={
+            <>
+              <Box sx={{ mt: 1, mr: 1 }}>
+                <Typography variant="body2">
+                  {t("TOTAL_TRANSACTIONS_INCOMES")}:{" "}
+                  {transactions?.filter((t) => t.type === "INCOME").length || 0}
+                </Typography>
+                <Typography variant="body2">
+                  {t("TOTAL_TRANSACTIONS_EXPENSES")}:{" "}
+                  {transactions?.filter((t) => t.type === "EXPENSE").length ||
+                    0}
+                </Typography>
+              </Box>
+            </>
+          }
+        />
+        <CardComponent
+          title={t("TOTAL_TRANSACTIONS")}
+          description={t("SUMMARY_OF_TRANSACTIONS")}
+          customBody={
+            <>
+              <Box sx={{ mt: 1, mr: 1 }}>
+                <Typography variant="body2">
+                  {t("TOTAL_SUM_TRANSACTIONS_INCOMES")}:{" USD: $"}{" "}
+                  {transactions
+                    ?.filter((t) => t.type === "INCOME")
+                    .reduce((sum, t) => sum + t.amount, 0) || 0}
+                </Typography>
+                <Typography variant="body2">
+                  {t("TOTAL_SUM_TRANSACTIONS_EXPENSES")}:{" USD: $"}{" "}
+                  {transactions
+                    ?.filter((t) => t.type === "EXPENSE")
+                    .reduce((sum, t) => sum + t.amount, 0) || 0}
                 </Typography>
               </Box>
             </>
@@ -109,27 +151,23 @@ export const TransactionsPage = () => {
         />
       </Box>
 
-      <Box display="flex" justifyContent="flex-end" sx={{ p: 2 }}>
-        <ButtonComponent
-          label={t("CREATE_TRANSACTION")}
-          color="primary"
-          variant="outlined"
-          size="medium"
-          isLoading={false}
-          startIcon={<Add />}
-          SxProps={{ mb: 2, alignContent: "flex-end", display: "flex" }}
-          onClick={() => {
-            setModalMode("create");
-            setIsCreateOrUpdateModalOpen(true);
-          }}
-        />
-      </Box>
+      <ActionButton
+        label={"CREATE_TRANSACTION"}
+        color="secondary"
+        variant="outlined"
+        onClick={() => {
+          setModalMode("create");
+          setIsCreateOrUpdateModalOpen(true);
+        }}
+        isLoading={false}
+        iconType="add"
+      />
 
-      <TableComponent<any>
-        rows={transactions}
+      <TableComponent<ITransactionWithDetails>
+        rows={transactions || []}
         columnOrder={[
-          "transaction_id",
           "amount",
+          "type",
           "date",
           "category.name",
           "subcategory.name",
@@ -154,52 +192,17 @@ export const TransactionsPage = () => {
           isOpen={isCreateOrUpdateModalOpen}
           onClose={() => setIsCreateOrUpdateModalOpen(false)}
           mode={modalMode}
-          categories={[
-            {
-              category_id: 1,
-              name: "Groceries",
-            },
-            {
-              category_id: 2,
-              name: "Transport",
-            },
-            {
-              category_id: 3,
-              name: "Health",
-            },
-          ]} // Reemplaza con datos reales
-          subcategories={[
-            {
-              subcategory_id: 1,
-              name: "Food",
-            },
-            {
-              subcategory_id: 2,
-              name: "Transport",
-            },
-            {
-              subcategory_id: 3,
-              name: "Medicine",
-            },
-          ]} // Reemplaza con datos reales
-          classifications={[
-            {
-              classification_id: 1,
-              name: "Essential",
-            },
-            {
-              classification_id: 2,
-              name: "Non-essential",
-            },
-          ]} // Reemplaza con datos reales
-          transactionData={selectedTransaction}
+          transactionId={selectedTransactionId}
+          categories={categories}
+          subcategories={subcategories}
+          classifications={classifications}
         />
       )}
 
-      {isDetailModalOpen && (
+      {isDetailModalOpen && selectedTransactionId !== null && (
         <TransactionDetailModal
           isOpen={isDetailModalOpen}
-          transactionData={selectedTransaction}
+          transactionId={selectedTransactionId}
           onClose={() => setIsDetailModalOpen(false)}
         />
       )}
@@ -208,12 +211,9 @@ export const TransactionsPage = () => {
         <DeleteConfirmationModal
           isOpen={isDeleteModalOpen}
           onClose={() => setIsDeleteModalOpen(false)}
-          onConfirm={() => {
-            setIsDeleteModalOpen(false);
-            setSnackbarOpen(true);
-          }}
+          onConfirm={handleConfirmDelete}
         />
       )}
-    </Container>
+    </>
   );
 };

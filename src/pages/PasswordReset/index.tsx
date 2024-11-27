@@ -93,7 +93,7 @@ const PasswordReset: React.FC = () => {
           icon={<LockResetIcon />}
           backgroundColor={getRandomColor()}
         />
-        <PasswordResetForm onSubmit={onSubmit} loading={loading} />
+        <PasswordResetForm onSubmit={onSubmit} isLoading={loading} />
 
         <ErrorSnackbar
           open={openSnackbar}

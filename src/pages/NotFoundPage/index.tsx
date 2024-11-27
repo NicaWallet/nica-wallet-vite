@@ -1,15 +1,21 @@
 import React from "react";
 import { Box, Typography, Button } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "@mui/material/styles";
 
-/**
- * NotFoundPage component renders a 404 error page with a styled message and a button to navigate back home.
- */
-const NotFoundPage: React.FC = () => {
+interface NotFoundPageProps {
+  isAccessDenied?: boolean; // Nueva propiedad para identificar si es un caso de acceso denegado
+}
+
+const NotFoundPage: React.FC<NotFoundPageProps> = ({ isAccessDenied = false }) => {
   const { t } = useTranslation();
   const theme = useTheme();
+  const navigate = useNavigate();
+
+  const handleGoBack = () => {
+    navigate(-1); // Navega hacia atrás
+  };
 
   return (
     <Box
@@ -63,7 +69,7 @@ const NotFoundPage: React.FC = () => {
           },
         }}
       >
-        404
+        {isAccessDenied ? t("ACCESS_DENIED_TITLE") : "404"}
       </Typography>
 
       <Typography
@@ -75,29 +81,51 @@ const NotFoundPage: React.FC = () => {
           maxWidth: "600px",
         }}
       >
-        {t("NOT_FOUND_MESSAGE")}
+        {isAccessDenied ? t("ACCESS_DENIED_MESSAGE") : t("NOT_FOUND_MESSAGE")}
       </Typography>
 
-      <Button
-        component={Link}
-        to="/"
-        variant="contained"
-        sx={{
-          backgroundColor: "white",
-          color: theme.palette.primary.main,
-          padding: "12px 30px",
-          fontSize: "1rem",
-          borderRadius: "30px",
-          textTransform: "none",
-          transition: "background-color 0.3s ease",
-          "&:hover": {
-            backgroundColor: theme.palette.secondary.light,
-            transform: "scale(1.05)",
-          },
-        }}
-      >
-        {t("GO_BACK_HOME")}
-      </Button>
+      {isAccessDenied ? (
+        <Button
+          onClick={handleGoBack}
+          variant="contained"
+          sx={{
+            backgroundColor: "white",
+            color: theme.palette.primary.main,
+            padding: "12px 30px",
+            fontSize: "1rem",
+            borderRadius: "30px",
+            textTransform: "none",
+            transition: "background-color 0.3s ease",
+            "&:hover": {
+              backgroundColor: theme.palette.secondary.light,
+              transform: "scale(1.05)",
+            },
+          }}
+        >
+          {t("GO_BACK")}
+        </Button>
+      ) : (
+        <Button
+          component={Link}
+          to="/"
+          variant="contained"
+          sx={{
+            backgroundColor: "white",
+            color: theme.palette.primary.main,
+            padding: "12px 30px",
+            fontSize: "1rem",
+            borderRadius: "30px",
+            textTransform: "none",
+            transition: "background-color 0.3s ease",
+            "&:hover": {
+              backgroundColor: theme.palette.secondary.light,
+              transform: "scale(1.05)",
+            },
+          }}
+        >
+          {t("GO_BACK_HOME")}
+        </Button>
+      )}
     </Box>
   );
 };

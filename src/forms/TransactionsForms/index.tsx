@@ -3,22 +3,18 @@ import { Box, Grid, MenuItem } from "@mui/material";
 import { UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import InputField from "../../components/InputField";
+import { ITransactionForm, TransactionType } from "../../types/Transactions/transactions.types";
 
 interface ITransactionFormProps {
-  form: UseFormReturn<any>;
+  form: UseFormReturn<ITransactionForm>;
   categories: { category_id: number; name: string }[];
   subcategories: { subcategory_id: number; name: string }[];
   classifications: { classification_id: number; name: string }[];
   mode: "create" | "update";
-  initialData?: {
-    amount?: number;
-    category_id?: number;
-    subcategory_id?: number;
-    classification_id?: number;
-  };
+  initialData?: Partial<ITransactionForm>;
 }
 
-export const TransactionForm: React.FC<ITransactionFormProps> = ({
+const TransactionForm: React.FC<ITransactionFormProps> = ({
   form,
   categories,
   subcategories,
@@ -27,15 +23,15 @@ export const TransactionForm: React.FC<ITransactionFormProps> = ({
   initialData,
 }) => {
   const { t } = useTranslation();
-  const { register, formState, setValue } = form;
+  const { watch, setValue, formState } = form;
   const { errors } = formState;
 
   React.useEffect(() => {
     if (mode === "update" && initialData) {
       setValue("amount", initialData.amount || 0);
-      setValue("category_id", initialData.category_id || "");
-      setValue("subcategory_id", initialData.subcategory_id || "");
-      setValue("classification_id", initialData.classification_id || "");
+      setValue("category_id", initialData.category_id || 0);
+      setValue("subcategory_id", initialData.subcategory_id || 0);
+      setValue("classification_id", initialData.classification_id || 0);
     }
   }, [mode, initialData, setValue]);
 
@@ -51,21 +47,21 @@ export const TransactionForm: React.FC<ITransactionFormProps> = ({
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
           <InputField
-            {...register("amount")}
             label={t("AMOUNT")}
             type="number"
-            errorText={errors.amount?.message as string}
-            required
+            value={watch("amount") || ""}
+            onChange={(value) => setValue("amount", Number(value))}
+            errorText={errors.amount?.message}
             size="large"
           />
         </Grid>
         <Grid item xs={12} md={6}>
           <InputField
-            {...register("category_id")}
-            select
             label={t("CATEGORY")}
-            errorText={errors.category_id?.message as string}
-            required
+            select
+            value={watch("category_id") || ""}
+            onChange={(value) => setValue("category_id", Number(value))}
+            errorText={errors.category_id?.message}
             size="large"
           >
             {categories.map((category) => (
@@ -77,11 +73,11 @@ export const TransactionForm: React.FC<ITransactionFormProps> = ({
         </Grid>
         <Grid item xs={12} md={6}>
           <InputField
-            {...register("subcategory_id")}
-            select
             label={t("SUBCATEGORY")}
-            errorText={errors.subcategory_id?.message as string}
-            required
+            select
+            value={watch("subcategory_id") || ""}
+            onChange={(value) => setValue("subcategory_id", Number(value))}
+            errorText={errors.subcategory_id?.message}
             size="large"
           >
             {subcategories.map((subcategory) => (
@@ -96,11 +92,11 @@ export const TransactionForm: React.FC<ITransactionFormProps> = ({
         </Grid>
         <Grid item xs={12} md={6}>
           <InputField
-            {...register("classification_id")}
-            select
             label={t("CLASSIFICATION")}
-            errorText={errors.classification_id?.message as string}
-            required
+            select
+            value={watch("classification_id") || ""}
+            onChange={(value) => setValue("classification_id", Number(value))}
+            errorText={errors.classification_id?.message}
             size="large"
           >
             {classifications.map((classification) => (
@@ -113,7 +109,23 @@ export const TransactionForm: React.FC<ITransactionFormProps> = ({
             ))}
           </InputField>
         </Grid>
+        <Grid item xs={12} md={6}>
+          <InputField
+            label={t("TRANSACTION_TYPE")}
+            select
+            value={watch("type") || ""}
+            onChange={(value) => setValue("type", value as TransactionType)}
+            errorText={errors.type?.message}
+            size="large"
+          >
+            <MenuItem value="EXPENSE">{t("EXPENSE")}</MenuItem>
+            <MenuItem value="INCOME">{t("INCOME")}</MenuItem>
+          </InputField>
+        </Grid>
+
       </Grid>
     </Box>
   );
 };
+
+export default TransactionForm;

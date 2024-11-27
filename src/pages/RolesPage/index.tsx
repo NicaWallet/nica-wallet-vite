@@ -36,7 +36,7 @@ export const RolesPage = () => {
     if (loading) return <Loader overlayVariant="transparent" />;
     if (error) return <ErrorSnackbar message={error} open={true} autoHideDuration={5000} />;
 
-    console.log("userRoles before tablecomponent", userRoles);
+    // console.log("userRoles before tablecomponent", userRoles);
 
     return (
         <>
