@@ -17,7 +17,7 @@ export interface RangeDatePickerProps {
   widthPercent?: number;
 }
 
-const RangeDatePicker: React.FC<RangeDatePickerProps> = ({
+export const RangeDatePicker: React.FC<RangeDatePickerProps> = ({
   labelStart,
   labelEnd,
   startDate,
@@ -123,5 +123,3 @@ const RangeDatePicker: React.FC<RangeDatePickerProps> = ({
     </Box>
   );
 };
-
-export default RangeDatePicker;

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Meta, StoryFn } from "@storybook/react";
-import RangeDatePicker, { RangeDatePickerProps } from ".";
 import CenteredTemplate from "../../stories/CenteredTemplate";
+import { RangeDatePicker, RangeDatePickerProps } from ".";
 
 export default {
   title: "Components/RangeDatePicker",
