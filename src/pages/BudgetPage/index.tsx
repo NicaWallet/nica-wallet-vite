@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from "react";
-import TableComponent from "../../components/TableComponent";
-import Loader from "../../components/Loader";
-import ErrorSnackbar from "../../components/ErrorSnackbar";
-import PageHeader from "../../components/PageHeader";
-import { getCategoryById } from "../../services/categories/getCategoryById.service";
 import { t } from "i18next";
-import { BudgetDetailModal } from "./local-components/BudgetDetailModal";
-import { CreateOrUpdateBudgetModal } from "./local-components/CreateOrUpdateBudgetModal";
-import { getAllCategories } from "../../services/categories/getAllCategories.service";
-import { useGetAllBudgets } from "../../services/budget/getAllBudgets.service";
-import { deleteBudget } from "../../services/budget/deleteBudget.service";
-import { IBudget } from "../../types/Transactions/Budgets/budgets.types";
-import CardGroup from "./local-components/CardGroup/CardGroup";
+import { useState, useEffect } from "react";
 import ActionButton from "../../components/ActionButton";
 import DeleteConfirmationModal from "../../components/DeleteConfirmationModal";
+import ErrorSnackbar from "../../components/ErrorSnackbar";
+import Loader from "../../components/Loader";
+import PageHeader from "../../components/PageHeader";
+import TableComponent from "../../components/TableComponent";
+import { deleteBudget } from "../../services/budget/deleteBudget.service";
+import { useGetAllBudgets } from "../../services/budget/getAllBudgets.service";
+import { getAllCategories } from "../../services/categories/getAllCategories.service";
+import { getCategoryById } from "../../services/categories/getCategoryById.service";
+import { IBudget } from "../../types/Transactions/Budgets/budgets.types";
+import { BudgetDetailModal } from "./local-components/BudgetDetailModal";
+import CardGroup from "./local-components/CardGroup/CardGroup";
+import { CreateOrUpdateBudgetModal } from "./local-components/CreateOrUpdateBudgetModal";
 
 export const BudgetPage = () => {
   const { budgets, loading, error, fetchBudgets } = useGetAllBudgets();
