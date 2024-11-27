@@ -1,24 +1,26 @@
 import { useState } from "react";
-import {
-  Box,
-  Container,
-  Typography,
-  Grid,
-  Paper,
-  Drawer,
-  IconButton,
-} from "@mui/material";
+import { Box, Typography, Paper } from "@mui/material";
 import TableComponent from "../../components/TableComponent";
 import Loader from "../../components/Loader";
 import ErrorSnackbar from "../../components/ErrorSnackbar";
 import PageHeader from "../../components/PageHeader";
-import ButtonComponent from "../../components/ButtonComponent";
 import { useTranslation } from "react-i18next";
-import { Add, Paid, Pending, AttachMoney } from "@mui/icons-material";
+import { Paid, Pending, AttachMoney } from "@mui/icons-material";
+import ActionButton from "../../components/ActionButton";
 
-// Simulación de datos de facturas (reemplazar con la API real)
+interface Bill {
+  bill_id: number;
+  user_id: number;
+  name: string;
+  amount: number;
+  due_date: string;
+  status: string;
+  updated_at: string;
+  [key: string]: unknown;
+}
+
 const useMockBills = () => {
-  const [bills, setBills] = useState<any[]>([
+  const [bills] = useState<Bill[]>([
     {
       bill_id: 1,
       user_id: 1,
@@ -38,7 +40,7 @@ const useMockBills = () => {
       updated_at: "2024-11-20T12:00:00.000Z",
     },
   ]);
-  const [loading, setLoading] = useState(false);
+  const [loading] = useState(false);
   const [error] = useState<string | null>(null);
 
   return { bills, loading, error };
@@ -48,24 +50,22 @@ export const BillsPage = () => {
   const { bills, loading, error } = useMockBills();
   const { t } = useTranslation();
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const [selectedBill, setSelectedBill] = useState<any>(null);
 
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
 
-  const handleView = (bill: any) => {
-    setSelectedBill(bill);
-    setDrawerOpen(true);
+  const handleView = (bill: Bill) => {
+    console.log(t("VIEWING_BILL"), bill);
+    setSnackbarOpen(true);
   };
 
-  const handleEdit = (bill: any) => {
+  const handleEdit = (bill: Bill) => {
     console.log(t("EDITING_BILL"), bill);
     setSnackbarOpen(true);
   };
 
-  const handleDelete = (bill: any) => {
+  const handleDelete = (bill: Bill) => {
     console.log(t("DELETING_BILL"), bill);
     setSnackbarOpen(true);
   };
@@ -86,93 +86,89 @@ export const BillsPage = () => {
     );
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 4 }}>
+    <>
       <PageHeader titleKey={t("BILLS_PAGE")} />
 
-      {/* Resumen en tarjetas */}
-      <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid item xs={12} sm={6} md={3}>
-          <Paper
-            elevation={3}
-            sx={{
-              p: 3,
-              textAlign: "center",
-              position: "relative",
-              ":hover": { boxShadow: 6, transform: "scale(1.05)" },
-              transition: "all 0.3s ease",
-            }}
-          >
-            <Paid fontSize="large" color="primary" />
-            <Typography variant="h6">{t("TOTAL_BILLS")}</Typography>
-            <Typography variant="h4">{totalBills}</Typography>
-          </Paper>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Paper
-            elevation={3}
-            sx={{
-              p: 3,
-              textAlign: "center",
-              ":hover": { boxShadow: 6, transform: "scale(1.05)" },
-              transition: "all 0.3s ease",
-            }}
-          >
-            <Pending fontSize="large" color="error" />
-            <Typography variant="h6">{t("TOTAL_PENDING")}</Typography>
-            <Typography variant="h4" color="error">
-              {totalPending}
-            </Typography>
-          </Paper>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Paper
-            elevation={3}
-            sx={{
-              p: 3,
-              textAlign: "center",
-              ":hover": { boxShadow: 6, transform: "scale(1.05)" },
-              transition: "all 0.3s ease",
-            }}
-          >
-            <Paid fontSize="large" color="success" />
-            <Typography variant="h6">{t("TOTAL_PAID")}</Typography>
-            <Typography variant="h4" color="success">
-              {totalPaid}
-            </Typography>
-          </Paper>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Paper
-            elevation={3}
-            sx={{
-              p: 3,
-              textAlign: "center",
-              ":hover": { boxShadow: 6, transform: "scale(1.05)" },
-              transition: "all 0.3s ease",
-            }}
-          >
-            <AttachMoney fontSize="large" color="secondary" />
-            <Typography variant="h6">{t("TOTAL_AMOUNT")}</Typography>
-            <Typography variant="h4">${totalAmount.toFixed(2)}</Typography>
-          </Paper>
-        </Grid>
-      </Grid>
-
-      {/* Botón para agregar nueva factura */}
-      <Box display="flex" justifyContent="flex-end" sx={{ mb: 3 }}>
-        <ButtonComponent
-          label={t("CREATE_BILL")}
-          color="primary"
-          variant="contained"
-          size="large"
-          startIcon={<Add />}
-          onClick={() => console.log(t("CREATE_BILL_CLICK"))}
-        />
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        flexWrap="wrap"
+        sx={{ mb: 4 }}
+      >
+        <Box
+          component={Paper}
+          elevation={1}
+          sx={{
+            p: 2,
+            textAlign: "center",
+            flex: "1 1 21%",
+            m: 1,
+          }}
+        >
+          <Paid fontSize="large" color="primary" />
+          <Typography variant="h6">{t("TOTAL_BILLS")}</Typography>
+          <Typography variant="h4">{totalBills}</Typography>
+        </Box>
+        <Box
+          component={Paper}
+          elevation={1}
+          sx={{
+            p: 2,
+            textAlign: "center",
+            flex: "1 1 21%",
+            m: 1,
+          }}
+        >
+          <Pending fontSize="large" color="error" />
+          <Typography variant="h6">{t("TOTAL_PENDING")}</Typography>
+          <Typography variant="h4" color="error">
+            {totalPending}
+          </Typography>
+        </Box>
+        <Box
+          component={Paper}
+          elevation={1}
+          sx={{
+            p: 2,
+            textAlign: "center",
+            flex: "1 1 21%",
+            m: 1,
+          }}
+        >
+          <Paid fontSize="large" color="success" />
+          <Typography variant="h6">{t("TOTAL_PAID")}</Typography>
+          <Typography variant="h4" color="success">
+            {totalPaid}
+          </Typography>
+        </Box>
+        <Box
+          component={Paper}
+          elevation={1}
+          sx={{
+            p: 2,
+            textAlign: "center",
+            flex: "1 1 21%",
+            m: 1,
+          }}
+        >
+          <AttachMoney fontSize="large" color="secondary" />
+          <Typography variant="h6">{t("TOTAL_AMOUNT")}</Typography>
+          <Typography variant="h4">${totalAmount.toFixed(2)}</Typography>
+        </Box>
       </Box>
+
+      <ActionButton
+        label={"CREATE_BILL"}
+        color="secondary"
+        variant="outlined"
+        onClick={() => console.log(t("CREATE_BILL_CLICK"))}
+        isLoading={false}
+        iconType="add"
+      />
 
       {/* Tabla de facturas */}
       <Box sx={{ p: 2 }}>
-        <TableComponent<any>
+        <TableComponent<Bill>
           rows={bills}
           columnOrder={["bill_id", "name", "amount", "status"]}
           handleView={handleView}
@@ -181,31 +177,6 @@ export const BillsPage = () => {
         />
       </Box>
 
-      {/* Drawer para mostrar detalles */}
-      <Drawer anchor="right" open={drawerOpen} onClose={() => setDrawerOpen(false)}>
-        <Box sx={{ width: 350, p: 3 }}>
-          <Typography variant="h5">{t("BILL_DETAILS")}</Typography>
-          {selectedBill ? (
-            <>
-              <Typography variant="body1">
-                {t("NAME")}: {selectedBill.name}
-              </Typography>
-              <Typography variant="body1">
-                {t("AMOUNT")}: ${selectedBill.amount.toFixed(2)}
-              </Typography>
-              <Typography variant="body1">
-                {t("STATUS")}: {selectedBill.status}
-              </Typography>
-              <Typography variant="body1">
-                {t("DUE_DATE")}: {new Date(selectedBill.due_date).toLocaleDateString()}
-              </Typography>
-            </>
-          ) : (
-            <Typography>{t("NO_DETAILS_AVAILABLE")}</Typography>
-          )}
-        </Box>
-      </Drawer>
-
       <ErrorSnackbar
         message={t("FEATURE_NOT_AVAILABLE")}
         open={snackbarOpen}
@@ -213,6 +184,6 @@ export const BillsPage = () => {
         autoHideDuration={5000}
         severity="info"
       />
-    </Container>
+    </>
   );
 };

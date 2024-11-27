@@ -9,8 +9,6 @@ import { useTranslation } from "react-i18next";
 import { CreateOrUpdateTransactionModal } from "./local-components/CreateOrUpdateTransactionModal";
 import { TransactionDetailModal } from "./local-components/TransactionDetailModal";
 import DeleteConfirmationModal from "../../components/DeleteConfirmationModal";
-import ButtonComponent from "../../components/ButtonComponent";
-import { Add } from "@mui/icons-material";
 import { useGetAllTransactions } from "../../services/transactions/getAllTransactions.service";
 import { getAllCategories } from "../../services/categories/getAllCategories.service";
 import { getAllSubcategories } from "../../services/subcategories/getAllSubcategories.service";
@@ -20,14 +18,18 @@ import { ISubcategory } from "../../types/Transactions/Subcategories/subcategori
 import { IClassification } from "../../types/Transactions/Classification/classification.types";
 import { deleteTransaction } from "../../services/transactions/deleteTransaction.service";
 import { ITransactionWithDetails } from "../../types/Transactions/transactions.types";
+import ActionButton from "../../components/ActionButton";
 
 export const TransactionsPage = () => {
   const { transactions, loading, fetchTransactions } = useGetAllTransactions();
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [isCreateOrUpdateModalOpen, setIsCreateOrUpdateModalOpen] = useState(false);
+  const [isCreateOrUpdateModalOpen, setIsCreateOrUpdateModalOpen] =
+    useState(false);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<"create" | "update">("create");
-  const [selectedTransactionId, setSelectedTransactionId] = useState<number | null>(null);
+  const [selectedTransactionId, setSelectedTransactionId] = useState<
+    number | null
+  >(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const { t } = useTranslation();
   const [categories, setCategories] = useState<ICategory[]>([]);
@@ -37,11 +39,12 @@ export const TransactionsPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [categoriesData, subcategoriesData, classificationsData] = await Promise.all([
-          getAllCategories(),
-          getAllSubcategories(),
-          getAllClassifications(),
-        ]);
+        const [categoriesData, subcategoriesData, classificationsData] =
+          await Promise.all([
+            getAllCategories(),
+            getAllSubcategories(),
+            getAllClassifications(),
+          ]);
         setCategories(categoriesData);
         setSubcategories(subcategoriesData);
         setClassifications(classificationsData);
@@ -112,10 +115,13 @@ export const TransactionsPage = () => {
             <>
               <Box sx={{ mt: 1, mr: 1 }}>
                 <Typography variant="body2">
-                  {t("TOTAL_TRANSACTIONS_INCOMES")}: {transactions?.filter((t) => t.type === "INCOME").length || 0}
+                  {t("TOTAL_TRANSACTIONS_INCOMES")}:{" "}
+                  {transactions?.filter((t) => t.type === "INCOME").length || 0}
                 </Typography>
                 <Typography variant="body2">
-                  {t("TOTAL_TRANSACTIONS_EXPENSES")}: {transactions?.filter((t) => t.type === "EXPENSE").length || 0}
+                  {t("TOTAL_TRANSACTIONS_EXPENSES")}:{" "}
+                  {transactions?.filter((t) => t.type === "EXPENSE").length ||
+                    0}
                 </Typography>
               </Box>
             </>
@@ -128,10 +134,16 @@ export const TransactionsPage = () => {
             <>
               <Box sx={{ mt: 1, mr: 1 }}>
                 <Typography variant="body2">
-                  {t("TOTAL_SUM_TRANSACTIONS_INCOMES")}:{" USD: $"} {transactions?.filter((t) => t.type === "INCOME").reduce((sum, t) => sum + t.amount, 0) || 0}
+                  {t("TOTAL_SUM_TRANSACTIONS_INCOMES")}:{" USD: $"}{" "}
+                  {transactions
+                    ?.filter((t) => t.type === "INCOME")
+                    .reduce((sum, t) => sum + t.amount, 0) || 0}
                 </Typography>
                 <Typography variant="body2">
-                  {t("TOTAL_SUM_TRANSACTIONS_EXPENSES")}:{" USD: $"} {transactions?.filter((t) => t.type === "EXPENSE").reduce((sum, t) => sum + t.amount, 0) || 0}
+                  {t("TOTAL_SUM_TRANSACTIONS_EXPENSES")}:{" USD: $"}{" "}
+                  {transactions
+                    ?.filter((t) => t.type === "EXPENSE")
+                    .reduce((sum, t) => sum + t.amount, 0) || 0}
                 </Typography>
               </Box>
             </>
@@ -139,20 +151,17 @@ export const TransactionsPage = () => {
         />
       </Box>
 
-      <Box display="flex" justifyContent="flex-end" sx={{ p: 2 }}>
-        <ButtonComponent
-          label={t("CREATE_TRANSACTION")}
-          color="primary"
-          variant="outlined"
-          size="medium"
-          startIcon={<Add />}
-          SxProps={{ marginBottom: 2, alignContent: "flex-end", display: "flex" }}
-          onClick={() => {
-            setModalMode("create");
-            setIsCreateOrUpdateModalOpen(true);
-          }}
-        />
-      </Box>
+      <ActionButton
+        label={"CREATE_TRANSACTION"}
+        color="secondary"
+        variant="outlined"
+        onClick={() => {
+          setModalMode("create");
+          setIsCreateOrUpdateModalOpen(true);
+        }}
+        isLoading={false}
+        iconType="add"
+      />
 
       <TableComponent<ITransactionWithDetails>
         rows={transactions || []}

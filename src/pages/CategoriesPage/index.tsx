@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
-import { Box, Typography, Container, Avatar, Grid, Paper } from "@mui/material";
+import { Box, Typography, Container, Avatar, Paper } from "@mui/material";
 import TableComponent from "../../components/TableComponent";
 import Loader from "../../components/Loader";
 import ErrorSnackbar from "../../components/ErrorSnackbar";
 import PageHeader from "../../components/PageHeader";
 import CardComponent from "../../components/CardComponent";
-import ButtonComponent from "../../components/ButtonComponent";
 import DeleteConfirmationModal from "../../components/DeleteConfirmationModal";
 import { useTranslation } from "react-i18next";
-import { Add, Category, BarChart } from "@mui/icons-material";
+import { Category, BarChart } from "@mui/icons-material";
 import { getAllCategories } from "../../services/categories/getAllCategories.service";
 import { ICategory } from "../../types/Transactions/Categories/categories.types";
+import ActionButton from "../../components/ActionButton";
 
 export const CategoryPage = () => {
   const { t } = useTranslation();
@@ -18,7 +18,9 @@ export const CategoryPage = () => {
   const [loading, setLoading] = useState(true);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
+    null
+  );
   const [error, setError] = useState<string | null>(null);
 
   // Fetch categories
@@ -84,67 +86,71 @@ export const CategoryPage = () => {
   }
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 4 }}>
+    <>
       <PageHeader titleKey={t("CATEGORY_PAGE")} />
 
       {/* Summary Section */}
-      <Grid container spacing={4} mb={4}>
-        <Grid item xs={12} md={6}>
-          <CardComponent
-            title={t("TOTAL_CATEGORIES")}
-            description={t("SUMMARY_OF_CATEGORIES")}
-            customBody={
-              <Paper
-                sx={{
-                  p: 2,
-                  background: "linear-gradient(135deg, #3498db, #2ecc71)",
-                  borderRadius: 3,
-                  color: "white",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-                elevation={3}
-              >
-                <Box display="flex" alignItems="center" gap={2}>
-                  <Avatar
-                    sx={{
-                      bgcolor: "rgba(255, 255, 255, 0.3)",
-                      color: "white",
-                      width: 56,
-                      height: 56,
-                    }}
-                  >
-                    <Category />
-                  </Avatar>
-                  <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-                    {categories.length}
-                  </Typography>
-                </Box>
-                <Typography variant="body2" sx={{ opacity: 0.8 }}>
-                  {t("CATEGORIES_DESC_SHORT")}
+      <Box
+        display="flex"
+        flexDirection={{ xs: "column", md: "row" }}
+        gap={4}
+        mb={4}
+        p={6}
+      >
+        <CardComponent
+          title={t("TOTAL_CATEGORIES")}
+          description={t("SUMMARY_OF_CATEGORIES")}
+          customBody={
+            <Paper
+              sx={{
+                p: 2,
+                background: "linear-gradient(135deg, #3498db, #2ecc71)",
+                borderRadius: 3,
+                color: "white",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                boxShadow: 3,
+              }}
+            >
+              <Box display="flex" alignItems="center" gap={2}>
+                <Avatar
+                  sx={{
+                    bgcolor: "rgba(255, 255, 255, 0.3)",
+                    color: "white",
+                    width: 56,
+                    height: 56,
+                  }}
+                >
+                  <Category />
+                </Avatar>
+                <Typography variant="h4" sx={{ fontWeight: "bold" }}>
+                  {categories.length}
                 </Typography>
-              </Paper>
-            }
-          />
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <CardComponent
-            title={t("STATISTICS")}
-            description={t("CATEGORIES_STATISTICS")}
-            customBody={
-              <Paper
-                sx={{
-                  p: 2,
-                  background: "linear-gradient(135deg, #8e44ad, #9b59b6)",
-                  borderRadius: 3,
-                  color: "white",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 2,
-                }}
-                elevation={3}
-              >
+              </Box>
+              <Typography variant="body2" sx={{ opacity: 0.8, mt: 1 }}>
+                {t("CATEGORIES_DESC_SHORT")}
+              </Typography>
+            </Paper>
+          }
+        />
+        <CardComponent
+          title={t("STATISTICS")}
+          description={t("CATEGORIES_STATISTICS")}
+          customBody={
+            <Paper
+              sx={{
+                p: 2,
+                background: "linear-gradient(135deg, #8e44ad, #9b59b6)",
+                borderRadius: 3,
+                color: "white",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+              elevation={3}
+            >
+              <Box display="flex" alignItems="center" gap={2}>
                 <Avatar
                   sx={{
                     bgcolor: "rgba(255, 255, 255, 0.3)",
@@ -155,32 +161,23 @@ export const CategoryPage = () => {
                 >
                   <BarChart />
                 </Avatar>
-                <Typography variant="h6">{t("COMING_SOON")}</Typography>
-              </Paper>
-            }
-          />
-        </Grid>
-      </Grid>
-
-      {/* Add Button */}
-      <Box display="flex" justifyContent="flex-end" sx={{ p: 2 }}>
-        <ButtonComponent
-          label={t("CREATE_CATEGORY")}
-          color="primary"
-          variant="contained"
-          size="large"
-          startIcon={<Add />}
-          SxProps={{
-            transition: "transform 0.3s ease",
-            "&:hover": {
-              transform: "scale(1.05)",
-            },
-          }}
-          onClick={() => {
-            console.log(t("CREATE_CATEGORY_CLICK"));
-          }}
+                <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                  {t("COMING_SOON")}
+                </Typography>
+              </Box>
+            </Paper>
+          }
         />
       </Box>
+
+      <ActionButton
+        label={"CREATE_CATEGORY"}
+        color="secondary"
+        variant="outlined"
+        onClick={() => {}}
+        isLoading={false}
+        iconType="add"
+      />
 
       {/* Categories Table */}
       <TableComponent<ICategory>
@@ -189,12 +186,7 @@ export const CategoryPage = () => {
         handleView={handleView}
         handleEdit={handleEdit}
         handleDelete={handleDelete}
-        sx={{
-          p: 2,
-          "& .MuiTableRow-root:hover": {
-            backgroundColor: "rgba(0, 0, 0, 0.05)",
-          },
-        }}
+        sx={{ px: 4, pb: 4 }}
       />
 
       {/* Snackbar */}
@@ -214,6 +206,6 @@ export const CategoryPage = () => {
           onConfirm={handleConfirmDelete}
         />
       )}
-    </Container>
+    </>
   );
 };

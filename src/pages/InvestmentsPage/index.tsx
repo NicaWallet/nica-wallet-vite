@@ -1,15 +1,26 @@
 import { useState } from "react";
-import { Box, Container, Typography, Button, Card, CardContent } from "@mui/material";
+import { Box } from "@mui/material";
 import TableComponent from "../../components/TableComponent";
 import Loader from "../../components/Loader";
 import ErrorSnackbar from "../../components/ErrorSnackbar";
 import PageHeader from "../../components/PageHeader";
 import { useTranslation } from "react-i18next";
-import { Add } from "@mui/icons-material";
+import ActionButton from "../../components/ActionButton";
+
+interface Investment {
+  investment_id: number;
+  user_id: number;
+  name: string;
+  amount: number;
+  type: string;
+  start_date: string;
+  updated_at: string;
+  [key: string]: unknown;
+}
 
 // Simulación de datos de inversiones (reemplazar con la API real)
 const useMockInvestments = () => {
-  const [investments, setInvestments] = useState<any[]>([
+  const [investments] = useState<Investment[]>([
     {
       investment_id: 1,
       user_id: 1,
@@ -29,7 +40,7 @@ const useMockInvestments = () => {
       updated_at: "2024-11-20T12:00:00.000Z",
     },
   ]);
-  const [loading, setLoading] = useState(false);
+  const [loading] = useState(false);
   const [error] = useState<string | null>(null);
 
   return { investments, loading, error };
@@ -44,26 +55,20 @@ export const InvestmentsPage = () => {
     setSnackbarOpen(false);
   };
 
-  const handleView = (investment: any) => {
+  const handleView = (investment: Investment) => {
     console.log(t("VIEWING_INVESTMENT"), investment);
     setSnackbarOpen(true);
   };
 
-  const handleEdit = (investment: any) => {
+  const handleEdit = (investment: Investment) => {
     console.log(t("EDITING_INVESTMENT"), investment);
     setSnackbarOpen(true);
   };
 
-  const handleDelete = (investment: any) => {
+  const handleDelete = (investment: Investment) => {
     console.log(t("DELETING_INVESTMENT"), investment);
     setSnackbarOpen(true);
   };
-
-  const totalInvestments = investments.length;
-  const totalAmountInvested = investments.reduce(
-    (sum, investment) => sum + investment.amount,
-    0
-  );
 
   if (loading) return <Loader overlayVariant="transparent" />;
   if (error)
@@ -76,59 +81,29 @@ export const InvestmentsPage = () => {
     );
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 4 }}>
+    <>
       <PageHeader titleKey={t("INVESTMENTS_PAGE")} />
 
-      {/* Resumen total de inversiones */}
-      <Box display="flex" justifyContent="space-between" mb={4}>
-        <Card
-          sx={{
-            width: "100%",
-            background: "linear-gradient(135deg, #83a4d4, #b6fbff)",
-            borderRadius: 2,
-            boxShadow: 2,
-            color: "#fff",
-          }}
-        >
-          <CardContent>
-            <Typography variant="h6" gutterBottom>
-              {t("INVESTMENT_SUMMARY")}
-            </Typography>
-            <Box mt={2}>
-              <Typography variant="body1">
-                {t("TOTAL_INVESTMENTS")}: <strong>{totalInvestments}</strong>
-              </Typography>
-              <Typography variant="body1">
-                {t("TOTAL_AMOUNT_INVESTED")}: <strong>${totalAmountInvested.toFixed(2)}</strong>
-              </Typography>
-            </Box>
-          </CardContent>
-        </Card>
-      </Box>
+      <ActionButton
+        label={"CREATE_INVESTMENT"}
+        color="secondary"
+        variant="outlined"
+        onClick={() => {}}
+        isLoading={false}
+        iconType="add"
+      />
 
-      {/* Botón para agregar nueva inversión */}
-      <Box display="flex" justifyContent="flex-end" mb={2}>
-        <Button
-          variant="contained"
-          color="primary"
-          startIcon={<Add />}
-          sx={{
-            "&:hover": {
-              transform: "scale(1.05)",
-            },
-            transition: "transform 0.2s ease-in-out",
-          }}
-          onClick={() => console.log(t("CREATE_INVESTMENT_CLICK"))}
-        >
-          {t("CREATE_INVESTMENT")}
-        </Button>
-      </Box>
-
-      {/* Tabla de inversiones */}
+      {/* Tabla de Inversiones */}
       <Box sx={{ p: 2 }}>
-        <TableComponent<any>
+        <TableComponent<Investment>
           rows={investments}
-          columnOrder={["investment_id", "name", "type", "amount", "start_date"]}
+          columnOrder={[
+            "investment_id",
+            "name",
+            "type",
+            "amount",
+            "start_date",
+          ]}
           handleView={handleView}
           handleEdit={handleEdit}
           handleDelete={handleDelete}
@@ -142,6 +117,6 @@ export const InvestmentsPage = () => {
         autoHideDuration={5000}
         severity="info"
       />
-    </Container>
+    </>
   );
 };
