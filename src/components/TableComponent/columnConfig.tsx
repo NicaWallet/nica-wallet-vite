@@ -494,8 +494,8 @@ const columnConfig: IColumnConfig[] = [
     filterType: "search",
     width: 100,
     loadingStateType: "medium-text",
-    },
-    {
+  },
+  {
     id: "description",
     titleKey: "DESCRIPTION",
     dataType: "String",
@@ -503,8 +503,8 @@ const columnConfig: IColumnConfig[] = [
     filterType: "search",
     width: 200,
     loadingStateType: "medium-text",
-    },
-    {
+  },
+  {
     id: "target_amount",
     titleKey: "TARGET_AMOUNT",
     dataType: "Number",
@@ -514,8 +514,8 @@ const columnConfig: IColumnConfig[] = [
     loadingStateType: "medium-text",
     renderType: "custom",
     renderLogic: (data) => renderAmountCurrency(data.target_amount as number),
-    },
-    {
+  },
+  {
     id: "current_amount",
     titleKey: "CURRENT_AMOUNT",
     dataType: "Number",
@@ -525,8 +525,8 @@ const columnConfig: IColumnConfig[] = [
     loadingStateType: "medium-text",
     renderType: "custom",
     renderLogic: (data) => renderAmountCurrency(data.current_amount as number),
-    },
-    {
+  },
+  {
     id: "deadline",
     titleKey: "DEADLINE",
     dataType: "Date",
@@ -535,7 +535,7 @@ const columnConfig: IColumnConfig[] = [
     width: 150,
     loadingStateType: "medium-text",
     renderLogic: (data) => renderFormattedDate(data, "deadline"),
-    },
+  },
   {
     id: "updated_at",
     titleKey: "UPDATED_AT",
@@ -546,6 +546,62 @@ const columnConfig: IColumnConfig[] = [
     loadingStateType: "medium-text",
     renderLogic: (data) => renderFormattedDate(data, "updated_at"),
   },
+  {
+    id: "session_id",
+    titleKey: "SESSION_ID",
+    dataType: "Number",
+    filterId: "session_id",
+    filterType: "search",
+    width: 100,
+    loadingStateType: "medium-text",
+  },
+  {
+    id: "device",
+    titleKey: "DEVICE",
+    dataType: "String",
+    filterId: "device",
+    filterType: "search",
+    width: 150,
+    loadingStateType: "medium-text",
+  },
+  {
+    id: "ip",
+    titleKey: "IP",
+    dataType: "String",
+    filterId: "ip",
+    filterType: "search",
+    width: 150,
+    loadingStateType: "medium-text",
+  },
+  {
+    id: "location",
+    titleKey: "LOCATION",
+    dataType: "String",
+    filterId: "location",
+    filterType: "search",
+    width: 200,
+    loadingStateType: "medium-text",
+  },
+  {
+    id: "start_time",
+    titleKey: "START_TIME",
+    dataType: "Date",
+    filterId: "start_time",
+    filterType: "search",
+    width: 150,
+    loadingStateType: "medium-text",
+    renderLogic: (data) => renderFormattedDate(data, "start_time"),
+  },
+  {
+    id: "end_time",
+    titleKey: "END_TIME",
+    dataType: "Date",
+    filterId: "end_time",
+    filterType: "search",
+    width: 150,
+    loadingStateType: "medium-text",
+    renderLogic: (data) => renderFormattedDate(data, "end_time"),
+  }
 ];
 
 validateUniqueIds(columnConfig);
