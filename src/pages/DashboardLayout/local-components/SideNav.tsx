@@ -42,7 +42,8 @@ const SideNav = () => {
 
   const user = JSON.parse(localStorage.getItem("user") || "{}");
 
-  const userRoles = user?.userRoles?.map((role: UserRole) => role.role.role_name) || [];
+  const userRoles =
+    user?.userRoles?.map((role: UserRole) => role.role.role_name) || [];
 
   const handleDrawerToggle = () => {
     setOpen(!open);
@@ -202,7 +203,9 @@ const SideNav = () => {
                     <ListItemText primary={t("CATEGORIES")} />
                   </ListItem>
                   <ListItem
-                    onClick={() => handleNavigate("/transactions-sub-categories")}
+                    onClick={() =>
+                      handleNavigate("/transactions-sub-categories")
+                    }
                     sx={{
                       pl: 6,
                       cursor: "pointer",
@@ -212,7 +215,9 @@ const SideNav = () => {
                     <ListItemText primary={t("SUB_CATEGORIES")} />
                   </ListItem>
                   <ListItem
-                    onClick={() => handleNavigate("/transactions-classification")}
+                    onClick={() =>
+                      handleNavigate("/transactions-classification")
+                    }
                     sx={{
                       pl: 6,
                       cursor: "pointer",
@@ -222,9 +227,7 @@ const SideNav = () => {
                     <ListItemText primary={t("CLASSIFICATION")} />
                   </ListItem>
                   <ListItem
-                    onClick={() =>
-                      handleNavigate("/transactions-history")
-                    }
+                    onClick={() => handleNavigate("/transactions-history")}
                     sx={{
                       pl: 6,
                       cursor: "pointer",
@@ -240,41 +243,48 @@ const SideNav = () => {
         )}
 
         {/* Analytics Section */}
-        <ListItem
-          onClick={() => setOpenAnalytics(!openAnalytics)}
-          sx={{ cursor: "pointer", "&:hover": { backgroundColor: "#f0f0f0" } }}
-        >
-          <ListItemIcon>
-            <InsertChartIcon />
-          </ListItemIcon>
-          {open && <ListItemText primary={t("ANALYTICS")} />}
-          {open && (openAnalytics ? <ExpandLess /> : <ExpandMore />)}
-        </ListItem>
-        {open && (
-          <Collapse in={openAnalytics} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              <ListItem
-                onClick={() => handleNavigate("/statistics")}
-                sx={{
-                  pl: 4,
-                  cursor: "pointer",
-                  "&:hover": { backgroundColor: "#f0f0f0" },
-                }}
-              >
-                <ListItemText primary={t("STATISTICS")} />
-              </ListItem>
-              <ListItem
-                onClick={() => handleNavigate("/trends")}
-                sx={{
-                  pl: 4,
-                  cursor: "pointer",
-                  "&:hover": { backgroundColor: "#f0f0f0" },
-                }}
-              >
-                <ListItemText primary={t("TRENDS")} />
-              </ListItem>
-            </List>
-          </Collapse>
+        {userRoles.includes("Admin") && (
+          <>
+            <ListItem
+              onClick={() => setOpenAnalytics(!openAnalytics)}
+              sx={{
+                cursor: "pointer",
+                "&:hover": { backgroundColor: "#f0f0f0" },
+              }}
+            >
+              <ListItemIcon>
+                <InsertChartIcon />
+              </ListItemIcon>
+              {open && <ListItemText primary={t("ANALYTICS")} />}
+              {open && (openAnalytics ? <ExpandLess /> : <ExpandMore />)}
+            </ListItem>
+            {open && (
+              <Collapse in={openAnalytics} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
+                  <ListItem
+                    onClick={() => handleNavigate("/statistics")}
+                    sx={{
+                      pl: 4,
+                      cursor: "pointer",
+                      "&:hover": { backgroundColor: "#f0f0f0" },
+                    }}
+                  >
+                    <ListItemText primary={t("STATISTICS")} />
+                  </ListItem>
+                  <ListItem
+                    onClick={() => handleNavigate("/trends")}
+                    sx={{
+                      pl: 4,
+                      cursor: "pointer",
+                      "&:hover": { backgroundColor: "#f0f0f0" },
+                    }}
+                  >
+                    <ListItemText primary={t("TRENDS")} />
+                  </ListItem>
+                </List>
+              </Collapse>
+            )}
+          </>
         )}
 
         <ListItem
@@ -312,7 +322,10 @@ const SideNav = () => {
         {userRoles.includes("Admin") && (
           <ListItem
             onClick={() => handleNavigate("/admin-panel")}
-            sx={{ cursor: "pointer", "&:hover": { backgroundColor: "#f0f0f0" } }}
+            sx={{
+              cursor: "pointer",
+              "&:hover": { backgroundColor: "#f0f0f0" },
+            }}
           >
             <ListItemIcon>
               <AdminPanelSettings />

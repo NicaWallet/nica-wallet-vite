@@ -26,7 +26,51 @@ import { ProfileEdit } from "../pages/ProfileEdit";
 import { CategoryPage } from "../pages/CategoriesPage";
 import DashboardPage from "../pages/DashboardPage";
 import SettingsPage from "../pages/SettingsPage";
+import { StatisticsPage } from "../pages/StatisticsPage";
+import { TrendsPage } from "../pages/TrendsPage";
+import { SupportPage } from "../pages/SupportPage";
+import { SecurityPage } from "../pages/SecurityPage";
 
+/**
+ * AppRoutes component defines the routing structure for the application.
+ * It uses React Router to manage both public and protected routes.
+ *
+ * Public Routes:
+ * - "/" - LandingPage
+ * - "/auth/login" - Login
+ * - "/auth/register" - Register
+ * - "/auth/password-recovery" - PasswordRecovery
+ * - "/reset-password" - PasswordReset
+ * - "*" - NotFoundPage
+ *
+ * Protected Routes (requires authentication):
+ * - "/welcome" - WelcomePage
+ * - "/dashboard" - DashboardPage
+ * - "/budget" - BudgetPage
+ * - "/goals" - GoalsPage
+ * - "/transactions-overview" - TransactionsPage
+ * - "/transactions-categories" - CategoryPage
+ * - "/transactions-sub-categories" - SubcategoryPage
+ * - "/transactions-classification" - ClassificationPage
+ * - "/transactions-history" - TransactionHistoryPage
+ * - "/investments" - InvestmentsPage
+ * - "/bills" - BillsPage
+ * - "/support" - Support
+ * - "/settings" - SettingsPage
+ * - "/security" - Security
+ * - "/profile" - ProfilePage
+ * - "/profile/edit" - ProfileEdit
+ * - "/profile/change-password" - ChangePassword
+ *
+ * Admin Protected Routes (requires Admin role):
+ * - "/statistics" - StatisticsPage
+ * - "/trends" - Trends
+ * - "/admin-panel" - AdminPanel
+ *   - "/admin-panel/users" - UsersPage
+ *   - "/admin-panel/roles" - RolesPage
+ *
+ * The component uses nested routes for better organization and role-based access control.
+ */
 const AppRoutes = () => {
   return (
     <Router>
@@ -49,38 +93,74 @@ const AppRoutes = () => {
             {/* Rutas financieras */}
             <Route path="/budget" element={<BudgetPage />} />
             <Route path="/goals" element={<GoalsPage />} />
-            <Route path="/transactions-overview" element={<TransactionsPage />} />
+            <Route
+              path="/transactions-overview"
+              element={<TransactionsPage />}
+            />
             <Route path="/transactions-categories" element={<CategoryPage />} />
-            <Route path="/transactions-sub-categories" element={<SubcategoryPage />} />
-            <Route path="/transactions-classification" element={<ClassificationPage />} />
-            <Route path="/transactions-history" element={<TransactionHistoryPage />} />
+            <Route
+              path="/transactions-sub-categories"
+              element={<SubcategoryPage />}
+            />
+            <Route
+              path="/transactions-classification"
+              element={<ClassificationPage />}
+            />
+            <Route
+              path="/transactions-history"
+              element={<TransactionHistoryPage />}
+            />
             <Route path="/investments" element={<InvestmentsPage />} />
             <Route path="/bills" element={<BillsPage />} />
 
-            {/* Rutas analíticas */}
-            <Route path="/statistics" element={<div>Statistics</div>} />
-            <Route path="/trends" element={<div>Trends</div>} />
-
             {/* Soporte */}
-            <Route path="/support" element={<div>Support</div>} />
+            <Route path="/support" element={<SupportPage />} />
 
             {/* Configuración */}
             <Route path="/settings" element={<SettingsPage />} />
 
             {/* Seguridad */}
-            <Route path="/security" element={<div>Security</div>} />
+            <Route path="/security" element={<SecurityPage/>} />
 
             {/* Perfil */}
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/profile/edit" element={<ProfileEdit />} />
-            <Route path="/profile/change-password" element={<ChangePassword />} />
+            <Route
+              path="/profile/change-password"
+              element={<ChangePassword />}
+            />
 
-            {/* Admin Panel protegido */}
-            <Route path="/admin-panel" element={<ProtectedRoute allowedRoles={["Admin"]} />}>
-              <Route index element={<AdminPanel />} />
-              <Route path="users" element={<UsersPage />} />
-              <Route path="roles" element={<RolesPage />} />
-            </Route>
+            {/* Rutas protegidas con roles de Admin */}
+            {[
+              { path: "/statistics", element: <StatisticsPage /> },
+              { path: "/trends", element: <TrendsPage /> },
+              {
+                path: "/admin-panel",
+                children: [
+                  { index: true, element: <AdminPanel /> },
+                  { path: "users", element: <UsersPage /> },
+                  { path: "roles", element: <RolesPage /> },
+                ],
+              },
+            ].map(({ path, element, children }) => (
+              <Route
+                key={path}
+                path={path}
+                element={<ProtectedRoute allowedRoles={["Admin"]} />}
+              >
+                {element && <Route index element={element} />}
+                {children?.map(
+                  ({ path: childPath, index, element: childElement }) => (
+                    <Route
+                      key={childPath || "index"}
+                      path={childPath}
+                      index={index}
+                      element={childElement}
+                    />
+                  )
+                )}
+              </Route>
+            ))}
           </Route>
         </Route>
       </Routes>
