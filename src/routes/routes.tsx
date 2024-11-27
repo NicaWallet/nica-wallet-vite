@@ -9,7 +9,6 @@ import { AdminPanel } from "../pages/AdminPanel";
 import PasswordRecovery from "../pages/PasswordRecovery";
 import { UsersPage } from "../pages/UsersPage";
 import { RolesPage } from "../pages/RolesPage";
-import { DashboardPage } from "../pages/DashboardPage";
 import { BudgetPage } from "../pages/BudgetPage";
 import { GoalsPage } from "../pages/GoalsPage";
 import { TransactionsPage } from "../pages/TransactionsPage";
@@ -24,6 +23,7 @@ import ProtectedRoute from "../components/ProtectedRoute";
 import AuthRoute from "../components/AuthRoute";
 import { ChangePassword } from "../pages/ChangePassword";
 import { ProfileEdit } from "../pages/ProfileEdit";
+import DashboardPage from "../pages/DashboardPage";
 
 const AppRoutes = () => {
   return (
@@ -70,8 +70,8 @@ const AppRoutes = () => {
 
             {/* Perfil */}
             <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/profile/edit" element={<ProfileEdit/>} />
-            <Route path="/profile/change-password" element={<ChangePassword/>} />
+            <Route path="/profile/edit" element={<ProfileEdit />} />
+            <Route path="/profile/change-password" element={<ChangePassword />} />
 
             {/* Admin Panel protegido */}
             <Route path="/admin-panel" element={<ProtectedRoute allowedRoles={["Admin"]} />}>
