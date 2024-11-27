@@ -2,6 +2,7 @@ import React from "react";
 import { t, TFunction } from "i18next";
 import { Chip } from "@mui/material";
 import { DateTimeUtils } from "../../utils/dateTimeUtils";
+import { ArrowDownward, ArrowUpward } from "@mui/icons-material";
 
 /**
  * Interface for column configuration.
@@ -22,6 +23,28 @@ export interface IColumnConfig<T = Record<string, unknown>> {
     t: TFunction
   ) => React.ReactNode;
 }
+
+export function validateUniqueIds(columns: IColumnConfig[]): void {
+  const ids = columns.map((column) => column.id);
+  const duplicateMap = ids.reduce<Record<string, number[]>>((acc, id, index) => {
+    if (!acc[id]) {
+      acc[id] = [];
+    }
+    acc[id].push(index);
+    return acc;
+  }, {});
+
+  // Filtrar solo los duplicados
+  const duplicates = Object.entries(duplicateMap).filter(([, positions]) => positions.length > 1);
+
+  if (duplicates.length > 0) {
+    const errorMessages = duplicates.map(
+      ([id, positions]) => `ID "${id}" is duplicated at positions: ${positions.join(", ")}`
+    );
+    throw new Error(`Duplicate column IDs found:\n${errorMessages.join("\n")}`);
+  }
+}
+
 
 /**
  * Renders a status chip.
@@ -44,23 +67,6 @@ const renderStatusChip = (data: Record<string, unknown>): React.ReactNode => {
       }}
     />
   );
-};
-
-
-/**
- * Validates and logs a warning for duplicate IDs in the column configuration.
- * @param columns - The array of column configurations.
- */
-const validateUniqueIds = (columns: IColumnConfig[]): void => {
-  const idSet = new Set<string>();
-  columns.forEach((column) => {
-    if (idSet.has(column.id)) {
-      console.warn(
-        `Advertencia: ID duplicado encontrado en columnConfig: ${column.id}`
-      );
-    }
-    idSet.add(column.id);
-  });
 };
 
 const validateStringNotNull = (value: string | null | undefined): React.ReactNode => {
@@ -99,6 +105,31 @@ const renderFormattedDate = (
 
   return DateTimeUtils.formatDate(date, "dd-mm-yyyy");
 };
+
+export const renderTransactionTypeChip = (
+  type: "EXPENSE" | "INCOME",
+  t: TFunction
+): React.ReactNode => {
+  const isExpense = type === "EXPENSE";
+
+  return (
+    <Chip
+      label={t(isExpense ? "EXPENSE" : "INCOME")}
+      icon={isExpense ? <ArrowDownward /> : <ArrowUpward />}
+      color={isExpense ? "error" : "success"} // Rojo para gastos, verde para ingresos
+      variant="outlined"
+      sx={{
+        textTransform: "uppercase",
+        fontWeight: "bold",
+        fontSize: "0.875rem",
+      }}
+    />
+  );
+};
+
+const renderAmountCurrency = (amount: number): React.ReactNode => {
+  return ` USD: $${amount.toFixed(2)}`;
+}
 
 
 /**
@@ -350,6 +381,8 @@ const columnConfig: IColumnConfig[] = [
     filterType: "search",
     width: 100,
     loadingStateType: "medium-text",
+    renderType: "custom",
+    renderLogic: (data) => renderAmountCurrency(data.amount as number),
   },
   {
     id: "start_date",
@@ -375,21 +408,13 @@ const columnConfig: IColumnConfig[] = [
    * Transaction columns
    */
   {
-    id: "transaction_id",
-    titleKey: "ID",
-    dataType: "Number",
-    filterId: "transaction_id",
-    filterType: "search",
-    width: 100,
-    loadingStateType: "medium-text",
-  },
-  {
-    id: "amount",
-    titleKey: "AMOUNT",
-    dataType: "Number",
-    filterId: "amount",
-    filterType: "search",
-    width: 100,
+    id: "type",
+    titleKey: "TYPE",
+    dataType: "Custom",
+    filterId: "type",
+    filterType: "dropdown",
+    renderLogic: (data, titleKey, t) => renderTransactionTypeChip(data.type as "EXPENSE" | "INCOME", t),
+    width: 150,
     loadingStateType: "medium-text",
   },
   {

@@ -259,5 +259,13 @@
   "CURRENT_PASSWORD_REQUIRED": "La contraseña actual es obligatoria",
   "NEW_PASSWORD_REQUIRED": "La nueva contraseña es obligatoria",
   "CURRENT_PASSWORD_PLACEHOLDER": "Contraseña Actual",
-  "CONFIRM_NEW_PASSWORD_PLACEHOLDER": "Confirmar Nueva Contraseña"
+  "CONFIRM_NEW_PASSWORD_PLACEHOLDER": "Confirmar Nueva Contraseña",
+  "INCOME": "Ingresos",
+  "EXPENSE": "Gastos",
+  "TYPE": "Tipo",
+  "RESUMEN_DE_TRANSACCIONES": "Resumen de Transacciones",
+  "TOTAL_TRANSACCIONES_INGRESOS": "Total de Transacciones de Ingresos",
+  "TOTAL_TRANSACCIONES_GASTOS": "Total de Transacciones de Gastos",
+  "SUMA_TOTAL_TRANSACCIONES_INGRESOS": "Suma Total de Transacciones de Ingresos",
+  "SUMA_TOTAL_TRANSACCIONES_GASTOS": "Suma Total de Transacciones de Gastos"
 }
